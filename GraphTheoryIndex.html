@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teoría de Grafos - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos consistentes con la página principal */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Gris oscuro */
+            color: #E5E7EB; /* Gris claro */
+        }
+        .card {
+            background-color: #1F2937; /* Gris un poco más claro */
+            border: 1px solid #374151;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        #petersen-animation-canvas {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Barra de Navegación Sencilla -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex items-center">
+            <!-- Botón para volver a la página principal -->
+            <a href="./index.html" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Volver
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <!-- Encabezado de la sección con animación -->
+        <div class="text-center mb-16">
+            <div class="flex justify-center items-center gap-4">
+                <h1 class="text-5xl md:text-6xl font-black text-white tracking-tight">Teoría de Grafos</h1>
+                <!-- Canvas para la animación pequeña -->
+                <canvas id="petersen-animation-canvas"></canvas>
+            </div>
+            <p class="text-xl text-blue-300 mt-4">Un compendio de notas y temas fundamentales.</p>
+        </div>
+
+        <!-- Lista de Temas/Notas -->
+        <div class="max-w-4xl mx-auto space-y-8">
+            
+            <!-- Tema 1: Introducción a los Grafos -->
+            <div class="card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-blue-300 mb-2">1. ¿Qué es un Grafo?</h2>
+                <p class="text-gray-400 mb-4">Definiciones básicas, vértices, aristas, y los primeros ejemplos que dieron origen a esta fascinante área de las matemáticas.</p>
+                <a href="./Queesungrafo.html" class="font-semibold text-white hover:text-blue-400">Leer nota completa &rarr;</a>
+            </div>
+
+            <!-- Tema 2: Caminos y Ciclos Eulerianos -->
+            <div class="card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-blue-300 mb-2">2. Caminos y Ciclos Eulerianos</h2>
+                <p class="text-gray-400 mb-4">El problema de los puentes de Königsberg y las condiciones necesarias y suficientes para recorrer un grafo sin levantar el lápiz.</p>
+                <a href="#" class="font-semibold text-white hover:text-blue-400">Leer nota completa &rarr;</a>
+            </div>
+
+            <!-- Tema 3: Árboles -->
+            <div class="card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-blue-300 mb-2">3. Árboles y sus Propiedades</h2>
+                <p class="text-gray-400 mb-4">Explorando los grafos acíclicos y conectados. Propiedades fundamentales y su importancia en la computación y otras áreas.</p>
+                <a href="#" class="font-semibold text-white hover:text-blue-400">Leer nota completa &rarr;</a>
+            </div>
+
+            <!-- Tema 4: Coloración de Grafos -->
+            <div class="card rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-blue-300 mb-2">4. Coloración de Grafos</h2>
+                <p class="text-gray-400 mb-4">El famoso Teorema de los Cuatro Colores y cómo podemos usar colores para resolver problemas de asignación y planificación.</p>
+                <a href="#" class="font-semibold text-white hover:text-blue-400">Leer nota completa &rarr;</a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            const canvas = document.getElementById('petersen-animation-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const radius = rect.width * 0.4;
+
+            const vertices = [];
+            // Vértices exteriores (pentágono)
+            for (let i = 0; i < 5; i++) {
+                const angle = (i / 5) * 2 * Math.PI - Math.PI / 2;
+                vertices.push({ x: centerX + radius * Math.cos(angle), y: centerY + radius * Math.sin(angle) });
+            }
+            // Vértices interiores (estrella)
+            for (let i = 0; i < 5; i++) {
+                const angle = (i / 5) * 2 * Math.PI - Math.PI / 2;
+                vertices.push({ x: centerX + radius * 0.5 * Math.cos(angle), y: centerY + radius * 0.5 * Math.sin(angle) });
+            }
+
+            const edges = [
+                [0, 1], [1, 2], [2, 3], [3, 4], [4, 0],
+                [5, 7], [7, 9], [9, 6], [6, 8], [8, 5],
+                [0, 5], [1, 6], [2, 7], [3, 8], [4, 9]
+            ];
+
+            let animationState = 'FADE_IN_V';
+            let startTime = null;
+            const DURATION_FADE_IN_V = 1000;
+            const DURATION_DRAW_E = 1500;
+            const DURATION_HOLD = 2000;
+            const DURATION_FADE_OUT = 1000;
+
+            function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                ctx.clearRect(0, 0, rect.width, rect.height);
+                
+                let progress = 0;
+
+                if (animationState === 'FADE_IN_V') {
+                    progress = Math.min(1, elapsed / DURATION_FADE_IN_V);
+                    const easedProgress = easeInOut(progress);
+                    ctx.globalAlpha = easedProgress;
+                    vertices.forEach(v => {
+                        ctx.beginPath();
+                        ctx.fillStyle = '#60a5fa';
+                        ctx.arc(v.x, v.y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    });
+                    if (progress >= 1) {
+                        animationState = 'DRAW_E';
+                        startTime = timestamp;
+                    }
+                } else if (animationState === 'DRAW_E') {
+                    progress = Math.min(1, elapsed / DURATION_DRAW_E);
+                    ctx.globalAlpha = 1;
+                    vertices.forEach(v => {
+                        ctx.beginPath();
+                        ctx.fillStyle = '#60a5fa';
+                        ctx.arc(v.x, v.y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    });
+                    ctx.strokeStyle = 'rgba(110, 110, 120, 0.7)';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    const edgeCount = Math.floor(edges.length * progress);
+                    for (let i = 0; i < edgeCount; i++) {
+                        const [u, v] = edges[i];
+                        ctx.moveTo(vertices[u].x, vertices[u].y);
+                        ctx.lineTo(vertices[v].x, vertices[v].y);
+                    }
+                    ctx.stroke();
+                    if (progress >= 1) {
+                        animationState = 'HOLD';
+                        startTime = timestamp;
+                    }
+                } else if (animationState === 'HOLD') {
+                    progress = Math.min(1, elapsed / DURATION_HOLD);
+                    ctx.globalAlpha = 1;
+                    // Dibujar grafo completo
+                    vertices.forEach(v => {
+                        ctx.beginPath();
+                        ctx.fillStyle = '#60a5fa';
+                        ctx.arc(v.x, v.y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    });
+                    ctx.strokeStyle = 'rgba(110, 110, 120, 0.7)';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    edges.forEach(([u, v]) => {
+                        ctx.moveTo(vertices[u].x, vertices[u].y);
+                        ctx.lineTo(vertices[v].x, vertices[v].y);
+                    });
+                    ctx.stroke();
+                    if (progress >= 1) {
+                        animationState = 'FADE_OUT';
+                        startTime = timestamp;
+                    }
+                } else if (animationState === 'FADE_OUT') {
+                    progress = Math.min(1, elapsed / DURATION_FADE_OUT);
+                    ctx.globalAlpha = 1 - easeInOut(progress);
+                    // Dibujar grafo completo mientras se desvanece
+                    vertices.forEach(v => {
+                        ctx.beginPath();
+                        ctx.fillStyle = '#60a5fa';
+                        ctx.arc(v.x, v.y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    });
+                    ctx.strokeStyle = 'rgba(110, 110, 120, 0.7)';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    edges.forEach(([u, v]) => {
+                        ctx.moveTo(vertices[u].x, vertices[u].y);
+                        ctx.lineTo(vertices[v].x, vertices[v].y);
+                    });
+                    ctx.stroke();
+                    if (progress >= 1) {
+                        animationState = 'FADE_IN_V';
+                        startTime = timestamp;
+                    }
+                }
+
+                ctx.globalAlpha = 1; // Reset alpha for next frame
+                requestAnimationFrame(animate);
+            }
+
+            requestAnimationFrame(animate);
+        });
+    </script>
+</body>
+</html>

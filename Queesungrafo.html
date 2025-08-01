@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué es un Grafo? - Teoría de Grafos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- SCRIPTS PARA HABILITAR LATEX CON MATHJAX -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* Estilos consistentes con el resto del sitio */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Gris oscuro */
+            color: #E5E7EB; /* Gris claro */
+        }
+        /* Estilos para el contenido del artículo para mejorar la legibilidad */
+        .article-content h2 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* bold */
+            color: #93c5fd; /* text-blue-300 */
+            margin-top: 2.5rem; /* mt-10 */
+            margin-bottom: 1rem; /* mb-4 */
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .article-content p {
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.75; /* leading-relaxed */
+            margin-bottom: 1.5rem; /* mb-6 */
+            color: #D1D5DB; /* text-gray-300 */
+        }
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem; /* rounded-lg */
+            margin-top: 1.5rem; /* mt-6 */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Barra de Navegación Sencilla -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex items-center">
+            <!-- Botón para volver a la página de índice de Grafos -->
+            <a href="./GraphTheoryIndex.html" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Volver a Teoría de Grafos
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <!-- Contenedor del artículo -->
+        <article class="max-w-4xl mx-auto">
+            <!-- Título de la Nota -->
+            <header class="text-center mb-12">
+                <p class="text-lg text-blue-400 font-semibold">Tema 1</p>
+                <h1 class="text-5xl md:text-6xl font-black text-white mt-2 tracking-tight">¿Qué es un Grafo?</h1>
+            </header>
+
+            <!-- Contenido de la Nota -->
+            <div class="article-content">
+                <p>
+                    Aquí comienza el contenido de tu nota. Puedes escribir una introducción atractiva que enganche al lector y le explique de qué tratará esta sección. La teoría de grafos es una de las áreas más visuales y aplicadas de las matemáticas, y su punto de partida es sorprendentemente simple.
+                </p>
+
+                <img src="https://placehold.co/800x400/1F2937/E5E7EB?text=Ejemplo+de+un+Grafo" alt="[Diagrama de un grafo simple con vértices y aristas]">
+
+                <h2>Definiciones Fundamentales</h2>
+                <p>
+                    Un grafo $G$ es un par ordenado $G = (V, E)$, donde $V$ es un conjunto no vacío de **vértices** (o nodos) y $E$ es un conjunto de **aristas** (o arcos). Cada arista tiene un conjunto de uno o dos vértices asociados, a los que se llama sus puntos finales.
+                </p>
+                
+                <h2>La Formula de Euler</h2>
+                <p>
+                    
+                $$ V - E + F = 2 $$
+                <p>
+                    Donde $V$ es el número de vértices, $E$ el número de aristas y $F$ el número de caras.
+                </p>
+
+                <h2>El Origen: Los Puentes de Königsberg</h2>
+                <p>
+                    La historia de la teoría de grafos comienza en el siglo XVIII con Leonhard Euler. El problema de los siete puentes de Königsberg fue el que dio pie a la primera formalización de un grafo. Los habitantes de la ciudad se preguntaban si era posible dar un paseo cruzando cada uno de los siete puentes una sola vez y regresando al punto de partida.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

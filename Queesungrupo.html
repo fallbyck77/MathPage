@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. ¿Qué es un Grupo? - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- SCRIPTS PARA HABILITAR LATEX CON MATHJAX -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #E5E7EB;
+        }
+        .article-content h2 {
+            font-size: 1.875rem; /* 30px */
+            font-weight: 700;
+            color: #93c5fd; /* text-blue-300 */
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .article-content p, .article-content li {
+            font-size: 1.125rem; /* 18px */
+            line-height: 1.75;
+            color: #D1D5DB; /* text-gray-300 */
+            margin-bottom: 1rem;
+        }
+        .article-content ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            padding-left: 1rem;
+        }
+        .article-content code {
+            background-color: #1F2937;
+            color: #f0f0f0;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Barra de Navegación Sencilla -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex items-center">
+            <!-- Botón para volver al índice de Teoría de Grupos -->
+            <a href="./GroupTheoryIndex.html" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Volver al Índice
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <article class="max-w-4xl mx-auto">
+            
+            <header class="text-center mb-12">
+                <h1 class="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">1. ¿Qué es un Grupo?</h1>
+                <p class="text-xl text-gray-400">Las bases del Álgebra Abstracta</p>
+            </header>
+
+            <div class="article-content">
+                
+                <h2>Introducción</h2>
+                <p>
+                    Nos vamos a adentrar a una de las ramas matemáticas, en la cual, como en la mayoría no requerimos fundamentalmente de los números para su desarrollo, aquí tratamos de cubrir conceptos más avanzados como las simetrías, las permutaciones, y naturalmente los patrones que podamos ir notando en la naturaleza. Estos son apuntes de autoaprendizaje de una colección propia, si notas errores puedes mandar un mensaje a kevinmessinarodriguez@gmail.com 
+                </p>
+
+                <h2>Definición Formal</h2>
+                 
+                <p>
+                    Sea $G$ un conjunto no vacío y $*$ una operación binaria en $G$. El par $(G, *)$ es un <b>grupo</b> si satisface los siguientes axiomas:
+                </p>
+                <ul>
+                    <li>
+                        <b>(i) Asociatividad:</b> Para todo $a, b, c \in G$, se cumple que $(a * b) * c = a * (b * c)$.
+                    </li>
+                    <li>
+                        <b>(ii) Elemento Identidad (o Neutro):</b> Existe un elemento $e \in G$ tal que para todo $a \in G$, se cumple que $e * a = a * e = a$.
+                    </li>
+                    <li>
+                        <b>(iii) Elemento Inverso:</b> Para cada $a \in G$, existe un elemento $a^{-1} \in G$ tal que $a * a^{-1} = a^{-1} * a = e$.
+                    </li>
+                </ul>
+                <p>
+                    Notemos que la propiedad de <b>Cierre</b> (para todo $a, b \in G$, el resultado $a * b$ también está en $G$) está implícita en la definición de una operación binaria <i>en</i> $G$.
+                </p>
+                <p>
+                    Si la operación $*$ es conmutativa, el grupo $(G, *)$ se denomina <b>Abeliano</b>. El <b>orden</b> de un grupo es el número de elementos en $G$, y se denota por $|G|$.
+                </p>
+                <p>
+                    Cuando los matemáticos trabajan con un grupo genérico, la operación usualmente se suprime por conveniencia: se habla del "grupo $G$" y se escribe $ab$ o $a \cdot b$ para el resultado de combinar $a$ y $b$. El elemento $ab$ se denomina genéricamente el "producto" de $a$ y $b$.
+                </p>
+
+                <h2>Primeros Ejemplos</h2>
+                <p>
+                    Aquí puedes detallar algunos ejemplos clásicos para dar una intuición de lo que es un grupo.
+                </p>
+                <ul>
+                    <li>
+                        <b>Los enteros con la suma:</b> El conjunto de los números enteros, $(\mathbb{Z}, +)$, forma un grupo. El elemento identidad es $0$ y el inverso de $a$ es $-a$.
+                    </li>
+                    <li>
+                        <b>Los reales positivos con la multiplicación:</b> El conjunto $(\mathbb{R}^+, \cdot)$ es un grupo. ¿Qué pasa con $(\mathbb{R}, \cdot)$? ¿Por qué el cero es un problema?
+                    </li>
+                    <li>
+                        <b>Un no-ejemplo:</b> El conjunto de los números naturales $(\mathbb{N}, +)$. ¿Qué axioma no se cumple?
+                    </li>
+                </ul>
+
+                 <h2>Propiedades Básicas</h2>
+                <p>
+                    A partir de los axiomas, se pueden deducir varias propiedades importantes que todo grupo debe cumplir.
+                </p>
+                 <ul>
+                    <li>
+                        Unicidad del elemento identidad.
+                    </li>
+                     <li>
+                        Unicidad del elemento inverso para cada elemento.
+                    </li>
+                    <li>
+                        Las leyes de cancelación: si $a*b = a*c$, entonces $b=c$.
+                    </li>
+                </ul>
+
+                <h2>Conclusión</h2>
+                <p>
+                   En esta sección, puedes resumir las ideas principales y dar un adelanto de lo que vendrá en las siguientes notas, como los subgrupos, los grupos cíclicos o los homomorfismos, conectando con el resto de tu compendio.
+                </p>
+
+            </div>
+
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

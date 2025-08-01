@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>πlography - Kevin Messina Rodriguez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo principal usando la fuente Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Gris oscuro */
+            color: #E5E7EB; /* Gris claro */
+        }
+        /* Efecto de gradiente animado para el fondo del encabezado */
+        .hero-bg {
+            background: radial-gradient(ellipse at 50% 50%, #1e3a8a 0%, #111827 70%);
+        }
+        /* Estilo para las tarjetas con un borde sutil */
+        .card {
+            background-color: #1F2937; /* Gris un poco más claro */
+            border: 1px solid #374151;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        /* Estilo para el lienzo de la animación */
+        #rose-canvas {
+            filter: drop-shadow(0 0 5px #60a5fa);
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+        }
+        /* Estilos para el slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            cursor: pointer;
+            background: #374151;
+            height: 8px;
+            border-radius: 8px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 20px;
+            width: 20px;
+            background-color: #60a5fa;
+            border-radius: 50%;
+            border: 2px solid #1F2937;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            background-color: #60a5fa;
+            border-radius: 50%;
+            border: 2px solid #1F2937;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Menú de Navegación Desplegable (Slide-out) -->
+    <div id="side-menu" class="fixed top-0 left-0 w-64 h-full bg-gray-900 shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-white">Menú</h2>
+                <button id="close-menu-btn" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <nav class="space-y-4">
+                <a href="#notas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Notas</a>
+                <a href="#talleres" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Talleres</a>
+                <a href="#fotografia" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Fotografía</a>
+                <a href="#lecturas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Lecturas</a>
+                <a href="#eventos" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Eventos</a>
+                <a href="#interes" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Vínculos</a>
+            </nav>
+        </div>
+    </div>
+    <!-- Modal / Anuncio Emergente -->
+<div id="anuncio-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+    <!-- Contenedor del modal -->
+    <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-8 relative">
+        <!-- Botón de cerrar -->
+        <button id="close-modal-btn" class="absolute top-3 right-4 text-gray-400 hover:text-white text-3xl font-bold">&times;</button>
+        
+        <!-- Contenido del modal -->
+        <h3 class="text-2xl font-bold text-blue-300 mb-4">¡Anuncio Importante!</h3>
+        <p class="text-gray-300 mb-6">
+            Estas en una demo de la página, si notas algo raro, mal funcionmiento, correcciones, apoyo, o cualquier sugerencia, por favor comunicate conmigo a kevinmessinarodriguez@gmail.com 
+        </p>
+        <button id="accept-modal-btn" class="w-full bg-blue-600 text-white font-semibold rounded-lg px-5 py-2 hover:bg-blue-700 transition-colors">
+            Entendido
+        </button>
+    </div>
+</div>
+    <!-- Fondo oscuro para el menú -->
+    <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300"></div>
+
+
+    <!-- Barra de Navegación Principal -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Botón de Menú (Hamburguesa) -->
+            <button id="open-menu-btn" class="text-white focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <!-- Logo/Título del sitio -->
+            <a href="#inicio" class="text-2xl font-bold text-white">π</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Sección de Inicio (Hero) -->
+        <section id="inicio" class="min-h-screen flex items-center justify-center hero-bg p-6">
+            <div class="text-center max-w-4xl mx-auto">
+                <!-- Contenedor para la animación y controles -->
+                <div class="w-full max-w-md mx-auto mb-8 flex flex-col justify-center items-center">
+                    <canvas id="rose-canvas"></canvas>
+                    <!-- Controles para el parámetro k -->
+                    <div class="w-full mt-6 space-y-4">
+                        <div class="flex items-center justify-between text-lg">
+                            <label for="k-slider" class="font-semibold text-blue-300">k</label>
+                            <p id="equation-display" class="font-mono text-gray-300">ρ = R sin(kφ)</p>
+                        </div>
+                        <input type="range" id="k-slider" min="1" max="10" step="0.01" value="1" class="w-full">
+                    </div>
+                    <button id="pause-button" class="mt-6 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-colors">Pausar Animación</button>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-2 tracking-tight">πlography</h1>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Kevin Messina Rodriguez</h2>
+                <p class="text-lg md:text-xl text-gray-300 italic mb-4">Un espacio donde convergen las matemáticas, la fotografía y la curiosidad.</p>
+                <p class="text-xl md:text-2xl text-blue-300 mb-8">Apasionado y estudiante de matemáticas.</p>
+                
+                <div class="flex justify-center space-x-6">
+                    <!-- ENLACES CORREGIDOS: Asegúrate de que cada enlace empiece con https:// -->
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/kevin_messinaa/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
+                    <!-- YouTube -->
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
+                    <!-- GitHub -->
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.663 7.826 6.357 9.363.465.086.635-.202.635-.448 0-.22-.008-.996-.013-1.79-2.585.56-3.13-1.11-3.21-1.33-.132-.33-.67-1.33-1.15-1.59-.4-.22-.97-.75-.01-.76.91-.01 1.55.93 1.76 1.33.99 1.76 2.6 1.25 3.23.95.1-.75.39-1.25.7-1.54-2.47-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2.14-2.98-.12-.28-.54-1.4.12-2.94 0 0 .93-.3 3.05 1.13A10.66 10.66 0 0112 6.8c.96 0 1.93.13 2.82.38 2.12-1.43 3.05-1.13 3.05-1.13.66 1.54.24 2.66.12 2.94.71.78 1.14 1.77 1.14 2.98 0 4.26-2.58 5.2-5.06 5.47.4.34.76.99.76 2 0 1.45-.01 2.62-.01 2.97 0 .25.17.54.64.45A10.01 10.01 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contenedor para las secciones -->
+        <div class="container mx-auto px-6 py-20 space-y-20">
+
+            <!-- Sección de Notas -->
+            <section id="notas">
+                <h2 class="text-4xl font-bold text-center mb-12">Notas de Divulgación</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Ejemplo de Nota 1 -->
+                    <div class="card rounded-lg overflow-hidden p-6">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">Introducción a la Teoría de Grafos</h3>
+                        <p class="text-gray-400 mb-4">Un recorrido visual y conceptual por los fundamentos de los grafos, desde Euler hasta los problemas modernos.</p>
+                        <a href="./GraphTheoryIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    </div>
+                    <!-- Ejemplo de Nota 2 -->
+                    <div class="card rounded-lg overflow-hidden p-6">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">El teorema de Pitágoras</h3>
+                        <p class="text-gray-400 mb-4">Hablamos de unos de los teoremas más conocidos por la comunidad, incluso la no matemática.</p>
+                        <a href="NotaDTeoremaPitagoras.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    </div>
+                    <!-- Ejemplo de Nota 3 -->
+                    <div class="card rounded-lg overflow-hidden p-6">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">¿Qué es un Toro en Topología?</h3>
+                        <p class="text-gray-400 mb-4">Más allá de la dona: una explicación intuitiva de las superficies topológicas y sus curiosas propiedades.</p>
+                        <a href="#" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    </div>
+                      <!-- Nota 4  sobre grupos -->
+                    <div class="card rounded-lg overflow-hidden p-6">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">Introducción a la teoría de Grupos</h3>
+                        <p class="text-gray-400 mb-4">Una perspectiva visual sobre cconceptos de la teoría de grupos.</p>
+                        <a href="./GroupTheoryIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Talleres -->
+            <section id="talleres">
+                <h2 class="text-4xl font-bold text-center mb-12">Talleres y Cursos</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                     <!-- Ejemplo de Taller 1 -->
+                    <div class="card rounded-lg overflow-hidden p-6">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">Taller: Matemáticas con Papiroflexia</h3>
+                        <p class="text-gray-400 mb-4">Descubre cómo los pliegues y las formas del origami revelan conceptos geométricos y algebraicos profundos.</p>
+                        <a href="#" class="font-semibold text-white hover:text-blue-400">Más información &rarr;</a>
+                    </div>
+                    <!-- Ejemplo de Taller 2 -->
+                    <div class="card rounded-lg overflow-hidden p-6">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">Curso: Programación Creativa con Python</h3>
+                        <p class="text-gray-400 mb-4">Aprende a generar arte, música y visualizaciones de datos utilizando la lógica matemática y el poder de Python.</p>
+                        <a href="#" class="font-semibold text-white hover:text-blue-400">Más información &rarr;</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Fotografía -->
+            <section id="fotografia">
+                <h2 class="text-4xl font-bold text-center mb-12">Fotografía</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- IMÁGENES REEMPLAZADAS CON PLACEHOLDERS PARA EVITAR BLOQUEOS -->
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://i.postimg.cc/tJbrkb9c/PXL-20250711-171745996-2.jpg" alt="Descripción de la foto 1" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Una tarde tranquila en el comedor del CIMAT, Guanajuato.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://i.postimg.cc/CLFPfwPB/PXL-20250712-041541875-PORTRAIT.jpg" alt="Descripción de la foto 2" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
+                        </div>
+                    </div>
+                     <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://i.postimg.cc/TYbWJbKp/PXL-20250707-013923759-NIGHT-RAW-01-COVER.jpg" alt="Descripción de la foto 3" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Aquí va otra descripción.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://i.postimg.cc/hG2Jtb53/Whats-App-Image-2025-07-18-at-2-37-39-PM.jpg" alt="Descripción de la foto 4" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
+                        </div>
+                    </div>
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://i.postimg.cc/xjcxG9Lc/PXL-20250710-041020320-RAW-01-COVER.jpg" alt="Descripción de la foto 5" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
+                        </div>
+                    </div>
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://placehold.co/600x400/1F2937/E5E7EB?text=Foto+6" alt="Descripción de la foto 6" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
+                        </div>
+                    </div>
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://placehold.co/600x400/1F2937/E5E7EB?text=Foto+7" alt="Descripción de la foto 7" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
+                        </div>
+                    </div>
+                    <div class="relative group card rounded-lg overflow-hidden">
+                        <img src="https://placehold.co/600x400/1F2937/E5E7EB?text=Foto+8" alt="Descripción de la foto 8" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Lecturas Recomendadas -->
+            <section id="lecturas">
+                <h2 class="text-4xl font-bold text-center mb-12">Lecturas Recomendadas</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                    <!-- Libro 1 -->
+                    <div class="text-center">
+                        <img src="https://i.postimg.cc/HkHJQ4V3/s-l1600.webp" alt="Portada del libro 'Gödel, Escher, Bach'" class="card rounded-lg mb-2 mx-auto">
+                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Un libro distinto, algo conocido, habla sobre productividad y hacer un focus en nuestras metas, me lo regaló un amigo y me motivó a hacer este proyecto.</p>
+                        <h4 class="font-bold text-white mt-2">Gödel, Escher, Bach</h4>
+                        <p class="text-sm text-gray-400">Douglas Hofstadter</p>
+                    </div>
+                    <!-- Libro 2 -->
+                    <div class="text-center">
+                        <img src="https://i.postimg.cc/nc3V30th/image.jpg" alt="Portada del libro 'Chaos: Making a New Science'" class="card rounded-lg mb-2 mx-auto">
+                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Mi primer libro de divulgación leído antes de entrar a mi carrera, lo regalé porque creo que era un excelente ejemplar</p>
+                        <h4 class="font-bold text-white mt-2">Del cero al infinito.</h4>
+                        <p class="text-sm text-gray-400">Pablo Ámster</p>
+                    </div>
+                    <!-- Libro 3 -->
+                    <div class="text-center">
+                        <img src="https://i.postimg.cc/hGtbS0rf/chel-87-e-cov-1.jpg" alt="Portada del libro 'Flatland: A Romance of Many Dimensions'" class="card rounded-lg mb-2 mx-auto">
+                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Maravilloso ejemplar sobre la geometría, es una recomendación de un maestro, y se ha quedado en mis favoritos</p>
+                        <h4 class="font-bold text-white mt-2">Geometry and Imagination</h4>
+                        <p class="text-sm text-gray-400">David Hilbert</p>
+                    </div>
+                    <!-- Libro 4 -->
+                    <div class="text-center">
+                        <img src="https://i.postimg.cc/bYDk1SXM/stml-88-e-cov-1.jpg" alt="Portada del libro 'The Man Who Knew Infinity'" class="card rounded-lg mb-2 mx-auto">
+                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">En proceso de lectura</p>
+                        <h4 class="font-bold text-white mt-2">Hilbert´s Tenth Problem</h4>
+                        <p class="text-sm text-gray-400">Fodden </p>
+                    </div>
+                    <!-- Libro 5 -->
+                    <div class="text-center">
+                        <img src="https://i.postimg.cc/JzVfFfPR/12112fb0fb088856cda9c86eed51001c.webp" alt="Portada del libro 'Cálculus'" class="card rounded-lg mb-2 mx-auto">
+                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">La biblia del cálculo, el terror y destrozamentes de muchos matemáticos que han leído este libro.</p>
+                        <h4 class="font-bold text-white mt-2">Calculus</h4>
+                        <p class="text-sm text-gray-400">Michael Spivak</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Eventos -->
+            <section id="eventos">
+                <h2 class="text-4xl font-bold text-center mb-12">Eventos y Viajes</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Lugares Visitados</h3>
+                        <ul class="space-y-3 list-disc list-inside text-gray-300">
+                            <li>Escuela de Verano del CIMAT - Guanajuato, 2025</li>
+                            <li>Congreso Nacional de Matemáticas SMM- Durango, 2024</li>
+                            <li>Congreso Nacional de Matemáticas SMM- San Luis Potosí, 2023</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Próximamente</h3>
+                         <ul class="space-y-3 list-disc list-inside text-gray-300">
+                            <li>Si todo sale bien xD Congreso de la SMM  (Octubre 2025)</li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Vínculos de Interés -->
+            <section id="interes">
+                <h2 class="text-4xl font-bold text-center mb-12">Vínculos de Interés</h2>
+                <div class="max-w-2xl mx-auto space-y-4">
+                    <a href="https://www.3blue1brown.com/" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                        <h4 class="font-bold text-blue-300">3Blue1Brown</h4>
+                        <p class="text-sm text-gray-400">Explicaciones matemáticas animadas de alta calidad.</p>
+                    </a>
+                    <a href="https://mathoverflow.net/" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                        <h4 class="font-bold text-blue-300">MathOverflow</h4>
+                        <p class="text-sm text-gray-400">Comunidad de preguntas y respuestas para matemáticos profesionales.</p>
+                    </a>
+                    <a href="https://www.numberphile.com/" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                        <h4 class="font-bold text-blue-300">Numberphile</h4>
+                        <p class="text-sm text-gray-400">Videos fascinantes sobre números y el mundo de las matemáticas.</p>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCXtxgWwk55kVJo9lCCZRdmg" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                        <h4 class="font-bold text-blue-300">Veritasium en español</h4>
+                        <p class="text-sm text-gray-400">Videos increiblemente asombrosos sobre ciencia en general, puedes encontrar matemáticas acá también.</p>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+  <!-- Recuadro de Mensaje Importante (Restaurado) -->
+    <div id="important-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-yellow-500 text-gray-900 p-4 rounded-lg shadow-lg flex items-center gap-4 z-40">
+        <p><strong class="font-bold">Importante leer:</strong> Observaciones, sugerencias o si notas algo raro en la página agradeceré profundamente tu mensaje en kevinmessinarodriguez@gmail.com</p>
+        <button id="close-banner-btn" class="text-gray-900 font-bold text-2xl leading-none">&times;</button>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+            <p class="text-sm mt-2">"Debemos saber, sabremos".</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- SCRIPT PARA EL MENÚ DESPLEGABLE ---
+        const openMenuBtn = document.getElementById('open-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const sideMenu = document.getElementById('side-menu');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+        const menuLinks = sideMenu.querySelectorAll('a');
+
+        const openMenu = () => {
+            sideMenu.classList.remove('-translate-x-full');
+            menuBackdrop.classList.remove('hidden');
+        };
+
+        const closeMenu = () => {
+            sideMenu.classList.add('-translate-x-full');
+            menuBackdrop.classList.add('hidden');
+        };
+
+        openMenuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        menuBackdrop.addEventListener('click', closeMenu);
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+
+        // --- SCRIPT DE ANIMACIÓN CON CONTROLES AVANZADOS ---
+        window.addEventListener('load', () => {
+            requestAnimationFrame(() => {
+                const canvas = document.getElementById('rose-canvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                const pauseButton = document.getElementById('pause-button');
+                const kSlider = document.getElementById('k-slider');
+                const equationDisplay = document.getElementById('equation-display');
+
+                if (!ctx || !pauseButton || !kSlider || !equationDisplay) return;
+
+                const dpr = window.devicePixelRatio || 1;
+                const rect = canvas.getBoundingClientRect();
+
+                if (rect.width === 0 || rect.height === 0) return;
+                
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                ctx.scale(dpr, dpr);
+
+                let k = parseFloat(kSlider.value);
+                let kDirection = 1;
+                const kSpeed = 0.002;
+                const R = (Math.min(rect.width, rect.height) / 2) * 0.9;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                let isPaused = false;
+                let animationFrameId;
+
+                function redrawStatic(newK) {
+                    k = newK;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#60a5fa';
+                    ctx.lineWidth = 1.5;
+                    const maxPhi = Math.PI * 16; 
+                    const step = 0.01;
+                    for (let phi = 0; phi <= maxPhi; phi += step) {
+                        const rho = R * Math.sin(k * phi);
+                        const x = centerX + rho * Math.cos(phi);
+                        const y = centerY + rho * Math.sin(phi);
+                        if (phi === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+
+                    ctx.fillStyle = "rgba(229, 231, 235, 0.7)";
+                    ctx.font = "16px 'Inter', sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText('k = ' + k.toFixed(2), centerX, rect.height - 15);
+                    equationDisplay.textContent = 'ρ = R sin(' + k.toFixed(2) + 'φ)';
+                }
+
+                function animate() {
+                    if (!isPaused) {
+                        k += kSpeed * kDirection;
+                        if (k > 10 || k < 1) {
+                            kDirection *= -1;
+                            k = Math.max(1, Math.min(10, k));
+                        }
+                        kSlider.value = k;
+                        redrawStatic(k);
+                    }
+                    animationFrameId = requestAnimationFrame(animate);
+                }
+
+                pauseButton.addEventListener('click', () => {
+                    isPaused = !isPaused;
+                    pauseButton.textContent = isPaused ? 'Reanudar Animación' : 'Pausar Animación';
+                    if (!isPaused) {
+                        animate();
+                    } else {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                });
+
+                kSlider.addEventListener('input', () => {
+                    if (!isPaused) {
+                        isPaused = true;
+                        pauseButton.textContent = 'Reanudar Animación';
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                    const newK = parseFloat(kSlider.value);
+                    redrawStatic(newK);
+                });
+                
+                // Iniciar la animación
+                redrawStatic(k); // Dibujo inicial
+                animate();
+            });
+            // --- CÓDIGO PARA EL MODAL DE ANUNCIOS ---
+const modal = document.getElementById('anuncio-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const acceptModalBtn = document.getElementById('accept-modal-btn');
+
+if (modal && closeModalBtn && acceptModalBtn) {
+    const openModal = () => modal.classList.remove('hidden');
+    const closeModal = () => modal.classList.add('hidden');
+
+    // Abrir el modal después de 2 segundos
+    setTimeout(openModal, 2000);
+
+    // Eventos para cerrar el modal
+    closeModalBtn.addEventListener('click', closeModal);
+    acceptModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        // Si se hace clic en el fondo oscuro (el propio modal), se cierra
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+            }
+
+            const banner = document.getElementById('important-banner');
+            const closeBannerBtn = document.getElementById('close-banner-btn');
+            if (banner && closeBannerBtn) {
+                closeBannerBtn.addEventListener('click', () => {
+                    banner.style.display = 'none';
+                });
+            }
+        });
+        
+    </script>
+
+</body>
+</html>

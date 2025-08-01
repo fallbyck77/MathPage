@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teorema de Pitágoras - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Scripts para habilitar LaTeX con MathJax -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #E5E7EB;
+        }
+        .article-content h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #93c5fd;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .article-content p {
+            font-size: 1.125rem;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+            color: #D1D5DB;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Barra de Navegación Sencilla -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex items-center">
+            <!-- Botón para volver a la página principal -->
+            <a href="./index.html" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Volver a la página principal
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <article class="max-w-4xl mx-auto">
+            <!-- Encabezado con Título y Animación -->
+            <header class="mb-12 flex flex-col md:flex-row justify-center items-center text-center md:text-left gap-8">
+                <div>
+                    <h1 class="text-5xl md:text-6xl font-black text-white tracking-tight">Teorema de Pitágoras</h1>
+                    <p class="text-xl text-blue-300 mt-4">Una demostración visual.</p>
+                </div>
+                <!-- Canvas para la ilustración -->
+                <canvas id="pythagoras-canvas" width="200" height="200" class="bg-gray-800 rounded-lg shadow-lg"></canvas>
+            </header>
+
+            <!-- Contenido de la Nota -->
+            <div class="article-content">
+                <p>
+                    El Teorema de Pitágoras es uno de los resultados más conocidos y fundamentales de la geometría euclidiana. Establece una relación entre los lados de un triángulo rectángulo.
+                </p>
+                <p>
+                    En un triángulo rectángulo, el cuadrado de la longitud de la hipotenusa (el lado opuesto al ángulo recto) es igual a la suma de los cuadrados de las longitudes de los otros dos lados (los catetos). La fórmula se expresa de la siguiente manera:
+                </p>
+                $$ a^2 + b^2 = c^2 $$
+                <p>
+                    Donde $a$ y $b$ son las longitudes de los catetos, y $c$ es la longitud de la hipotenusa.
+                </p>
+
+                <h2>La Demostración del Cuadrado</h2>
+                <p>
+                    Una de las demostraciones más elegantes se basa en la construcción de un cuadrado de lado $(a+b)$. Al colocar cuatro copias del triángulo rectángulo en las esquinas de este cuadrado mayor, el área que queda en el centro es un cuadrado de lado $c$. Por lo tanto, su área es $c^2$.
+                </p>
+                <p>
+                    El área del cuadrado grande se puede calcular como $(a+b)^2$. También se puede calcular sumando las áreas de sus componentes: los cuatro triángulos (cada uno con área $\frac{1}{2}ab$) y el cuadrado central ($c^2$).
+                </p>
+                $$ (a+b)^2 = 4 \left(\frac{1}{2}ab\right) + c^2 $$
+                $$ a^2 + 2ab + b^2 = 2ab + c^2 $$
+                <p>
+                    Restando $2ab$ de ambos lados, obtenemos el famoso resultado:
+                </p>
+                $$ a^2 + b^2 = c^2 $$
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            const canvas = document.getElementById('pythagoras-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const size = 200;
+            const padding = 30; // Aumentar padding para las etiquetas
+            const contentSize = size - 2 * padding;
+
+            // Proporciones clásicas para un triángulo rectángulo visible
+            const b = contentSize * 0.85;
+            const a = contentSize * 0.6;
+
+            ctx.clearRect(0, 0, size, size);
+            ctx.save();
+            // Centrar el triángulo en el canvas
+            ctx.translate((size - b) / 2, (size + a) / 2);
+
+            const colorTriangle = '#60a5fa';
+            const colorLabel = '#E5E7EB';
+
+            // Dibuja el triángulo
+            ctx.beginPath();
+            ctx.moveTo(0, 0);   // Vértice del ángulo recto
+            ctx.lineTo(b, 0);   // Cateto b
+            ctx.lineTo(0, -a);  // Cateto a
+            ctx.closePath();
+            ctx.fillStyle = colorTriangle;
+            ctx.fill();
+
+            // Dibuja el símbolo de ángulo recto
+            ctx.strokeStyle = colorLabel;
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(3, -3, 10, -10);
+
+            // Etiquetas
+            ctx.fillStyle = colorLabel;
+            ctx.font = '14px Inter';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Etiqueta 'a'
+            ctx.fillText('a', -15, -a / 2);
+
+            // Etiqueta 'b'
+            ctx.fillText('b', b / 2, 15);
+
+            // Etiqueta 'c' (hipotenusa)
+            ctx.save();
+            ctx.translate(b / 2, -a / 2);
+            ctx.rotate(-Math.atan(a / b));
+            ctx.fillText('c', 0, -15);
+            ctx.restore();
+
+            ctx.restore();
+        });
+    </script>
+</body>
+</html>
