@@ -64,6 +64,23 @@
             border-radius: 50%;
             border: 2px solid #1F2937;
         }
+        /* Estilos para la simulación del Juego de la Vida */
+        #game-of-life-canvas {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .control-button {
+            background-color: #374151;
+            transition: background-color 0.2s;
+        }
+        .control-button:hover {
+            background-color: #4b5563;
+        }
+        .control-button.active {
+            background-color: #2563eb;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -77,6 +94,7 @@
             </div>
             <nav class="space-y-4">
                 <a href="#notas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Notas</a>
+                <a href="#simulaciones" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Simulaciones</a>
                 <a href="#talleres" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Talleres</a>
                 <a href="#fotografia" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Fotografía</a>
                 <a href="#lecturas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Lecturas</a>
@@ -86,10 +104,8 @@
         </div>
     </div>
    
-
     <!-- Fondo oscuro para el menú -->
     <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300"></div>
-
 
     <!-- Barra de Navegación Principal -->
     <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
@@ -127,14 +143,9 @@
                 <p class="text-xl md:text-2xl text-blue-300 mb-8">Apasionado y estudiante de matemáticas.</p>
                 
                 <div class="flex justify-center space-x-6">
-                    <!-- ENLACES CORREGIDOS: Asegúrate de que cada enlace empiece con https:// -->
-                    <!-- LinkedIn -->
                     <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
-                    <!-- Instagram -->
                     <a href="https://www.instagram.com/kevin_messinaa/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
-                    <!-- YouTube -->
                     <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
-                    <!-- GitHub -->
                     <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.663 7.826 6.357 9.363.465.086.635-.202.635-.448 0-.22-.008-.996-.013-1.79-2.585.56-3.13-1.11-3.21-1.33-.132-.33-.67-1.33-1.15-1.59-.4-.22-.97-.75-.01-.76.91-.01 1.55.93 1.76 1.33.99 1.76 2.6 1.25 3.23.95.1-.75.39-1.25.7-1.54-2.47-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2.14-2.98-.12-.28-.54-1.4.12-2.94 0 0 .93-.3 3.05 1.13A10.66 10.66 0 0112 6.8c.96 0 1.93.13 2.82.38 2.12-1.43 3.05-1.13 3.05-1.13.66 1.54.24 2.66.12 2.94.71.78 1.14 1.77 1.14 2.98 0 4.26-2.58 5.2-5.06 5.47.4.34.76.99.76 2 0 1.45-.01 2.62-.01 2.97 0 .25.17.54.64.45A10.01 10.01 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
                 </div>
             </div>
@@ -147,27 +158,21 @@
             <section id="notas">
                 <h2 class="text-4xl font-bold text-center mb-12">Notas de Divulgación</h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Ejemplo de Nota 1 -->
                     <div class="card rounded-lg overflow-hidden p-6">
                         <h3 class="text-xl font-bold text-blue-300 mb-2">Introducción a la Teoría de Grafos</h3>
                         <p class="text-gray-400 mb-4">Un recorrido visual y conceptual por los fundamentos de los grafos, desde Euler hasta los problemas modernos.</p>
                         <a href="./GraphTheoryIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
                     </div>
-                    <!-- Ejemplo de Nota 2 -->
                     <div class="card rounded-lg overflow-hidden p-6">
                         <h3 class="text-xl font-bold text-blue-300 mb-2">El teorema de Pitágoras</h3>
                         <p class="text-gray-400 mb-4">Hablamos de unos de los teoremas más conocidos por la comunidad, incluso la no matemática.</p>
                         <a href="NotaDTeoremaPitagoras.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
                     </div>
-                    <!-- Ejemplo de Nota 3 -->
-    
-                      <!-- Nota 4  sobre grupos -->
                     <div class="card rounded-lg overflow-hidden p-6">
                         <h3 class="text-xl font-bold text-blue-300 mb-2">Introducción a la teoría de Grupos</h3>
                         <p class="text-gray-400 mb-4">Una perspectiva visual sobre cconceptos de la teoría de grupos.</p>
                         <a href="./GroupTheoryIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
                     </div>
-                     <!-- Nota 5  sobre grupos -->
                     <div class="card rounded-lg overflow-hidden p-6">
                         <h3 class="text-xl font-bold text-blue-300 mb-2">Animaciones Matemáticas </h3>
                         <p class="text-gray-400 mb-4">Estoy aprendiendo ahacer animaciones y quierco compartirlo con ustedes:D.</p>
@@ -176,16 +181,57 @@
                 </div>
             </section>
 
+            <!-- ================================================== -->
+            <!-- =========      NUEVA SECCIÓN INICIA AQUÍ     ========= -->
+            <!-- ================================================== -->
+            <section id="simulaciones">
+                <h2 class="text-4xl font-bold text-center mb-12">Simulaciones Interactivas</h2>
+                <div class="card rounded-lg overflow-hidden p-6 max-w-4xl mx-auto">
+                    <h3 class="text-2xl font-bold text-blue-300 mb-4">El Juego de la Vida de Conway</h3>
+                    <div class="grid md:grid-cols-3 gap-6 items-start">
+                        <!-- Columna de la simulación -->
+                        <div class="md:col-span-2">
+                            <canvas id="game-of-life-canvas" class="w-full aspect-square rounded-lg"></canvas>
+                        </div>
+                        <!-- Columna de controles y explicación -->
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Controles</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <button id="gol-start-pause" class="control-button px-4 py-2 rounded-md text-sm font-medium text-white">Iniciar</button>
+                                    <button id="gol-reset" class="control-button px-4 py-2 rounded-md text-sm font-medium text-white">Aleatorio</button>
+                                    <button id="gol-clear" class="control-button px-4 py-2 rounded-md text-sm font-medium text-white">Limpiar</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2">Reglas</h4>
+                                <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+                                    <li>Una célula viva con &lt; 2 vecinos vivos muere.</li>
+                                    <li>Una célula viva con 2 o 3 vecinos vivos sobrevive.</li>
+                                    <li>Una célula viva con &gt; 3 vecinos vivos muere.</li>
+                                    <li>Una célula muerta con = 3 vecinos vivos nace.</li>
+                                </ul>
+                            </div>
+                            <p class="text-gray-400 text-sm italic">
+                                Haz clic en el lienzo para crear o destruir células.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ================================================== -->
+            <!-- =========       NUEVA SECCIÓN TERMINA AQUÍ     ========= -->
+            <!-- ================================================== -->
+
             <!-- Sección de Talleres -->
             <section id="talleres">
                 <h2 class="text-4xl font-bold text-center mb-12">Talleres y Cursos</h2>
                 <div class="grid md:grid-cols-2 gap-8">
-                     <!-- Ejemplo de Taller 1 -->
-                    <div class="card rounded-lg overflow-hidden p-6">
+                     <div class="card rounded-lg overflow-hidden p-6">
                         <h3 class="text-xl font-bold text-blue-300 mb-2">Proximamente...</h3>
                         <p class="text-gray-400 mb-4"></p>
                         <a href="#" class="font-semibold text-white hover:text-blue-400">... &rarr;</a>
-       
+                    </div>
                 </div>
             </section>
 
@@ -193,13 +239,10 @@
             <section id="fotografia">
                 <h2 class="text-4xl font-bold text-center mb-12">Fotografía</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <!-- IMÁGENES REEMPLAZADAS CON PLACEHOLDERS PARA EVITAR BLOQUEOS -->
                     <div class="relative group card rounded-lg overflow-hidden">
                         <img src="https://i.postimg.cc/tJbrkb9c/PXL-20250711-171745996-2.jpg" alt="Descripción de la foto 1" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                Una tarde tranquila en el comedor del CIMAT, Guanajuato.
-                            </p>
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">Una tarde tranquila en el comedor del CIMAT, Guanajuato.</p>
                         </div>
                     </div>
                     <div class="relative group card rounded-lg overflow-hidden">
@@ -211,9 +254,7 @@
                      <div class="relative group card rounded-lg overflow-hidden">
                         <img src="https://i.postimg.cc/TYbWJbKp/PXL-20250707-013923759-NIGHT-RAW-01-COVER.jpg" alt="Descripción de la foto 3" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                
-                            </p>
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
                         </div>
                     </div>
                     <div class="relative group card rounded-lg overflow-hidden">
@@ -228,7 +269,6 @@
                             <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
                         </div>
                     </div>
-                    
                 </div>
             </section>
 
@@ -236,42 +276,32 @@
             <section id="lecturas">
                 <h2 class="text-4xl font-bold text-center mb-12">Lecturas Recomendadas</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                    <!-- Libro 1 -->
                     <div class="text-center">
                         <img src="https://i.postimg.cc/HkHJQ4V3/s-l1600.webp" alt="Portada del libro 'Gödel, Escher, Bach'" class="card rounded-lg mb-2 mx-auto">
-                        
                         <h4 class="font-bold text-white mt-2">Gödel, Escher, Bach</h4>
                         <p class="text-sm text-gray-400">James Clear</p>
                         <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Un libro distinto, algo conocido, habla sobre productividad y hacer un focus en nuestras metas, me lo regaló un amigo y me motivó a hacer este proyecto.</p>
                     </div>
-                    <!-- Libro 2 -->
                     <div class="text-center">
                         <img src="https://i.postimg.cc/nc3V30th/image.jpg" alt="Portada del libro 'Chaos: Making a New Science'" class="card rounded-lg mb-2 mx-auto">
-                        
                         <h4 class="font-bold text-white mt-2">Del cero al infinito.</h4>
                         <p class="text-sm text-gray-400">Pablo Ámster</p>
                         <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Mi primer libro de divulgación leído antes de entrar a mi carrera, lo regalé porque creo que era un excelente ejemplar</p>
                     </div>
-                    <!-- Libro 3 -->
                     <div class="text-center">
                         <img src="https://i.postimg.cc/hGtbS0rf/chel-87-e-cov-1.jpg" alt="Portada del libro 'Flatland: A Romance of Many Dimensions'" class="card rounded-lg mb-2 mx-auto">
-                        
                         <h4 class="font-bold text-white mt-2">Geometry and Imagination</h4>
                         <p class="text-sm text-gray-400">David Hilbert</p>
                         <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Maravilloso ejemplar sobre la geometría, es una recomendación de un maestro, y se ha quedado en mis favoritos</p>
                     </div>
-                    <!-- Libro 4 -->
                     <div class="text-center">
                         <img src="https://i.postimg.cc/bYDk1SXM/stml-88-e-cov-1.jpg" alt="Portada del libro 'The Man Who Knew Infinity'" class="card rounded-lg mb-2 mx-auto">
-                        
                         <h4 class="font-bold text-white mt-2">Hilbert´s Tenth Problem</h4>
                         <p class="text-sm text-gray-400">Fodden </p>
                         <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">En proceso de lectura</p>
                     </div>
-                    <!-- Libro 5 -->
                     <div class="text-center">
                         <img src="https://i.postimg.cc/JzVfFfPR/12112fb0fb088856cda9c86eed51001c.webp" alt="Portada del libro 'Cálculus'" class="card rounded-lg mb-2 mx-auto">
-                       
                         <h4 class="font-bold text-white mt-2">Calculus</h4>
                         <p class="text-sm text-gray-400">Michael Spivak</p>
                          <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">La biblia del cálculo, el terror y destrozamentes de muchos matemáticos que han leído este libro.</p>
@@ -295,7 +325,6 @@
                         <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Próximamente</h3>
                          <ul class="space-y-3 list-disc list-inside text-gray-300">
                             <li>Si todo sale bien xD Congreso de la SMM  (Octubre 2025)</li>
-                            
                         </ul>
                     </div>
                 </div>
@@ -327,11 +356,12 @@
         </div>
     </main>
 
-  <!-- Recuadro de Mensaje Importante (Restaurado) -->
+    <!-- Recuadro de Mensaje Importante -->
     <div id="important-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-yellow-500 text-gray-900 p-4 rounded-lg shadow-lg flex items-center gap-4 z-40">
         <p><strong class="font-bold">Importante leer:</strong> Esto es una demo, estaré trabajando para que sea lo más funcional posible muy pronto. Observaciones, sugerencias o si notas algo raro en la página agradeceré profundamente tu mensaje en kevinmessinarodriguez@gmail.com</p>
         <button id="close-banner-btn" class="text-gray-900 font-bold text-2xl leading-none">&times;</button>
     </div>
+    
     <!-- Footer -->
     <footer class="bg-gray-900 border-t border-gray-700">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
@@ -341,147 +371,111 @@
     </footer>
 
     <script>
-        // --- SCRIPT PARA EL MENÚ DESPLEGABLE ---
-        const openMenuBtn = document.getElementById('open-menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        const sideMenu = document.getElementById('side-menu');
-        const menuBackdrop = document.getElementById('menu-backdrop');
-        const menuLinks = sideMenu.querySelectorAll('a');
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- SCRIPT PARA EL MENÚ DESPLEGABLE ---
+            const openMenuBtn = document.getElementById('open-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const sideMenu = document.getElementById('side-menu');
+            const menuBackdrop = document.getElementById('menu-backdrop');
+            const menuLinks = sideMenu.querySelectorAll('a');
 
-        const openMenu = () => {
-            sideMenu.classList.remove('-translate-x-full');
-            menuBackdrop.classList.remove('hidden');
-        };
+            const openMenu = () => {
+                sideMenu.classList.remove('-translate-x-full');
+                menuBackdrop.classList.remove('hidden');
+            };
 
-        const closeMenu = () => {
-            sideMenu.classList.add('-translate-x-full');
-            menuBackdrop.classList.add('hidden');
-        };
+            const closeMenu = () => {
+                sideMenu.classList.add('-translate-x-full');
+                menuBackdrop.classList.add('hidden');
+            };
 
-        openMenuBtn.addEventListener('click', openMenu);
-        closeMenuBtn.addEventListener('click', closeMenu);
-        menuBackdrop.addEventListener('click', closeMenu);
-        menuLinks.forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
+            openMenuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            menuBackdrop.addEventListener('click', closeMenu);
+            menuLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
 
-
-        // --- SCRIPT DE ANIMACIÓN CON CONTROLES AVANZADOS ---
-        window.addEventListener('load', () => {
-            requestAnimationFrame(() => {
-                const canvas = document.getElementById('rose-canvas');
-                if (!canvas) return;
+            // --- SCRIPT DE ANIMACIÓN HERO ---
+            const canvas = document.getElementById('rose-canvas');
+            if (canvas) {
                 const ctx = canvas.getContext('2d');
                 const pauseButton = document.getElementById('pause-button');
                 const kSlider = document.getElementById('k-slider');
                 const equationDisplay = document.getElementById('equation-display');
 
-                if (!ctx || !pauseButton || !kSlider || !equationDisplay) return;
-
-                const dpr = window.devicePixelRatio || 1;
-                const rect = canvas.getBoundingClientRect();
-
-                if (rect.width === 0 || rect.height === 0) return;
-                
-                canvas.width = rect.width * dpr;
-                canvas.height = rect.height * dpr;
-                ctx.scale(dpr, dpr);
-
-                let k = parseFloat(kSlider.value);
-                let kDirection = 1;
-                const kSpeed = 0.002;
-                const R = (Math.min(rect.width, rect.height) / 2) * 0.9;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                let isPaused = false;
-                let animationFrameId;
-
-                function redrawStatic(newK) {
-                    k = newK;
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (ctx && pauseButton && kSlider && equationDisplay) {
+                    const dpr = window.devicePixelRatio || 1;
+                    const rect = canvas.getBoundingClientRect();
                     
-                    ctx.beginPath();
-                    ctx.strokeStyle = '#60a5fa';
-                    ctx.lineWidth = 1.5;
-                    const maxPhi = Math.PI * 16; 
-                    const step = 0.01;
-                    for (let phi = 0; phi <= maxPhi; phi += step) {
-                        const rho = R * Math.sin(k * phi);
-                        const x = centerX + rho * Math.cos(phi);
-                        const y = centerY + rho * Math.sin(phi);
-                        if (phi === 0) ctx.moveTo(x, y);
-                        else ctx.lineTo(x, y);
-                    }
-                    ctx.stroke();
+                    if (rect.width > 0 && rect.height > 0) {
+                        canvas.width = rect.width * dpr;
+                        canvas.height = rect.height * dpr;
+                        ctx.scale(dpr, dpr);
 
-                    ctx.fillStyle = "rgba(229, 231, 235, 0.7)";
-                    ctx.font = "16px 'Inter', sans-serif";
-                    ctx.textAlign = "center";
-                    ctx.fillText('k = ' + k.toFixed(2), centerX, rect.height - 15);
-                    equationDisplay.textContent = 'ρ = R sin(' + k.toFixed(2) + 'φ)';
-                }
+                        let k = parseFloat(kSlider.value);
+                        let kDirection = 1;
+                        const kSpeed = 0.002;
+                        const R = (Math.min(rect.width, rect.height) / 2) * 0.9;
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
 
-                function animate() {
-                    if (!isPaused) {
-                        k += kSpeed * kDirection;
-                        if (k > 10 || k < 1) {
-                            kDirection *= -1;
-                            k = Math.max(1, Math.min(10, k));
+                        let isPaused = false;
+                        let animationFrameId;
+
+                        function redrawStatic(newK) {
+                            k = newK;
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#60a5fa';
+                            ctx.lineWidth = 1.5;
+                            const maxPhi = Math.PI * 16; 
+                            const step = 0.01;
+                            for (let phi = 0; phi <= maxPhi; phi += step) {
+                                const rho = R * Math.sin(k * phi);
+                                const x = centerX + rho * Math.cos(phi);
+                                const y = centerY + rho * Math.sin(phi);
+                                if (phi === 0) ctx.moveTo(x, y);
+                                else ctx.lineTo(x, y);
+                            }
+                            ctx.stroke();
+                            equationDisplay.textContent = 'ρ = R sin(' + k.toFixed(2) + 'φ)';
                         }
-                        kSlider.value = k;
+
+                        function animate() {
+                            if (!isPaused) {
+                                k += kSpeed * kDirection;
+                                if (k > 10 || k < 1) {
+                                    kDirection *= -1;
+                                    k = Math.max(1, Math.min(10, k));
+                                }
+                                kSlider.value = k;
+                                redrawStatic(k);
+                            }
+                            animationFrameId = requestAnimationFrame(animate);
+                        }
+
+                        pauseButton.addEventListener('click', () => {
+                            isPaused = !isPaused;
+                            pauseButton.textContent = isPaused ? 'Reanudar Animación' : 'Pausar Animación';
+                        });
+
+                        kSlider.addEventListener('input', () => {
+                            if (!isPaused) {
+                                isPaused = true;
+                                pauseButton.textContent = 'Reanudar Animación';
+                            }
+                            const newK = parseFloat(kSlider.value);
+                            redrawStatic(newK);
+                        });
+                        
                         redrawStatic(k);
-                    }
-                    animationFrameId = requestAnimationFrame(animate);
-                }
-
-                pauseButton.addEventListener('click', () => {
-                    isPaused = !isPaused;
-                    pauseButton.textContent = isPaused ? 'Reanudar Animación' : 'Pausar Animación';
-                    if (!isPaused) {
                         animate();
-                    } else {
-                        cancelAnimationFrame(animationFrameId);
                     }
-                });
-
-                kSlider.addEventListener('input', () => {
-                    if (!isPaused) {
-                        isPaused = true;
-                        pauseButton.textContent = 'Reanudar Animación';
-                        cancelAnimationFrame(animationFrameId);
-                    }
-                    const newK = parseFloat(kSlider.value);
-                    redrawStatic(newK);
-                });
-                
-                // Iniciar la animación
-                redrawStatic(k); // Dibujo inicial
-                animate();
-            });
-            // --- CÓDIGO PARA EL MODAL DE ANUNCIOS ---
-const modal = document.getElementById('anuncio-modal');
-const closeModalBtn = document.getElementById('close-modal-btn');
-const acceptModalBtn = document.getElementById('accept-modal-btn');
-
-if (modal && closeModalBtn && acceptModalBtn) {
-    const openModal = () => modal.classList.remove('hidden');
-    const closeModal = () => modal.classList.add('hidden');
-
-    // Abrir el modal después de 2 segundos
-    setTimeout(openModal, 2000);
-
-    // Eventos para cerrar el modal
-    closeModalBtn.addEventListener('click', closeModal);
-    acceptModalBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        // Si se hace clic en el fondo oscuro (el propio modal), se cierra
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
+                }
             }
 
+            // --- SCRIPT PARA EL BANNER ---
             const banner = document.getElementById('important-banner');
             const closeBannerBtn = document.getElementById('close-banner-btn');
             if (banner && closeBannerBtn) {
@@ -489,8 +483,153 @@ if (modal && closeModalBtn && acceptModalBtn) {
                     banner.style.display = 'none';
                 });
             }
+
+            // --- SCRIPT PARA EL JUEGO DE LA VIDA ---
+            const golCanvas = document.getElementById('game-of-life-canvas');
+            if (golCanvas) {
+                const ctx = golCanvas.getContext('2d');
+                const startPauseBtn = document.getElementById('gol-start-pause');
+                const resetBtn = document.getElementById('gol-reset');
+                const clearBtn = document.getElementById('gol-clear');
+
+                const resolution = 20;
+                let cols, rows;
+                let grid;
+                let isRunning = false;
+                let animationFrameId;
+
+                function setup() {
+                    const dpr = window.devicePixelRatio || 1;
+                    const rect = golCanvas.getBoundingClientRect();
+                    golCanvas.width = rect.width * dpr;
+                    golCanvas.height = rect.height * dpr;
+                    ctx.scale(dpr, dpr);
+                    
+                    cols = Math.floor(rect.width / resolution);
+                    rows = Math.floor(rect.height / resolution);
+                    grid = buildGrid();
+                    randomizeGrid();
+                    draw();
+                }
+
+                function buildGrid() {
+                    return new Array(cols).fill(null)
+                        .map(() => new Array(rows).fill(0));
+                }
+
+                function randomizeGrid() {
+                    for (let col = 0; col < cols; col++) {
+                        for (let row = 0; row < rows; row++) {
+                            grid[col][row] = Math.random() > 0.7 ? 1 : 0;
+                        }
+                    }
+                }
+                
+                function clearGrid() {
+                    for (let col = 0; col < cols; col++) {
+                        for (let row = 0; row < rows; row++) {
+                            grid[col][row] = 0;
+                        }
+                    }
+                }
+
+                function draw() {
+                    ctx.clearRect(0, 0, golCanvas.width, golCanvas.height);
+                    for (let col = 0; col < cols; col++) {
+                        for (let row = 0; row < rows; row++) {
+                            const cell = grid[col][row];
+                            ctx.beginPath();
+                            ctx.rect(col * resolution, row * resolution, resolution, resolution);
+                            ctx.fillStyle = cell ? '#60a5fa' : '#1F2937';
+                            ctx.fill();
+                            // ctx.stroke(); // Opcional: para ver la cuadrícula
+                        }
+                    }
+                }
+                
+                function step() {
+                    const nextGen = buildGrid();
+                    for (let col = 0; col < cols; col++) {
+                        for (let row = 0; row < rows; row++) {
+                            const neighbors = countNeighbors(col, row);
+                            const state = grid[col][row];
+                            if (state === 1 && (neighbors < 2 || neighbors > 3)) {
+                                nextGen[col][row] = 0;
+                            } else if (state === 0 && neighbors === 3) {
+                                nextGen[col][row] = 1;
+                            } else {
+                                nextGen[col][row] = state;
+                            }
+                        }
+                    }
+                    grid = nextGen;
+                    draw();
+                }
+                
+                function countNeighbors(x, y) {
+                    let sum = 0;
+                    for (let i = -1; i < 2; i++) {
+                        for (let j = -1; j < 2; j++) {
+                            if (i === 0 && j === 0) continue;
+                            const col = (x + i + cols) % cols;
+                            const row = (y + j + rows) % rows;
+                            sum += grid[col][row];
+                        }
+                    }
+                    return sum;
+                }
+                
+                function gameLoop() {
+                    if (!isRunning) return;
+                    step();
+                    setTimeout(() => {
+                        animationFrameId = requestAnimationFrame(gameLoop);
+                    }, 100); // Controla la velocidad de la simulación
+                }
+
+                startPauseBtn.addEventListener('click', () => {
+                    isRunning = !isRunning;
+                    startPauseBtn.textContent = isRunning ? 'Pausa' : 'Iniciar';
+                    startPauseBtn.classList.toggle('active', isRunning);
+                    if (isRunning) {
+                        gameLoop();
+                    } else {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                });
+
+                resetBtn.addEventListener('click', () => {
+                    randomizeGrid();
+                    draw();
+                });
+
+                clearBtn.addEventListener('click', () => {
+                    isRunning = false;
+                    startPauseBtn.textContent = 'Iniciar';
+                    startPauseBtn.classList.remove('active');
+                    cancelAnimationFrame(animationFrameId);
+                    clearGrid();
+                    draw();
+                });
+
+                golCanvas.addEventListener('click', (e) => {
+                    const rect = golCanvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const col = Math.floor(x / resolution);
+                    const row = Math.floor(y / resolution);
+                    if(col >= 0 && col < cols && row >= 0 && row < rows) {
+                       grid[col][row] = grid[col][row] ? 0 : 1;
+                       draw();
+                    }
+                });
+                
+                // Inicializar la simulación
+                setup();
+                // Redibujar si cambia el tamaño de la ventana
+                window.addEventListener('resize', setup);
+            }
         });
-        
     </script>
 
 </body>
