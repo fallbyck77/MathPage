@@ -90,12 +90,13 @@
         <div class="p-6">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-2xl font-bold text-white">Menú</h2>
-                <button id="close-menu-btn" class="text-gray-400 hover:text-white">&times;</button>
+                <button id="close-menu-btn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
             </div>
             <nav class="space-y-4">
                 <a href="#notas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Notas</a>
                 <a href="#simulaciones" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Simulaciones</a>
                 <a href="#talleres" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Talleres</a>
+                <a href="#congreso" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Congreso</a>
                 <a href="#fotografia" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Fotografía</a>
                 <a href="#lecturas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Lecturas</a>
                 <a href="#eventos" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Eventos</a>
@@ -103,7 +104,7 @@
             </nav>
         </div>
     </div>
-   
+    
     <!-- Fondo oscuro para el menú -->
     <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300"></div>
 
@@ -122,31 +123,39 @@
     <main>
         <!-- Sección de Inicio (Hero) -->
         <section id="inicio" class="min-h-screen flex items-center justify-center hero-bg p-6">
-            <div class="text-center max-w-4xl mx-auto">
-                <!-- Contenedor para la animación y controles -->
-                <div class="w-full max-w-md mx-auto mb-8 flex flex-col justify-center items-center">
-                    <canvas id="rose-canvas"></canvas>
-                    <!-- Controles para el parámetro k -->
-                    <div class="w-full mt-6 space-y-4">
-                        <div class="flex items-center justify-between text-lg">
-                            <label for="k-slider" class="font-semibold text-blue-300">k</label>
-                            <p id="equation-display" class="font-mono text-gray-300">ρ = R sin(kφ)</p>
+            <div class="container mx-auto px-6 py-12">
+                <div class="flex flex-col lg:flex-row items-center justify-center gap-12 text-center lg:text-left">
+                    
+                    <!-- Columna de Texto -->
+                    <div class="lg:w-1/2 lg:order-1 order-2">
+                        <h1 class="text-5xl md:text-7xl font-black text-white mb-2 tracking-tight">πlography</h1>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Kevin Messina Rodriguez</h2>
+                        <p class="text-lg md:text-xl text-gray-300 italic mb-4">Un espacio donde convergen las matemáticas, la fotografía y la curiosidad.</p>
+                        <p class="text-xl md:text-2xl text-blue-300 mb-8">Apasionado y estudiante de matemáticas.</p>
+                        
+                        <div class="flex justify-center lg:justify-start space-x-6">
+                            <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
+                            <a href="https://www.instagram.com/kevin_messinaa/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Instagram"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="YouTube"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="GitHub"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.663 7.826 6.357 9.363.465.086.635-.202.635-.448 0-.22-.008-.996-.013-1.79-2.585.56-3.13-1.11-3.21-1.33-.132-.33-.67-1.33-1.15-1.59-.4-.22-.97-.75-.01-.76.91-.01 1.55.93 1.76 1.33.99 1.76 2.6 1.25 3.23.95.1-.75.39-1.25.7-1.54-2.47-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2.14-2.98-.12-.28-.54-1.4.12-2.94 0 0 .93-.3 3.05 1.13A10.66 10.66 0 0112 6.8c.96 0 1.93.13 2.82.38 2.12-1.43 3.05-1.13 3.05-1.13.66 1.54.24 2.66.12 2.94.71.78 1.14 1.77 1.14 2.98 0 4.26-2.58 5.2-5.06 5.47.4.34.76.99.76 2 0 1.45-.01 2.62-.01 2.97 0 .25.17.54.64.45A10.01 10.01 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
                         </div>
-                        <input type="range" id="k-slider" min="1" max="10" step="0.01" value="1" class="w-full">
                     </div>
-                    <button id="pause-button" class="mt-6 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-colors">Pausar Animación</button>
-                </div>
-                
-                <h1 class="text-5xl md:text-7xl font-black text-white mb-2 tracking-tight">πlography</h1>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Kevin Messina Rodriguez</h2>
-                <p class="text-lg md:text-xl text-gray-300 italic mb-4">Un espacio donde convergen las matemáticas, la fotografía y la curiosidad.</p>
-                <p class="text-xl md:text-2xl text-blue-300 mb-8">Apasionado y estudiante de matemáticas.</p>
-                
-                <div class="flex justify-center space-x-6">
-                    <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
-                    <a href="https://www.instagram.com/kevin_messinaa/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.663 7.826 6.357 9.363.465.086.635-.202.635-.448 0-.22-.008-.996-.013-1.79-2.585.56-3.13-1.11-3.21-1.33-.132-.33-.67-1.33-1.15-1.59-.4-.22-.97-.75-.01-.76.91-.01 1.55.93 1.76 1.33.99 1.76 2.6 1.25 3.23.95.1-.75.39-1.25.7-1.54-2.47-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2.14-2.98-.12-.28-.54-1.4.12-2.94 0 0 .93-.3 3.05 1.13A10.66 10.66 0 0112 6.8c.96 0 1.93.13 2.82.38 2.12-1.43 3.05-1.13 3.05-1.13.66 1.54.24 2.66.12 2.94.71.78 1.14 1.77 1.14 2.98 0 4.26-2.58 5.2-5.06 5.47.4.34.76.99.76 2 0 1.45-.01 2.62-.01 2.97 0 .25.17.54.64.45A10.01 10.01 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
+                    
+                    <!-- Columna de Animación -->
+                    <div class="lg:w-1/2 lg:order-2 order-1 flex justify-center lg:justify-end">
+                         <div class="w-full max-w-sm mx-auto flex flex-col justify-center items-center">
+                            <canvas id="rose-canvas"></canvas>
+                            <div class="w-full mt-6 space-y-4">
+                                <div class="flex items-center justify-between text-lg">
+                                    <label for="k-slider" class="font-semibold text-blue-300">k</label>
+                                    <p id="equation-display" class="font-mono text-gray-300">ρ = R sin(kφ)</p>
+                                </div>
+                                <input type="range" id="k-slider" min="1" max="10" step="0.01" value="1" class="w-full">
+                            </div>
+                            <button id="pause-button" class="mt-6 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-colors">Pausar Animación</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -175,15 +184,13 @@
                     </div>
                     <div class="card rounded-lg overflow-hidden p-6">
                         <h3 class="text-xl font-bold text-blue-300 mb-2">Animaciones Matemáticas </h3>
-                        <p class="text-gray-400 mb-4">Estoy aprendiendo a hacer animaciones y quiero compartirlo con ustedes:D.</p>
+                        <p class="text-gray-400 mb-4">Estoy aprendiendo a hacer animaciones y quiero compartirlo con ustedes :D.</p>
                         <a href="./GaleriaManim.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
                     </div>
                 </div>
             </section>
 
-            <!-- ================================================== -->
-            <!-- =========      NUEVA SECCIÓN INICIA AQUÍ     ========= -->
-            <!-- ================================================== -->
+            <!-- Sección de Simulaciones -->
             <section id="simulaciones">
                 <h2 class="text-4xl font-bold text-center mb-12">Simulaciones Interactivas</h2>
                 <div class="card rounded-lg overflow-hidden p-6 max-w-4xl mx-auto">
@@ -219,60 +226,49 @@
                     </div>
                 </div>
             </section>
-            <!-- ================================================== -->
-            <!-- =========       NUEVA SECCIÓN TERMINA AQUÍ     ========= -->
-            <!-- ================================================== -->
 
-            <!-- Sección de Talleres -->
+            <!-- Sección de Talleres y Congreso (Unificadas para mejor estructura) -->
             <section id="talleres">
-                <h2 class="text-4xl font-bold text-center mb-12">Talleres y Cursos</h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                     <div class="card rounded-lg overflow-hidden p-6">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">Proximamente...</h3>
-                        <p class="text-gray-400 mb-4"></p>
-                        <a href="#" class="font-semibold text-white hover:text-blue-400">... &rarr;</a>
+                <h2 class="text-4xl font-bold text-center mb-12">Talleres y Congresos</h2>
+                <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                     <div class="card rounded-lg overflow-hidden p-6 text-center">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">58 Congreso Nacional</h3>
+                        <p class="text-gray-400 mb-4">Accede a las notas, presentaciones y fotografías del congreso.</p>
+                        <a href="./Congreso58.html" class="font-semibold text-white hover:text-blue-400">Ver más &rarr;</a>
+                    </div>
+                    <div class="card rounded-lg overflow-hidden p-6 text-center">
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">Próximos Talleres...</h3>
+                        <p class="text-gray-400 mb-4">Nuevos talleres y cursos en preparación.</p>
+                        <span class="font-semibold text-gray-500">... &rarr;</span>
                     </div>
                 </div>
             </section>
-                                    <!-- Sección del Congresoo -->
-            <section id="talleres">
-                <h2 class="text-4xl font-bold text-center mb-12">58 Congreso Nacional</h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                <a href="./Congreso58.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
-
+            
             <!-- Sección de Fotografía -->
             <section id="fotografia">
                 <h2 class="text-4xl font-bold text-center mb-12">Fotografía</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div class="relative group card rounded-lg overflow-hidden">
-                        <img src="https://i.postimg.cc/tJbrkb9c/PXL-20250711-171745996-2.jpg" alt="Descripción de la foto 1" class="w-full h-full object-cover">
+                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
+                        <img src="https://i.postimg.cc/tJbrkb9c/PXL-20250711-171745996-2.jpg" alt="Comedor del CIMAT en Guanajuato" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
                             <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">Una tarde tranquila en el comedor del CIMAT, Guanajuato.</p>
                         </div>
                     </div>
-                    <div class="relative group card rounded-lg overflow-hidden">
-                        <img src="https://i.postimg.cc/CLFPfwPB/PXL-20250712-041541875-PORTRAIT.jpg" alt="Descripción de la foto 2" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
-                        </div>
+                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
+                        <img src="https://i.postimg.cc/CLFPfwPB/PXL-20250712-041541875-PORTRAIT.jpg" alt="Fotografía de paisaje" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
                     </div>
-                     <div class="relative group card rounded-lg overflow-hidden">
-                        <img src="https://i.postimg.cc/TYbWJbKp/PXL-20250707-013923759-NIGHT-RAW-01-COVER.jpg" alt="Descripción de la foto 3" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
-                        </div>
+                     <div class="relative group card rounded-lg overflow-hidden aspect-square">
+                        <img src="https://i.postimg.cc/TYbWJbKp/PXL-20250707-013923759-NIGHT-RAW-01-COVER.jpg" alt="Fotografía nocturna" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
                     </div>
-                    <div class="relative group card rounded-lg overflow-hidden">
-                        <img src="https://i.postimg.cc/hG2Jtb53/Whats-App-Image-2025-07-18-at-2-37-39-PM.jpg" alt="Descripción de la foto 4" class="w-full h-full object-cover">
-                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
-                        </div>
+                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
+                        <img src="https://i.postimg.cc/hG2Jtb53/Whats-App-Image-2025-07-18-at-2-37-39-PM.jpg" alt="Fotografía de arquitectura" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
                     </div>
-                    <div class="relative group card rounded-lg overflow-hidden">
-                        <img src="https://i.postimg.cc/xjcxG9Lc/PXL-20250710-041020320-RAW-01-COVER.jpg" alt="Descripción de la foto 5" class="w-full h-full object-cover">
-                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></p>
-                        </div>
+                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
+                        <img src="https://i.postimg.cc/xjcxG9Lc/PXL-20250710-041020320-RAW-01-COVER.jpg" alt="Fotografía de naturaleza" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
                     </div>
                 </div>
             </section>
@@ -281,35 +277,45 @@
             <section id="lecturas">
                 <h2 class="text-4xl font-bold text-center mb-12">Lecturas Recomendadas</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                    <div class="text-center">
-                        <img src="https://i.postimg.cc/HkHJQ4V3/s-l1600.webp" alt="Portada del libro 'Gödel, Escher, Bach'" class="card rounded-lg mb-2 mx-auto">
-                        <h4 class="font-bold text-white mt-2">Gödel, Escher, Bach</h4>
-                        <p class="text-sm text-gray-400">James Clear</p>
-                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Un libro distinto, algo conocido, habla sobre productividad y hacer un focus en nuestras metas, me lo regaló un amigo y me motivó a hacer este proyecto.</p>
+                    <div class="flex flex-col items-center text-center">
+                        <img src="https://i.postimg.cc/HkHJQ4V3/s-l1600.webp" alt="Portada del libro 'Hábitos Atómicos'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
+                        <div class="flex flex-col flex-grow justify-start mt-4">
+                            <h4 class="font-bold text-white">Hábitos Atómicos</h4>
+                            <p class="text-sm text-gray-400">James Clear</p>
+                            <p class="text-sm text-gray-400 italic mt-2 px-2">Un libro distinto, habla sobre productividad y hacer un focus en nuestras metas, me lo regaló un amigo y me motivó a hacer este proyecto.</p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <img src="https://i.postimg.cc/nc3V30th/image.jpg" alt="Portada del libro 'Chaos: Making a New Science'" class="card rounded-lg mb-2 mx-auto">
-                        <h4 class="font-bold text-white mt-2">Del cero al infinito.</h4>
-                        <p class="text-sm text-gray-400">Pablo Ámster</p>
-                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Mi primer libro de divulgación leído antes de entrar a mi carrera, lo regalé porque creo que era un excelente ejemplar</p>
+                    <div class="flex flex-col items-center text-center">
+                        <img src="https://i.postimg.cc/nc3V30th/image.jpg" alt="Portada del libro 'Del cero al infinito'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
+                        <div class="flex flex-col flex-grow justify-start mt-4">
+                            <h4 class="font-bold text-white mt-2">Del cero al infinito.</h4>
+                            <p class="text-sm text-gray-400">Pablo Ámster</p>
+                            <p class="text-sm text-gray-400 italic mt-2 px-2">Mi primer libro de divulgación leído antes de entrar a mi carrera, lo regalé porque creo que era un excelente ejemplar.</p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <img src="https://i.postimg.cc/hGtbS0rf/chel-87-e-cov-1.jpg" alt="Portada del libro 'Flatland: A Romance of Many Dimensions'" class="card rounded-lg mb-2 mx-auto">
-                        <h4 class="font-bold text-white mt-2">Geometry and Imagination</h4>
-                        <p class="text-sm text-gray-400">David Hilbert</p>
-                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">Maravilloso ejemplar sobre la geometría, es una recomendación de un maestro, y se ha quedado en mis favoritos</p>
+                    <div class="flex flex-col items-center text-center">
+                        <img src="https://i.postimg.cc/hGtbS0rf/chel-87-e-cov-1.jpg" alt="Portada del libro 'Geometry and Imagination'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
+                        <div class="flex flex-col flex-grow justify-start mt-4">
+                            <h4 class="font-bold text-white mt-2">Geometry and Imagination</h4>
+                            <p class="text-sm text-gray-400">David Hilbert</p>
+                            <p class="text-sm text-gray-400 italic mt-2 px-2">Maravilloso ejemplar sobre la geometría, es una recomendación de un maestro, y se ha quedado en mis favoritos.</p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <img src="https://i.postimg.cc/bYDk1SXM/stml-88-e-cov-1.jpg" alt="Portada del libro 'The Man Who Knew Infinity'" class="card rounded-lg mb-2 mx-auto">
-                        <h4 class="font-bold text-white mt-2">Hilbert´s Tenth Problem</h4>
-                        <p class="text-sm text-gray-400">Fodden </p>
-                        <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">En proceso de lectura</p>
+                    <div class="flex flex-col items-center text-center">
+                        <img src="https://i.postimg.cc/bYDk1SXM/stml-88-e-cov-1.jpg" alt="Portada del libro 'Hilbert´s Tenth Problem'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
+                        <div class="flex flex-col flex-grow justify-start mt-4">
+                            <h4 class="font-bold text-white mt-2">Hilbert´s Tenth Problem</h4>
+                            <p class="text-sm text-gray-400">Yuri V. Matiyasevich</p>
+                            <p class="text-sm text-gray-400 italic mt-2 px-2">En proceso de lectura.</p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <img src="https://i.postimg.cc/JzVfFfPR/12112fb0fb088856cda9c86eed51001c.webp" alt="Portada del libro 'Cálculus'" class="card rounded-lg mb-2 mx-auto">
-                        <h4 class="font-bold text-white mt-2">Calculus</h4>
-                        <p class="text-sm text-gray-400">Michael Spivak</p>
-                         <p class="text-sm text-gray-400 italic mt-2 px-2 h-10">La biblia del cálculo, el terror y destrozamentes de muchos matemáticos que han leído este libro.</p>
+                    <div class="flex flex-col items-center text-center">
+                        <img src="https://i.postimg.cc/JzVfFfPR/12112fb0fb088856cda9c86eed51001c.webp" alt="Portada del libro 'Cálculus'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
+                        <div class="flex flex-col flex-grow justify-start mt-4">
+                            <h4 class="font-bold text-white mt-2">Calculus</h4>
+                            <p class="text-sm text-gray-400">Michael Spivak</p>
+                             <p class="text-sm text-gray-400 italic mt-2 px-2">La biblia del cálculo, el terror y destrozamentes de muchos matemáticos que han leído este libro.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -322,15 +328,15 @@
                         <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Lugares Visitados</h3>
                         <ul class="space-y-3 list-disc list-inside text-gray-300">
                             <li>Escuela de Verano del CIMAT - Guanajuato, 2025</li>
-                            <li>Congreso Nacional de Matemáticas SMM- Durango, 2024</li>
-                            <li>Congreso Nacional de Matemáticas SMM- San Luis Potosí, 2023</li>
+                            <li>Congreso Nacional de Matemáticas SMM - Durango, 2024</li>
+                            <li>Congreso Nacional de Matemáticas SMM - San Luis Potosí, 2023</li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Próximamente</h3>
                          <ul class="space-y-3 list-disc list-inside text-gray-300">
-                            <li>Si todo sale bien xD Congreso de la SMM  (Octubre 2025)</li>
-                        </ul>
+                            <li>Si todo sale bien xD, Congreso de la SMM (Octubre 2025)</li>
+                         </ul>
                     </div>
                 </div>
             </section>
@@ -353,7 +359,7 @@
                     </a>
                     <a href="https://www.youtube.com/channel/UCXtxgWwk55kVJo9lCCZRdmg" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
                         <h4 class="font-bold text-blue-300">Veritasium en español</h4>
-                        <p class="text-sm text-gray-400">Videos increiblemente asombrosos sobre ciencia en general, puedes encontrar matemáticas acá también.</p>
+                        <p class="text-sm text-gray-400">Videos increíblemente asombrosos sobre ciencia en general, puedes encontrar matemáticas acá también.</p>
                     </a>
                 </div>
             </section>
@@ -362,7 +368,7 @@
     </main>
 
     <!-- Recuadro de Mensaje Importante -->
-    <div id="important-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-yellow-500 text-gray-900 p-4 rounded-lg shadow-lg flex items-center gap-4 z-40">
+    <div id="important-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 w-11/12 max-w-4xl bg-yellow-400 text-gray-900 p-4 rounded-lg shadow-lg flex items-center gap-4 z-40">
         <p><strong class="font-bold">Importante leer:</strong> Esto es una demo, estaré trabajando para que sea lo más funcional posible muy pronto. Observaciones, sugerencias o si notas algo raro en la página agradeceré profundamente tu mensaje en kevinmessinarodriguez@gmail.com</p>
         <button id="close-banner-btn" class="text-gray-900 font-bold text-2xl leading-none">&times;</button>
     </div>
@@ -371,7 +377,7 @@
     <footer class="bg-gray-900 border-t border-gray-700">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
             <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
-            <p class="text-sm mt-2">"Debemos saber, sabremos".</p>
+            <p class="text-sm mt-2">"Debemos saber, sabremos". - David Hilbert</p>
         </div>
     </footer>
 
@@ -547,7 +553,6 @@
                             ctx.rect(col * resolution, row * resolution, resolution, resolution);
                             ctx.fillStyle = cell ? '#60a5fa' : '#1F2937';
                             ctx.fill();
-                            // ctx.stroke(); // Opcional: para ver la cuadrícula
                         }
                     }
                 }
@@ -589,7 +594,7 @@
                     step();
                     setTimeout(() => {
                         animationFrameId = requestAnimationFrame(gameLoop);
-                    }, 100); // Controla la velocidad de la simulación
+                    }, 100); 
                 }
 
                 startPauseBtn.addEventListener('click', () => {
@@ -629,9 +634,7 @@
                     }
                 });
                 
-                // Inicializar la simulación
                 setup();
-                // Redibujar si cambia el tamaño de la ventana
                 window.addEventListener('resize', setup);
             }
         });
@@ -639,4 +642,7 @@
 
 </body>
 </html>
+
+
+
 
