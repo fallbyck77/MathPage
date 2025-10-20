@@ -17,6 +17,7 @@
         .card {
             background-color: #1F2937;
             border: 1px solid #374151;
+            border-radius: 0.5rem; /* Tailwind's rounded-lg */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
@@ -38,6 +39,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            border-radius: 0.5rem; /* Apply to iframe as well */
         }
     </style>
 </head>
@@ -59,51 +61,89 @@
         <!-- SECCIÓN: CONGRESO -->
         <section id="congreso">
             <div class="text-center mb-12">
-                <h1 class="text-5xl md:text-6xl font-black text-white tracking-tight">Congreso Nacional de Matemáticas</h1>
+                <h1 class="text-5xl md:text-6xl font-black text-white tracking-tight">58 Congreso Nacional de Matemáticas</h1>
                 <p class="text-xl text-blue-300 mt-4 max-w-3xl mx-auto">
                     Recursos y animaciones del cartel "<span class="font-bold">Te presentamos los recursos utilizados</span>". 
                     ¡Gracias por visitar! Explora las visualizaciones interactivas a continuación.
                 </p>
             </div>
 
-            <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+            <div class="max-w-5xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <!-- Animación de Desmos -->
-                <div class="card rounded-lg p-4">
-                    <h3 class="text-xl font-bold text-blue-300 mb-4">Construcción Interactiva en Desmos</h3>
-                    <div class="video-container rounded-lg overflow-hidden border border-gray-600">
-                        <!-- Iframe de una construcción de curva de Bézier en Desmos -->
-                        <iframe src="https://www.desmos.com/3d/cnv1kmv12h?lang=es" class="w-full h-full" frameborder="0"></iframe>
+                <!-- Animación de Desmos 1 -->
+                <div class="card p-4">
+                    <h3 class="text-xl font-bold text-blue-300 mb-4">Grafo de Petersen en el Toro (Desmos)</h3>
+                    <div class="video-container overflow-hidden border border-gray-600">
+                        <iframe src="https://www.desmos.com/3d/cnv1kmv12h?lang=es" title="Grafo de Petersen en el Toro (Desmos)" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <p class="text-gray-400 mt-4">Presentamos el grafo de petersen incrustado en el toro :D </p>
+                    <p class="text-gray-400 mt-4">Presentamos el grafo de Petersen incrustado en el toro. </p>
+                </div>
+                
+                <!-- Animación de Desmos 2 -->
+                <div class="card p-4">
+                    <h3 class="text-xl font-bold text-blue-300 mb-4">Mapa de 4 Colores en el Toro (Desmos)</h3>
+                    <div class="video-container overflow-hidden border border-gray-600">
+                        <iframe src="https://www.desmos.com/3d/ho1b2wtls0" title="Mapa de 4 Colores en el Toro (Desmos)" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-gray-400 mt-4">Una demostración interactiva del teorema de los cuatro colores aplicado a una superficie toroidal. </p>
                 </div>
 
-                <!-- Animación de Manim para el congreso -->
-                <div class="card rounded-lg p-4">
-                    <h3 class="text-xl font-bold text-blue-300 mb-4">/h3>
-                    <div class="video-container rounded-lg overflow-hidden">
-                        <!-- Puedes reemplazar este enlace con tu video de Manim específico para el congreso -->
-                        <iframe src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <!-- Animación de Manim 1 -->
+                <div class="card p-4">
+                    <h3 class="text-xl font-bold text-blue-300 mb-4">Teorema de Kuratowski (Manim)</h3>
+                    <div class="video-container overflow-hidden border border-gray-600">
+                        <iframe src="https://www.youtube.com/embed/ptLADzjDbQI" title="Teorema de Kuratowski" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
-                    <p class="text-gray-400 mt-4"></p>
+                    <p class="text-gray-400 mt-4">Una explicación visual del Teorema de Kuratowski en la teoría de grafos. </p>
+                </div>
+
+                <!-- Animación de Manim 2 -->
+                <div class="card p-4">
+                    <h3 class="text-xl font-bold text-blue-300 mb-4">Proyección Estereográfica (Manim)</h3>
+                    <div class="video-container overflow-hidden border border-gray-600">
+                        <iframe src="https://www.youtube.com/embed/nb1JkvynTLM" title="Proyección estereográfica" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-gray-400 mt-4">Visualización animada de la proyección estereográfica. </p>
+                </div>
+
+                <!-- Animación de Manim 3 (Placeholder) -->
+                <div class="card p-4">
+                    <h3 class="text-xl font-bold text-blue-300 mb-4">Grafo de Sulanke</h3>
+                    <div class="video-container overflow-hidden border border-gray-600">
+                        <!-- Video de placeholder si no hay contenido aún -->
+                        <iframe src="https://www.youtube.com/embed/NI-pIx_Omw4" title="Placeholder video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-gray-400 mt-4">¡Mantente atento para más animaciones matemáticas espectaculares!</p>
                 </div>
 
             </div>
+                <div class="card p-4">
+                    <div class="relative group rounded-lg overflow-hidden">
+                        <img src="https://i.postimg.cc/0QYfmnrr/Whats-App-Image-2025-10-19-at-6-19-02-PM.jpg" alt="Ejemplo de la cota inferior para el número cromático del toro" class="w-full h-auto object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
+                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">El primer ejemplo de la cota inferior.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
-        
-    </main>
 
     <!-- Footer -->
     <footer class="bg-gray-900 border-t border-gray-700 mt-20">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
             <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+            <p class="text-sm mt-2">"Debemos saber, sabremos". - David Hilbert</p>
         </div>
     </footer>
 
     <script>
         // No se necesita script funcional para esta versión de la página, 
-        // pero se mantiene por si se añaden funcionalidades en el futuro.
+        // pero se mantiene el bloque por si se añaden funcionalidades en el futuro.
     </script>
 </body>
 </html>
+
+
+
+
 
