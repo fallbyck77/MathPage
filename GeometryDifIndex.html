@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>πlography - Geometría Diferencial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js para la animación Hero -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 60%);
+        }
+        .card {
+            background-color: #1e293b; /* Slate 800 */
+            border: 1px solid #334155;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #38bdf8;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        .text-glow {
+            text-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+        }
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-sky-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="fixed w-full bg-slate-900/80 backdrop-blur-md z-50 border-b border-slate-800">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 tracking-tighter">
+                πlography
+            </a>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#" class="hover:text-sky-400 transition-colors">Conceptos</a>
+                <a href="#" class="hover:text-sky-400 transition-colors">Historia</a>
+                <a href="#" class="hover:text-sky-400 transition-colors">Simulaciones</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section con Animación 3D -->
+    <section class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden hero-gradient">
+        <!-- Canvas 3D Background -->
+        <div id="hero-canvas"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-900/30 border border-sky-700/50 text-sky-300 text-xs font-bold mb-6 tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                    Explorando el espacio curvo
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-tight text-glow">
+                    Geometría <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400">Diferencial</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-slate-400 mb-10 max-w-2xl leading-relaxed">
+                    Donde el cálculo se encuentra con la forma. Un viaje visual a través de curvas, superficies, variedades y la curvatura del espacio mismo.
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="#temas" class="px-8 py-4 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-sky-900/40 flex items-center gap-2">
+                        Comenzar Exploración
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </a>
+                    <button class="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold border border-slate-700 transition-all">
+                        Sobre el Proyecto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Temas (Grid) -->
+    <section id="temas" class="py-24 bg-slate-950 relative">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Módulos Interactivos</h2>
+                    <p class="text-slate-400">Selecciona un tema para visualizar sus propiedades matemáticas.</p>
+                </div>
+                <div class="hidden md:block h-px flex-1 bg-slate-800 ml-12 mb-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Tarjeta 1: La Tractriz (EXISTENTE) -->
+                <a href="./TractrizPseudoesfera.html" class="group card rounded-2xl p-1 block relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="bg-slate-900 rounded-xl h-full p-6 relative z-10 flex flex-col">
+                        <div class="w-12 h-12 bg-sky-900/50 rounded-lg flex items-center justify-center mb-6 text-sky-400 border border-sky-700/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-400 transition-colors">La Tractriz y Pseudoesfera</h3>
+                        <p class="text-slate-400 text-sm mb-4 flex-grow">
+                            Descubre cómo pasear a un perro llevó al descubrimiento de la geometría hiperbólica de curvatura negativa constante.
+                        </p>
+                        <div class="flex items-center text-sky-400 text-sm font-bold mt-4">
+                            Ver Simulación 
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tarjeta 2: Curvas en el Espacio (PLACEHOLDER) -->
+                <div class="card rounded-2xl p-6 opacity-60 hover:opacity-100 cursor-not-allowed grayscale hover:grayscale-0 transition-all">
+                    <div class="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-6 text-slate-500 border border-slate-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Frenet-Serret</h3>
+                    <p class="text-slate-500 text-sm">
+                        Visualización del triedro móvil: Tangente, Normal y Binormal. Curvatura y torsión en tiempo real.
+                    </p>
+                    <span class="inline-block mt-4 px-2 py-1 bg-slate-800 text-xs text-slate-500 rounded border border-slate-700">Próximamente</span>
+                </div>
+
+                <!-- Tarjeta 3: Teorema Egregium (PLACEHOLDER) -->
+                <div class="card rounded-2xl p-6 opacity-60 hover:opacity-100 cursor-not-allowed grayscale hover:grayscale-0 transition-all">
+                    <div class="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-6 text-slate-500 border border-slate-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Teorema Egregium</h3>
+                    <p class="text-slate-500 text-sm">
+                        ¿Por qué no puedes aplanar una esfera sin romperla? Curvatura Gaussiana e isometrías.
+                    </p>
+                    <span class="inline-block mt-4 px-2 py-1 bg-slate-800 text-xs text-slate-500 rounded border border-slate-700">Próximamente</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-2xl font-bold text-white mb-2">πlography</h3>
+            <p class="text-slate-500 text-sm mb-6">Explorando la belleza matemática a través del código.</p>
+            <p class="text-slate-600 text-xs">&copy; 2025 Kevin Messina Rodriguez. Construido con Three.js y Tailwind.</p>
+        </div>
+    </footer>
+
+    <!-- Animación 3D del Hero (Torus Knot) -->
+    <script>
+        const canvasContainer = document.getElementById('hero-canvas');
+        
+        // Configuración Three.js
+        const scene = new THREE.Scene();
+        // Niebla para fundir con el fondo
+        scene.fog = new THREE.FogExp2(0x0f172a, 0.03); 
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 8;
+        camera.position.x = 2;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        canvasContainer.appendChild(renderer.domElement);
+
+        // Geometría: Torus Knot (Nudo Toroidal)
+        // Representa curvas complejas y topología
+        const geometry = new THREE.TorusKnotGeometry(3.5, 1, 200, 32, 2, 3);
+        
+        // Material "Wireframe" elegante
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0x38bdf8, // Sky 400
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+
+        const torusKnot = new THREE.Mesh(geometry, material);
+        scene.add(torusKnot);
+
+        // Partículas flotantes para dar ambiente "espacial"
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 700;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            // Dispersión amplia
+            posArray[i] = (Math.random() - 0.5) * 40; 
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0x6366f1, // Indigo
+            transparent: true,
+            opacity: 0.8
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Animación
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        // Efecto Parallax suave con el mouse
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.001;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.001;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            const elapsedTime = clock.getElapsedTime();
+
+            targetX = mouseX * 2;
+            targetY = mouseY * 2;
+
+            // Rotación constante suave
+            torusKnot.rotation.y += 0.003;
+            torusKnot.rotation.z += 0.002;
+            
+            // Respiración (Scaling sutil)
+            const scale = 1 + Math.sin(elapsedTime * 0.5) * 0.05;
+            torusKnot.scale.set(scale, scale, scale);
+
+            // Parallax
+            torusKnot.rotation.y += 0.1 * (targetX - torusKnot.rotation.y);
+            torusKnot.rotation.x += 0.1 * (targetY - torusKnot.rotation.x);
+            
+            // Movimiento de partículas
+            particlesMesh.rotation.y = -elapsedTime * 0.05;
+            particlesMesh.rotation.x = mouseY * 0.5;
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Responsive
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
