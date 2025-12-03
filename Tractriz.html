@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Tractriz y la Pseudoesfera - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax para renderizado LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Three.js para la Pseudoesfera 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls para mover la cámara -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #E5E7EB;
+        }
+        .card {
+            background-color: #1e293b; /* Slate 800 */
+            border: 1px solid #334155;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        canvas {
+            border-radius: 0.5rem;
+            cursor: move; /* Indica que es interactivo */
+        }
+        .highlight-text {
+            color: #38bdf8; /* Sky 400 */
+            font-weight: 700;
+        }
+        /* Estilo para el contenedor del canvas 2D */
+        #canvas-container {
+            background-color: #0f172a;
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-slate-900/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-700">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="./index.html" class="text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-2 font-bold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                πlography
+            </a>
+            <span class="text-xs font-mono text-slate-500 hidden md:block">Geometría Diferencial</span>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-6 py-12 max-w-6xl">
+        
+        <!-- Hero Section -->
+        <div class="text-center mb-16 space-y-4 animate-fade-in-down">
+            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight">La Tractriz</h1>
+            <h2 class="text-2xl md:text-3xl font-light text-sky-300">y la Pseudoesfera</h2>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto pt-4">De la correa de un perro obstinado al nacimiento de la geometría no euclidiana.</p>
+        </div>
+
+        <!-- Sección 1: La Curva de Persecución (2D) -->
+        <section class="mb-20 grid lg:grid-cols-2 gap-12 items-center">
+            
+            <div class="space-y-6 order-2 lg:order-1">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="h-1 w-8 bg-sky-500 rounded"></div>
+                    <h3 class="text-xl font-bold text-white tracking-wide uppercase">El Problema del Arrastre</h3>
+                </div>
+                
+                <p class="text-slate-300 leading-relaxed text-lg">
+                    Imagina que estás en el punto <span class="text-red-400 font-bold">(A)</span> sosteniendo una correa tensa de longitud constante $a$ (en los textos clásicos a veces llamada $L$). Al final de la correa hay un peso (o un perro obstinado) en el punto <span class="text-sky-400 font-bold">(P)</span>.
+                </p>
+                <p class="text-slate-300 leading-relaxed text-lg">
+                    Si comienzas a caminar en línea recta (sobre el eje Y), arrastrando el peso, la curva que describe el objeto se llama <span class="highlight-text">Tractriz</span>.
+                </p>
+                <p class="text-slate-300 leading-relaxed text-lg">
+                    La propiedad fundamental es geométrica: el segmento de la línea tangente desde el punto de contacto hasta la asíntota tiene siempre la misma longitud ($a$).
+                </p>
+
+                <div class="bg-slate-800/50 p-4 rounded-lg border-l-4 border-sky-500">
+                    <p class="font-mono text-sm text-sky-200">
+                        $$ \gamma(t) =  \left( \sin t, \cos t + \ln \left( \tan \frac{t}{2} \right) \right) $$
+                        $$ t \in (\pi/2, \pi) $$
+                    </p>
+                </div>
+            </div>
+
+            <!-- Canvas 2D Interactivo -->
+            <div class="card p-1 rounded-2xl shadow-2xl order-1 lg:order-2 bg-slate-800">
+                <div class="flex justify-between items-center px-4 py-2 bg-slate-900/50 rounded-t-xl border-b border-slate-700">
+                    <span class="text-xs font-mono text-sky-400">SIMULACIÓN FÍSICA</span>
+                    <div class="flex gap-2">
+                        <button id="reset-2d" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-full transition-all">
+                            Reiniciar
+                        </button>
+                        <button id="toggle-2d" class="text-xs bg-sky-600 hover:bg-sky-500 text-white px-4 py-1.5 rounded-full transition-all font-semibold shadow-lg shadow-sky-900/20">
+                            Pausar / Reanudar
+                        </button>
+                    </div>
+                </div>
+                <div id="canvas-container" class="relative w-full h-[400px]">
+                    <canvas id="tractrix-canvas" class="w-full h-full"></canvas>
+                    <div class="absolute bottom-4 left-4 text-xs font-mono text-slate-500 bg-slate-900/80 p-2 rounded pointer-events-none">
+                        Movimiento: Hacia arriba (infinito)<br>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: La Pseudoesfera (3D) -->
+        <section class="mb-20">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-white mb-4">La Superficie de Revolución Completa</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Si giramos la tractriz alrededor de su asíntota, obtenemos la <strong>Pseudoesfera</strong>.
+                </p>
+            </div>
+
+            <!-- Three.js Viewer -->
+            <div class="card rounded-2xl overflow-hidden shadow-2xl border-slate-700 relative group">
+                <!-- Overlay de controles -->
+                <div class="absolute top-4 left-4 z-10 glass-panel px-4 py-3 rounded-lg max-w-xs transition-opacity opacity-100">
+                    <p class="text-xs font-mono text-purple-300 mb-2 font-bold">CONSTRUCCIÓN</p>
+                    <p class="text-sm text-gray-300 mb-3 leading-snug">
+                        La pseudoesfera completa es la unión de dos tractrices simétricas (como dos trompetas) unidas por el ecuador.
+                    </p>
+                    <div class="flex gap-2">
+                        <button id="btn-half" class="text-xs bg-slate-700 hover:bg-slate-600 border border-slate-500 text-white px-3 py-1.5 rounded transition-colors">
+                            Media (1 Tractriz)
+                        </button>
+                        <button id="btn-full" class="text-xs bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded transition-colors font-bold shadow-lg shadow-purple-900/40">
+                            Completa (Unión)
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="three-container" class="w-full h-[600px] bg-black cursor-move"></div>
+                
+                <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pointer-events-none">
+                    <div class="flex justify-center gap-8 text-center">
+                        <div>
+                            <p class="text-2xl font-bold text-white font-mono">K = -1/R²</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider">Curvatura Constante</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-white">Beltrami</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider">Modelo Hiperbólico</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Conclusión -->
+        <section class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <!-- Decorative circle -->
+            <div class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            
+            <div class="relative z-10 max-w-3xl">
+                <h3 class="text-2xl font-bold text-white mb-4">¿Por qué es importante?</h3>
+                <p class="text-indigo-200 mb-6 leading-relaxed">
+                    La pseudoesfera es a la <strong>Geometría Hiperbólica</strong> lo que la esfera es a la Geometría Elíptica. Eugenio Beltrami demostró en 1868 que esta superficie es un modelo local de la geometría no euclidiana. Al igual que no puedes pelar una naranja y aplanar la cáscara perfectamente sin romperla (Gaussian Curvature > 0), tampoco puedes aplanar una pseudoesfera sobre un plano sin distorsionarla (Gaussian Curvature < 0).
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <span class="px-3 py-1 rounded-full bg-indigo-500/30 text-indigo-300 text-sm border border-indigo-500/30">#Geometría</span>
+                    <span class="px-3 py-1 rounded-full bg-indigo-500/30 text-indigo-300 text-sm border border-indigo-500/30">#HistoriaMatemática</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-800 mt-12 py-8">
+        <div class="container mx-auto px-6 text-center text-slate-500">
+            <p>&copy; 2025 πlography. </p>
+        </div>
+    </footer>
+
+    <!-- LOGICA DEL CANVAS 2D (Tractriz Física) -->
+    <script>
+        // Scope Isolation
+        {
+            const canvas2d = document.getElementById('tractrix-canvas');
+            const ctx2d = canvas2d.getContext('2d');
+            const container2d = document.getElementById('canvas-container');
+            const toggleBtn = document.getElementById('toggle-2d');
+            const resetBtn = document.getElementById('reset-2d');
+
+            let width, height;
+            let animationId;
+            let isPlaying = true;
+            
+            // Simulación Física
+            const leashLength = 180; // Longitud de la correa (a)
+            const speed = 1.0; // Velocidad del dueño (pixeles por frame)
+            
+            let ownerPos = { x: 0, y: 0 };
+            let dogPos = { x: 0, y: 0 };
+            let trail = [];
+
+            function initSimulation() {
+                if (!width) return;
+                
+                // --- CONFIGURACIÓN ESTILO IMAGEN ---
+                // Eje vertical a la izquierda
+                const axisX = 60; // Margen izquierdo
+                const bottomY = height - 40; // Margen inferior
+                
+                // Dueño empieza abajo en el eje
+                ownerPos = { x: axisX, y: bottomY };
+                
+                // Objeto empieza a la derecha (correa horizontal)
+                dogPos = { x: axisX + leashLength, y: bottomY };
+                
+                trail = [];
+                trail.push({ ...dogPos });
+            }
+            
+            function resizeCanvas() {
+                if (!container2d) return;
+                width = container2d.clientWidth;
+                height = container2d.clientHeight;
+                canvas2d.width = width * window.devicePixelRatio;
+                canvas2d.height = height * window.devicePixelRatio;
+                ctx2d.scale(window.devicePixelRatio, window.devicePixelRatio);
+                
+                initSimulation();
+            }
+
+            function updatePhysics() {
+                // 1. Mover al dueño hacia ARRIBA (y disminuye)
+                ownerPos.y -= speed;
+
+                // 2. Física de arrastre
+                const dx = ownerPos.x - dogPos.x;
+                const dy = ownerPos.y - dogPos.y;
+                const currentDist = Math.sqrt(dx*dx + dy*dy);
+                
+                if (currentDist > 0) {
+                    const factor = leashLength / currentDist;
+                    dogPos.x = ownerPos.x - dx * factor;
+                    dogPos.y = ownerPos.y - dy * factor;
+                }
+
+                trail.push({ ...dogPos });
+                
+                // Reiniciar si el dueño llega muy arriba (simulamos infinito dejando que suba mucho)
+                // Permitimos que suba mucho más allá del borde (-3000px)
+                if (ownerPos.y < -3000) {
+                    initSimulation();
+                }
+            }
+
+            function drawFrame() {
+                if (!width) return;
+                
+                if (isPlaying) {
+                    updatePhysics();
+                }
+
+                // Limpiar
+                ctx2d.fillStyle = '#0f172a';
+                ctx2d.fillRect(0, 0, width, height);
+
+                // --- DIBUJO ESTILO IMAGEN ---
+                const axisX = 60;
+                const bottomY = height - 40;
+
+                // 1. Ejes Coordenados
+                ctx2d.beginPath();
+                ctx2d.strokeStyle = '#94a3b8'; // Gris claro
+                ctx2d.lineWidth = 1;
+                // Eje Y
+                ctx2d.moveTo(axisX, 0);
+                ctx2d.lineTo(axisX, height);
+                // Eje X
+                ctx2d.moveTo(0, bottomY);
+                ctx2d.lineTo(width, bottomY);
+                ctx2d.stroke();
+
+                // 2. Dueño (Punto en el eje Y)
+                ctx2d.fillStyle = '#EF4444'; // Rojo 
+                ctx2d.beginPath(); 
+                ctx2d.arc(ownerPos.x, ownerPos.y, 4, 0, Math.PI*2); 
+                ctx2d.fill();
+
+                // 3. Rastro (La Tractriz - ROJO FUERTE)
+                if (trail.length > 1) {
+                    ctx2d.beginPath();
+                    ctx2d.strokeStyle = '#EF4444'; // Rojo intenso
+                    ctx2d.lineWidth = 3;
+                    ctx2d.lineCap = 'round';
+                    ctx2d.lineJoin = 'round';
+                    
+                    ctx2d.moveTo(trail[0].x, trail[0].y);
+                    
+                    // Optimización dinámica para líneas muy largas
+                    // Cuanto más largo es el trail, más puntos saltamos para mantener fluidez
+                    const skip = Math.ceil(trail.length / 500);
+                    
+                    for (let i = 1; i < trail.length; i += skip) {
+                        ctx2d.lineTo(trail[i].x, trail[i].y);
+                    }
+                    // Asegurar conectar con el último punto
+                    ctx2d.lineTo(dogPos.x, dogPos.y);
+                    ctx2d.stroke();
+                }
+
+                // 4. Correa (Tangente - AZUL CLARO/CIAN)
+                ctx2d.beginPath();
+                ctx2d.strokeStyle = '#67E8F9'; // Cyan 300
+                ctx2d.lineWidth = 2;
+                ctx2d.moveTo(dogPos.x, dogPos.y);
+                ctx2d.lineTo(ownerPos.x, ownerPos.y);
+                ctx2d.stroke();
+
+                // 5. Perro/Objeto (Punto en la curva - AMARILLO)
+                ctx2d.fillStyle = '#FDE047'; // Amarillo
+                ctx2d.beginPath(); 
+                ctx2d.arc(dogPos.x, dogPos.y, 5, 0, Math.PI*2); 
+                ctx2d.fill();
+                ctx2d.strokeStyle = '#000';
+                ctx2d.lineWidth = 1;
+                ctx2d.stroke();
+
+                animationId = requestAnimationFrame(drawFrame);
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    isPlaying = !isPlaying;
+                });
+            }
+            
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    initSimulation();
+                });
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); 
+            drawFrame(); 
+        }
+    </script>
+
+    <!-- LOGICA THREE.JS (Pseudoesfera) -->
+    <script>
+        // Scope Isolation
+        {
+            const container3d = document.getElementById('three-container');
+            const btnHalf = document.getElementById('btn-half');
+            const btnFull = document.getElementById('btn-full');
+            
+            if (container3d) {
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x000000); 
+                
+                const camera = new THREE.PerspectiveCamera(45, container3d.clientWidth / container3d.clientHeight, 0.1, 1000);
+                camera.position.set(25, 10, 25);
+                camera.lookAt(0, 0, 0);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(container3d.clientWidth, container3d.clientHeight);
+                container3d.appendChild(renderer.domElement);
+
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.autoRotate = true;
+                controls.autoRotateSpeed = 1.0;
+
+                const ambientLight = new THREE.AmbientLight(0x404040);
+                scene.add(ambientLight);
+                
+                const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+                pointLight.position.set(10, 10, 10);
+                scene.add(pointLight);
+
+                const pointLight2 = new THREE.PointLight(0x38bdf8, 1, 100); 
+                pointLight2.position.set(-10, -5, -10);
+                scene.add(pointLight2);
+
+                const pointLight3 = new THREE.PointLight(0xa855f7, 0.8, 100); 
+                pointLight3.position.set(0, 20, 0);
+                scene.add(pointLight3);
+
+                let mesh, wireframe;
+                const size = 6; 
+                const steps = 100;
+
+                function createPseudosphere(isFull) {
+                    if (mesh) {
+                        scene.remove(mesh);
+                        mesh.geometry.dispose();
+                        mesh.material.dispose();
+                    }
+
+                    const points = [];
+                    const startT = 0.05;
+                    const endT = isFull ? (Math.PI - 0.05) : Math.PI / 2;
+                    
+                    for (let t = startT; t <= endT; t += (endT - startT)/steps) {
+                        const r = size * Math.sin(t);
+                        const h = size * (Math.cos(t) + Math.log(Math.tan(t/2)));
+                        points.push(new THREE.Vector2(r, h));
+                    }
+
+                    if (!isFull) {
+                        // points.push(new THREE.Vector2(size, 0));
+                    }
+                    
+                    points.unshift(new THREE.Vector2(0.01, -20)); 
+                    if(isFull) points.push(new THREE.Vector2(0.01, 20)); 
+
+                    const geometry = new THREE.LatheGeometry(points, 40);
+                    
+                    const material = new THREE.MeshPhysicalMaterial({
+                        color: 0x38bdf8, 
+                        emissive: 0x1e1b4b,
+                        metalness: 0.6,
+                        roughness: 0.2,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        side: THREE.DoubleSide,
+                        flatShading: false
+                    });
+                    
+                    mesh = new THREE.Mesh(geometry, material);
+                    scene.add(mesh);
+
+                    const wiregeo = new THREE.WireframeGeometry(geometry);
+                    const wiremat = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.15, transparent: true });
+                    wireframe = new THREE.LineSegments(wiregeo, wiremat);
+                    mesh.add(wireframe);
+                }
+
+                createPseudosphere(true);
+
+                btnHalf.addEventListener('click', () => {
+                    createPseudosphere(false);
+                    btnHalf.classList.add('bg-purple-600', 'font-bold', 'shadow-lg');
+                    btnHalf.classList.remove('bg-slate-700', 'border');
+                    btnFull.classList.remove('bg-purple-600', 'font-bold', 'shadow-lg');
+                    btnFull.classList.add('bg-slate-700', 'border');
+                });
+
+                btnFull.addEventListener('click', () => {
+                    createPseudosphere(true);
+                    btnFull.classList.add('bg-purple-600', 'font-bold', 'shadow-lg');
+                    btnFull.classList.remove('bg-slate-700', 'border');
+                    btnHalf.classList.remove('bg-purple-600', 'font-bold', 'shadow-lg');
+                    btnHalf.classList.add('bg-slate-700', 'border');
+                });
+
+                const animate = function() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                window.addEventListener('resize', () => {
+                    if(container3d) {
+                        const w = container3d.clientWidth;
+                        const h = container3d.clientHeight;
+                        renderer.setSize(w, h);
+                        camera.aspect = w / h;
+                        camera.updateProjectionMatrix();
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
