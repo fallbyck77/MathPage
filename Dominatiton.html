@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominación en Grafos - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js para las animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        /* Gradiente Grafos (Violeta/Fucsia) */
+        .hero-graphs {
+            background: radial-gradient(circle at top left, #4c0519 0%, #0f172a 60%);
+        }
+        .card {
+            background-color: #1e293b; 
+            border: 1px solid #334155;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #d946ef; /* Fuchsia 500 */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        .text-glow-purple {
+            text-shadow: 0 0 40px rgba(192, 38, 211, 0.3);
+        }
+        .canvas-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-fuchsia-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="fixed w-full bg-slate-900/80 backdrop-blur-md z-50 border-b border-slate-800">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-rose-500 tracking-tighter">
+                πlography
+            </a>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#grafos" class="hover:text-fuchsia-400 transition-colors">Teoría</a>
+                <a href="#simulacion" class="hover:text-fuchsia-400 transition-colors">Simulaciones</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- SECCIÓN PRINCIPAL: DOMINACIÓN EN GRAFOS -->
+    <section id="grafos" class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden hero-graphs">
+        <!-- Canvas 3D (Queen + Graph) -->
+        <div id="domination-canvas" class="canvas-bg" style="left: 0;"></div>
+
+        <div class="container mx-auto px-6 relative z-10 flex justify-end">
+            <div class="max-w-4xl text-right">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-900/30 border border-fuchsia-700/50 text-fuchsia-300 text-xs font-bold mb-6 tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse"></span>
+                    Teoría de Grafos y Control
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-tight text-glow-purple">
+                    Dominación <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-l from-fuchsia-400 via-pink-400 to-rose-400">en Grafos</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-slate-400 mb-10 ml-auto max-w-2xl leading-relaxed">
+                    El arte de la cobertura mínima. Descubre el Número de Dominación $\gamma(G)$, el problema de las N-Reinas y la independencia en redes complejas.
+                </p>
+
+                <div class="flex flex-wrap gap-4 justify-end">
+                    <a href="#simulacion" class="px-8 py-4 bg-fuchsia-600 hover:bg-fuchsia-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-fuchsia-900/40 flex items-center gap-2">
+                        Explorar Conceptos
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Simulaciones -->
+    <section id="simulacion" class="py-24 bg-slate-950 relative">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Módulos Interactivos</h2>
+                    <p class="text-slate-400">Selecciona un problema para visualizar.</p>
+                </div>
+                <div class="hidden md:block h-px flex-1 bg-slate-800 ml-12 mb-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Tarjeta: Grafos (Principal) -->
+                <div class="group card rounded-2xl p-1 block relative overflow-hidden cursor-pointer border-l-4 border-l-fuchsia-500">
+                    <div class="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="bg-slate-900 rounded-xl h-full p-6 relative z-10 flex flex-col">
+                        <div class="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-6 text-fuchsia-500 border border-slate-700 group-hover:border-fuchsia-500/50 transition-colors">
+                            <!-- Icono Grafo -->
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-fuchsia-400 transition-colors">Dominación y N-Reinas</h3>
+                        <p class="text-slate-400 text-sm mb-4 flex-grow">
+                            Colocación estratégica en tableros y grafos para control total con recursos mínimos. Encuentra el conjunto dominante mínimo.
+                        </p>
+                        <div class="flex items-center text-fuchsia-400 text-sm font-bold mt-4">
+                            Iniciar Módulo 
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta: Conjuntos Independientes (Placeholder) -->
+                <div class="card rounded-2xl p-6 opacity-60 hover:opacity-100 cursor-not-allowed grayscale hover:grayscale-0 transition-all">
+                    <div class="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-6 text-slate-500 border border-slate-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Conjuntos Independientes</h3>
+                    <p class="text-slate-500 text-sm">
+                        La dualidad de la dominación. Nodos no adyacentes y coloración de grafos.
+                    </p>
+                    <span class="inline-block mt-4 px-2 py-1 bg-slate-800 text-xs text-slate-500 rounded border border-slate-700">Próximamente</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-2xl font-bold text-white mb-2">πlography</h3>
+            <p class="text-slate-500 text-sm mb-6">Explorando la belleza matemática a través del código.</p>
+            <p class="text-slate-600 text-xs">&copy; 2025 Kevin Messina Rodriguez. Construido con Three.js y Tailwind.</p>
+        </div>
+    </footer>
+
+    <!-- Animación: GRAFOS (Reina de Ajedrez + Nodos) -->
+    <script>
+        {
+            const container = document.getElementById('domination-canvas');
+            if(container) {
+                const scene = new THREE.Scene();
+                
+                // Cámara posicionada a la izquierda (para que la reina se vea a la izquierda)
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(-6, 2, 8);
+                camera.lookAt(0, 0, 0);
+
+                const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                container.appendChild(renderer.domElement);
+
+                // --- CONSTRUCCIÓN DE LA REINA ---
+                const points = [];
+                // Perfil aproximado de una reina
+                const profile = [
+                    [0, 0], [2, 0], [2, 0.5], [1.8, 1], [1.2, 2], [0.8, 4], [0.6, 6], 
+                    [1.2, 6.2], [1.2, 6.5], [0.6, 6.7], 
+                    [0.8, 7.5], [1.2, 8], [1.5, 8.5], [0, 8.5]
+                ];
+                profile.forEach(p => points.push(new THREE.Vector2(p[0]*0.5, p[1]*0.5 - 2)));
+
+                const geometry = new THREE.LatheGeometry(points, 20);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0xd946ef, // Fuchsia 500
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.15
+                });
+                const queen = new THREE.Mesh(geometry, material);
+                queen.rotation.x = 0.1;
+                scene.add(queen);
+
+                // --- GRAFO FLOTANTE (Nodos y Aristas) ---
+                const nodesGroup = new THREE.Group();
+                const nodeGeo = new THREE.IcosahedronGeometry(0.15, 0);
+                const nodeMat = new THREE.MeshBasicMaterial({ color: 0xf472b6 }); // Pink 400
+                
+                const nodeCount = 18;
+                const nodePositions = [];
+
+                for(let i=0; i<nodeCount; i++) {
+                    const mesh = new THREE.Mesh(nodeGeo, nodeMat);
+                    // Posición aleatoria en esfera alrededor de la reina
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    const r = 3 + Math.random() * 2.5;
+                    
+                    mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
+                    mesh.position.y = r * Math.sin(phi) * Math.sin(theta);
+                    mesh.position.z = r * Math.cos(phi);
+                    
+                    nodesGroup.add(mesh);
+                    nodePositions.push(mesh.position);
+                }
+                
+                const lineMat = new THREE.LineBasicMaterial({ color: 0x86198f, transparent: true, opacity: 0.3 });
+                
+                for(let i=0; i<nodeCount; i++) {
+                    for(let j=i+1; j<nodeCount; j++) {
+                        const dist = nodePositions[i].distanceTo(nodePositions[j]);
+                        if(dist < 2.5) { 
+                            const points = [nodePositions[i], nodePositions[j]];
+                            const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+                            const line = new THREE.Line(lineGeo, lineMat);
+                            nodesGroup.add(line);
+                        }
+                    }
+                }
+                scene.add(nodesGroup);
+
+                // Animación
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    
+                    // Rotar Reina majestuosamente
+                    queen.rotation.y -= 0.005;
+                    
+                    // Rotar el grafo alrededor de la reina
+                    nodesGroup.rotation.y += 0.002;
+                    nodesGroup.rotation.z += 0.001;
+
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                window.addEventListener('resize', () => {
+                    if(!container) return;
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
