@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2-Dominación en Grafos - πlography</title>
+    <title>Laboratorio de Dominación (k=1, 2) - πlography</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Configuración MathJax -->
@@ -43,10 +43,14 @@
         /* Estilos Grafos */
         #mynetwork {
             width: 100%;
-            height: 500px;
+            height: 600px;
             background-color: #111827;
             border-radius: 0.75rem;
             border: 1px solid #374151;
+            cursor: grab;
+        }
+        #mynetwork:active {
+            cursor: grabbing;
         }
         /* Estilos Ajedrez */
         .chess-board {
@@ -76,29 +80,20 @@
             content: '';
             position: absolute;
             inset: 0;
-            background-color: rgba(217, 70, 239, 0.4); /* Fuchsia overlay */
+            background-color: rgba(217, 70, 239, 0.4); 
             animation: fadeIn 0.4s ease-out;
         }
         
-        .square.queen {
-            font-size: 2.5rem;
-            z-index: 10;
-        }
+        .square.queen { font-size: 2.5rem; z-index: 10; }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
-
-        /* Animación de rayo para el ataque */
-        .attack-ray {
-            position: absolute;
-            background-color: #d946ef;
-            opacity: 0.7;
-            z-index: 5;
-            pointer-events: none;
-        }
         .status-badge { transition: all 0.3s ease; }
+        
+        /* Ocultar elementos */
+        .hidden-ctrl { display: none !important; }
     </style>
 </head>
 <body class="antialiased selection:bg-fuchsia-500 selection:text-white">
@@ -113,48 +108,41 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 md:px-6 py-12 max-w-5xl">
+    <main class="container mx-auto px-4 md:px-6 py-12 max-w-6xl">
         
         <div class="text-center mb-16 space-y-4">
-            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight">La <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-rose-500">2-Dominación</span></h1>
+            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight">Dominación <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-rose-500">k-Dominante</span></h1>
             <p class="text-xl text-slate-400 font-light max-w-2xl mx-auto">
-                "Si no estás en el conjunto, necesitas al menos dos amigos dentro."
+                Explora cómo cambia la estrategia cuando cada nodo necesita ser vigilado por 1 o 2 guardianes.
             </p>
         </div>
 
-        <!-- SECCIÓN HISTÓRICA: EL PROBLEMA DE LAS REINAS -->
+        <!-- SECCIÓN HISTÓRICA -->
         <section class="mb-20">
             <div class="flex items-center gap-4 mb-8">
                 <div class="h-1 w-12 bg-fuchsia-500 rounded"></div>
-                <h2 class="text-3xl font-bold text-white">Historia: El Origen de la Dominación</h2>
+                <h2 class="text-3xl font-bold text-white">Historia: El Origen (Ajedrez)</h2>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-12 items-start">
                 <div class="space-y-6 text-slate-300 leading-relaxed">
                     <p>
-                        Antes de formalizarse en grafos, la teoría de dominación nació en el tablero de ajedrez. En <strong>1862</strong>, el matemático y ajedrecista <strong>C.F. de Jaenisch</strong> se planteó una pregunta fundamental:
-                    </p>
-                    <blockquote class="border-l-4 border-fuchsia-500 pl-4 italic text-fuchsia-200">
-                        "¿Cuál es el número mínimo de reinas necesarias para atacar (dominar) todas las casillas de un tablero de 8x8?"
-                    </blockquote>
-                    <p>
-                        Mientras que el famoso "Problema de las 8 Reinas" busca colocar 8 reinas sin que se ataquen (independencia), el problema de Jaenisch busca la <strong>cobertura total</strong>.
+                        En <strong>1862</strong>, C.F. de Jaenisch estudió la dominación mínima en ajedrez.
+                        Para la <strong>1-Dominación</strong> (dominación clásica), el objetivo es atacar todas las casillas libres al menos una vez.
                     </p>
                     <p>
-                        La respuesta es sorprendente: solo se necesitan <strong>5 reinas</strong> para dominar todo el tablero ($\gamma(Q_8) = 5$). Este fue uno de los primeros resultados de números de dominación en la historia.
+                        El número de dominación clásico para un tablero de 8x8 es $\gamma(Q_8) = 5$.
                     </p>
-                    
                     <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mt-6">
                         <h4 class="font-bold text-white mb-2">Instrucciones:</h4>
                         <ul class="list-disc list-inside text-sm text-slate-400 space-y-1">
-                            <li>Haz clic en las casillas para colocar una Reina (♕).</li>
-                            <li>Observa cómo las líneas de ataque "pintan" el tablero.</li>
-                            <li>Intenta cubrir las 64 casillas usando solo 5 reinas.</li>
+                            <li>Haz clic para colocar/quitar Reinas (♕).</li>
+                            <li>El tablero muestra la dominación clásica ($k=1$).</li>
+                            <li>Intenta dominar el tablero con 5 reinas.</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Tablero Interactivo -->
                 <div class="card p-1 rounded-xl bg-slate-800 shadow-2xl relative">
                     <div class="absolute top-4 left-4 z-20 bg-slate-900/90 backdrop-blur px-3 py-1 rounded border border-slate-700 text-xs font-mono text-fuchsia-400">
                         Reinas: <span id="queen-count" class="text-white font-bold text-lg">0</span>
@@ -162,17 +150,11 @@
                     <div id="board-status" class="absolute top-4 right-4 z-20 bg-slate-900/90 backdrop-blur px-3 py-1 rounded border border-red-900 text-red-400 text-xs font-bold uppercase">
                         No Dominado
                     </div>
-
                     <div class="p-4">
-                        <div id="chessboard" class="chess-board rounded-lg overflow-hidden">
-                            <!-- JS generará las celdas -->
-                        </div>
+                        <div id="chessboard" class="chess-board rounded-lg overflow-hidden"></div>
                     </div>
-                    
                     <div class="bg-slate-900 p-3 text-center border-t border-slate-800">
-                        <button onclick="clearBoard()" class="text-xs text-slate-400 hover:text-white transition-colors uppercase tracking-widest font-bold">
-                            Limpiar Tablero
-                        </button>
+                        <button onclick="clearBoard()" class="text-xs text-slate-400 hover:text-white transition-colors uppercase tracking-widest font-bold">Limpiar Tablero</button>
                     </div>
                 </div>
             </div>
@@ -180,95 +162,114 @@
 
         <hr class="border-slate-800 mb-16">
 
-        <!-- Definición Formal 2-Dominación -->
-        <section class="mb-12">
-            <div class="card p-8 rounded-2xl border-l-4 border-l-fuchsia-500 shadow-2xl bg-gradient-to-r from-slate-800 to-slate-900">
-                <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Definición Formal de 2-Dominación
-                </h2>
-                <div class="prose prose-invert max-w-none text-slate-300">
-                    <p>
-                        Sea $G=(V,E)$ un grafo. Un subconjunto de vértices $D \subseteq V$ es un <strong>conjunto 2-dominante</strong> si todo vértice $v \in V \setminus D$ (que no está en $D$) es adyacente a, como mínimo, <strong>2 vértices</strong> en $D$.
-                    </p>
-                    <div class="bg-slate-950 p-4 rounded-lg font-mono text-sm text-fuchsia-200 border border-slate-700 my-4 text-center">
-                        $$ \forall v \in V \setminus D, \quad |N(v) \cap D| \ge 2 $$
-                    </div>
-                    <p>
-                        El <strong>número de 2-dominación</strong> $\gamma_2(G)$ es la cardinalidad mínima de tal conjunto.
-                    </p>
-                </div>
-            </div>
-        </section>
-
         <!-- Laboratorio Interactivo Grafos -->
         <section class="mb-16">
-            <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
-                <h2 class="text-2xl font-bold text-white">Laboratorio de Grafos</h2>
-                <div class="flex gap-2 items-center bg-slate-800 p-2 rounded-lg border border-slate-700">
-                    <select id="graph-type" class="bg-slate-900 text-slate-300 text-sm rounded border border-slate-600 p-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none">
-                        <option value="cycle">Ciclo (Cn)</option>
-                        <option value="path">Camino (Pn)</option>
-                        <option value="complete">Completo (Kn)</option>
-                    </select>
+            <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between mb-6 gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Laboratorio de Grafos</h2>
+                    <p class="text-slate-400 text-sm">Arrastra los nodos. Busca el mínimo conjunto.</p>
+                </div>
+                
+                <!-- Panel de Control -->
+                <div class="flex flex-wrap gap-4 items-center bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-lg w-full xl:w-auto">
                     
-                    <span class="text-slate-400 text-sm px-2">n =</span>
-                    <input type="number" id="vertex-count" min="3" max="100" value="8" class="bg-slate-900 text-white text-sm rounded border border-slate-600 p-2 w-20 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none" title="Máximo 100 vértices">
-                    
-                    <button id="generate-btn" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white text-sm px-4 py-2 rounded transition-colors font-bold ml-2">
-                        Generar
-                    </button>
+                    <!-- Selector de K -->
+                    <div class="flex items-center gap-2 border-r border-slate-600 pr-4 mr-2">
+                        <span class="text-xs font-bold text-fuchsia-300 uppercase tracking-wider">Dominación (k)</span>
+                        <div class="flex bg-slate-900 rounded-lg p-1">
+                            <button onclick="setK(1)" id="btn-k1" class="px-3 py-1 text-sm rounded transition-colors bg-fuchsia-600 text-white font-bold">k=1</button>
+                            <button onclick="setK(2)" id="btn-k2" class="px-3 py-1 text-sm rounded transition-colors text-slate-400 hover:text-white">k=2</button>
+                        </div>
+                    </div>
+
+                    <!-- Configuración Grafo -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <select id="graph-type" class="bg-slate-900 text-slate-300 text-sm rounded border border-slate-600 p-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none">
+                            <option value="path">Camino (Pn)</option>
+                            <option value="cycle">Ciclo (Cn)</option>
+                            <option value="wheel">Rueda (Wn)</option>
+                            <option value="complete">Completo (Kn)</option>
+                            <option value="bipartite">Bipartito Comp. (Kn,m)</option>
+                        </select>
+                        
+                        <!-- Control Normal (n) -->
+                        <div id="ctrl-simple" class="flex items-center">
+                            <span class="text-slate-400 text-sm px-1">n=</span>
+                            <input type="number" id="vertex-count" min="3" max="50" value="8" class="bg-slate-900 text-white text-sm rounded border border-slate-600 p-2 w-16 focus:ring-fuchsia-500 outline-none">
+                        </div>
+
+                        <!-- Control Bipartito (n, m) -->
+                        <div id="ctrl-bipartite" class="flex items-center hidden-ctrl">
+                            <span class="text-slate-400 text-sm px-1">n=</span>
+                            <input type="number" id="part-n" min="1" max="25" value="3" class="bg-slate-900 text-white text-sm rounded border border-slate-600 p-2 w-14 focus:ring-fuchsia-500 outline-none">
+                            <span class="text-slate-400 text-sm px-1">m=</span>
+                            <input type="number" id="part-m" min="1" max="25" value="3" class="bg-slate-900 text-white text-sm rounded border border-slate-600 p-2 w-14 focus:ring-fuchsia-500 outline-none">
+                        </div>
+                        
+                        <button id="generate-btn" class="bg-slate-700 hover:bg-slate-600 text-white text-sm px-4 py-2 rounded transition-colors font-bold ml-2">
+                            Generar
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card p-1 rounded-xl overflow-hidden shadow-lg relative">
-                <!-- Panel de Estado -->
-                <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
-                    <div class="bg-slate-900/80 backdrop-blur px-4 py-2 rounded-lg border border-slate-700 text-sm">
-                        <span class="text-slate-400">Tamaño del Conjunto $|D|$:</span>
-                        <span id="set-size" class="text-fuchsia-400 font-bold text-lg ml-2">0</span>
+            <!-- Canvas del Grafo -->
+            <div class="card p-1 rounded-xl overflow-hidden shadow-2xl relative border-t-4 border-t-fuchsia-600">
+                <!-- Panel de Estado Flotante -->
+                <div class="absolute top-4 left-4 z-10 flex flex-col gap-2 w-48">
+                    <div class="bg-slate-900/90 backdrop-blur px-4 py-3 rounded-lg border border-slate-700 text-sm shadow-xl space-y-2">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-slate-400 font-bold">META (Óptimo)</span>
+                            <strong id="optimal-val" class="text-yellow-400 text-lg">0</strong>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400">Actual |D|:</span>
+                            <span id="set-size" class="text-white font-bold text-lg">0</span>
+                        </div>
                     </div>
-                    <div id="status-badge" class="status-badge bg-red-900/80 backdrop-blur px-4 py-2 rounded-lg border border-red-700 text-red-200 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                    <div id="status-badge" class="status-badge bg-red-900/90 backdrop-blur px-4 py-2 rounded-lg border border-red-700 text-red-200 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg">
                         <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                        No es 2-Dominante
+                        Incompleto
                     </div>
                 </div>
 
                 <div id="mynetwork"></div>
                 
-                <div class="bg-slate-900 px-4 py-3 border-t border-slate-800 text-xs text-slate-500 flex justify-between">
-                    <span>Click en un nodo para añadirlo/quitarlo del conjunto $D$.</span>
-                    <div class="flex gap-4">
-                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-fuchsia-500"></span> En D (Dominador)</span>
-                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> Cubierto (≥2 vecinos)</span>
-                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-slate-500"></span> No Cubierto</span>
+                <div class="bg-slate-900 px-6 py-4 border-t border-slate-800 text-xs text-slate-400 flex flex-wrap justify-between items-center gap-4">
+                    <span class="hidden md:inline"><strong>Click</strong> para seleccionar. <strong>Arrastra</strong> los nodos para ordenarlos.</span>
+                    <div class="flex gap-6 font-mono">
+                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-fuchsia-500 border border-fuchsia-300"></span> En D</span>
+                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 border border-emerald-300"></span> Cubierto ($\ge k$)</span>
+                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-600 border border-slate-400"></span> Vulnerable ($< k$)</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Teoremas y Ejemplos -->
+        <!-- Información Teórica Dinámica -->
         <section class="grid md:grid-cols-2 gap-8 mb-16">
-            <!-- Tarjeta P_n (Corregida) -->
-            <div class="card p-6 rounded-xl hover:border-fuchsia-500/50 transition-colors">
-                <h3 class="text-xl font-bold text-white mb-3">Caminos ($P_n$)</h3>
-                <p class="text-slate-400 mb-4">
-                    Para un camino simple, las hojas (extremos) siempre deben estar en $D$. La fórmula para el número de 2-dominación es:
+            <div class="card p-6 rounded-xl border border-slate-700">
+                <h3 class="text-xl font-bold text-white mb-3 text-fuchsia-400">Definición Actual</h3>
+                <p id="def-text" class="text-slate-300 mb-4 text-lg leading-relaxed">
+                    Un conjunto $D$ es <strong>1-dominante</strong> si todo vértice fuera de $D$ tiene al menos <strong>1 vecino</strong> en $D$.
                 </p>
-                <div class="bg-slate-900 p-3 rounded text-center border border-slate-700">
-                    <span class="text-fuchsia-300 font-mono text-lg">$\gamma_2(P_n) = \lfloor \frac{n}{2} \rfloor + 1$</span>
+                <div class="bg-slate-950 p-4 rounded text-center border border-slate-800 font-mono text-fuchsia-200">
+                    $$ \forall v \in V \setminus D, \quad |N(v) \cap D| \ge \mathbf{k} $$
                 </div>
             </div>
 
-            <!-- Tarjeta K_n -->
-            <div class="card p-6 rounded-xl hover:border-fuchsia-500/50 transition-colors">
-                <h3 class="text-xl font-bold text-white mb-3">Grafos Completos ($K_n$)</h3>
-                <p class="text-slate-400 mb-4">
-                    En un grafo donde todos están conectados con todos ($n \ge 3$), cualquier par de vértices domina a todos los demás.
-                </p>
-                <div class="bg-slate-900 p-3 rounded text-center border border-slate-700">
-                    <span class="text-fuchsia-300 font-mono text-lg">$\gamma_2(K_n) = 2$</span>
-                </div>
+            <div class="card p-6 rounded-xl border border-slate-700">
+                <h3 class="text-xl font-bold text-white mb-3">Tips para el Grafo Actual</h3>
+                <ul class="space-y-3 text-slate-400 text-sm">
+                    <li class="flex gap-2">
+                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span><strong>Rueda ($W_n$):</strong> El vértice central domina todo en $k=1$, pero para $k=2$ necesitas reforzar con nodos del borde.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span><strong>Bipartito ($K_{n,m}$):</strong> Si $k=2$, necesitas tomar vértices de ambos lados para que todos estén doblemente cubiertos.</span>
+                    </li>
+                </ul>
             </div>
         </section>
 
@@ -370,64 +371,157 @@
         let nodes = new vis.DataSet([]);
         let edges = new vis.DataSet([]);
         let selection = new Set(); 
+        let k_domination = 1; 
+        let optimalVal = 0;
 
         const container = document.getElementById('mynetwork');
         const statusBadge = document.getElementById('status-badge');
         const setSizeDisplay = document.getElementById('set-size');
-        const inputN = document.getElementById('vertex-count');
-        const selectType = document.getElementById('graph-type');
+        const optimalValDisplay = document.getElementById('optimal-val');
         
-        const colorDefault = { background: '#1f293b', border: '#64748b' }; 
-        const colorSelected = { background: '#d946ef', border: '#f0abfc' }; 
-        const colorCovered = { background: '#10b981', border: '#34d399' }; 
-        const colorUncovered = { background: '#ef4444', border: '#fca5a5' }; 
+        const ctrlSimple = document.getElementById('ctrl-simple');
+        const ctrlBipartite = document.getElementById('ctrl-bipartite');
+        const inputN = document.getElementById('vertex-count');
+        const inputPartN = document.getElementById('part-n');
+        const inputPartM = document.getElementById('part-m');
+        const selectType = document.getElementById('graph-type');
+        const defText = document.getElementById('def-text');
+        
+        // Estilos
+        const colorSelected = { background: '#d946ef', border: '#f0abfc' }; // Fuchsia
+        const colorCovered = { background: '#10b981', border: '#34d399' }; // Emerald
+        const colorUncovered = { background: '#475569', border: '#94a3b8' }; // Slate
 
         const options = {
             nodes: {
-                shape: 'dot', size: 25, font: { size: 14, color: '#ffffff' }, borderWidth: 2, shadow: true
+                shape: 'dot', size: 30, 
+                font: { size: 16, color: '#ffffff', face: 'Inter' }, 
+                borderWidth: 2, shadow: true
             },
             edges: {
-                width: 2, color: { color: '#475569', highlight: '#a5b4fc' }, smooth: { type: 'continuous' }
+                width: 2, color: { color: '#334155', highlight: '#a5b4fc' }, 
+                smooth: { type: 'continuous' }
             },
             physics: {
-                stabilization: false, barnesHut: { gravitationalConstant: -2000, springConstant: 0.04 }
+                enabled: true, 
+                stabilization: false, 
+                barnesHut: { gravitationalConstant: -3000, springConstant: 0.04, springLength: 95 }
             },
-            interaction: { hover: true }
+            interaction: { hover: true, dragNodes: true }
         };
+
+        function calculateOptimal(type, n, k, m = 0) {
+            // Fórmulas teóricas aproximadas (Gamma_k)
+            if (type === 'path') { 
+                if (k === 1) return Math.ceil(n / 3);
+                if (k === 2) return Math.floor(n / 2) + 1;
+            } else if (type === 'cycle') { 
+                if (k === 1) return Math.ceil(n / 3);
+                if (k === 2) return Math.ceil(n / 2);
+            } else if (type === 'complete') { 
+                if (k === 1) return 1;
+                if (k === 2) return (n >= 2 ? 2 : n);
+            } else if (type === 'wheel') { 
+                if (k === 1) return 1;
+                if (k === 2) return 1 + Math.ceil((n - 1) / 3);
+            } else if (type === 'bipartite') { 
+                // Kn,m
+                const minPart = Math.min(n, m);
+                if (k === 1) {
+                    // Si alguna parte es 0, no se puede dominar salvo que n=1,m=0 (no conexo)
+                    // Si n=1, m>=1 (Estrella): gamma=1 (centro)
+                    // General: 2, salvo casos estrella
+                    return (Math.min(n, m) >= 2) ? 2 : 1; 
+                }
+                if (k === 2) {
+                    // Si n,m >= 2 => min(n, m, 4)
+                    if (n >= 2 && m >= 2) return Math.min(n, m, 4);
+                    // Si es estrella K1,m (m>=2) => hojas grado 1 => deben estar en D => m
+                    // Centro grado m.
+                    return Math.max(n, m); 
+                }
+            }
+            return '?';
+        }
+
+        // Manejar cambio de tipo de grafo
+        selectType.addEventListener('change', (e) => {
+            if (e.target.value === 'bipartite') {
+                ctrlSimple.classList.add('hidden-ctrl');
+                ctrlBipartite.classList.remove('hidden-ctrl');
+            } else {
+                ctrlSimple.classList.remove('hidden-ctrl');
+                ctrlBipartite.classList.add('hidden-ctrl');
+            }
+        });
+
+        function setK(val) {
+            k_domination = val;
+            const btn1 = document.getElementById('btn-k1');
+            const btn2 = document.getElementById('btn-k2');
+            
+            if(val === 1) {
+                btn1.className = "px-3 py-1 text-sm rounded transition-colors bg-fuchsia-600 text-white font-bold";
+                btn2.className = "px-3 py-1 text-sm rounded transition-colors text-slate-400 hover:text-white";
+                defText.innerHTML = `Un conjunto $D$ es <strong>1-dominante</strong> si todo vértice fuera de $D$ tiene al menos <strong>1 vecino</strong> en $D$.`;
+            } else {
+                btn2.className = "px-3 py-1 text-sm rounded transition-colors bg-fuchsia-600 text-white font-bold";
+                btn1.className = "px-3 py-1 text-sm rounded transition-colors text-slate-400 hover:text-white";
+                defText.innerHTML = `Un conjunto $D$ es <strong>2-dominante</strong> si todo vértice fuera de $D$ tiene al menos <strong>2 vecinos</strong> en $D$. <br><span class="text-sm text-fuchsia-300">¡Más redundancia!</span>`;
+            }
+            
+            // Recalcular sin regenerar si es posible, pero mejor regenerar para actualizar óptimo
+            generateGraph();
+            if(window.MathJax) MathJax.typeset();
+        }
 
         function generateGraph() {
             const type = selectType.value;
-            let n = parseInt(inputN.value);
+            let n = 0, m = 0;
+
+            if (type === 'bipartite') {
+                n = parseInt(inputPartN.value);
+                m = parseInt(inputPartM.value);
+                if (n < 1) n = 1; if (m < 1) m = 1;
+                inputPartN.value = n; inputPartM.value = m;
+                optimalVal = calculateOptimal(type, n, k_domination, m);
+            } else {
+                n = parseInt(inputN.value);
+                if (n < 3) n = 3; if (n > 50) n = 50;
+                inputN.value = n;
+                optimalVal = calculateOptimal(type, n, k_domination);
+            }
             
-            // Validaciones
-            if (n < 3) n = 3;
-            if (n > 100) n = 100;
-            inputN.value = n; // Ajustar input visual
+            optimalValDisplay.textContent = optimalVal;
 
             nodes.clear();
             edges.clear();
             selection.clear();
 
-            // Generar Nodos
-            for(let i=0; i<n; i++) {
-                nodes.add({ id: i, label: String(i+1) });
-            }
-
-            // Generar Aristas según tipo
+            // Generación
             if (type === 'path') {
-                for(let i=0; i<n-1; i++) edges.add({ from: i, to: i+1 });
+                for(let i=0; i<n; i++) nodes.add({id: i, label: String(i+1)});
+                for(let i=0; i<n-1; i++) edges.add({from: i, to: i+1});
             } else if (type === 'cycle') {
-                for(let i=0; i<n-1; i++) edges.add({ from: i, to: i+1 });
-                if(n > 1) edges.add({ from: n-1, to: 0 });
+                for(let i=0; i<n; i++) nodes.add({id: i, label: String(i+1)});
+                for(let i=0; i<n-1; i++) edges.add({from: i, to: i+1});
+                edges.add({from: n-1, to: 0});
             } else if (type === 'complete') {
-                // Cuidado con n grande, muchas aristas
-                if (n > 50) alert("Advertencia: Un grafo completo de " + n + " vértices puede ser lento.");
+                for(let i=0; i<n; i++) nodes.add({id: i, label: String(i+1)});
                 let edgeList = [];
-                for(let i=0; i<n; i++) {
-                    for(let j=i+1; j<n; j++) {
-                        edgeList.push({ from: i, to: j });
-                    }
-                }
+                for(let i=0; i<n; i++) for(let j=i+1; j<n; j++) edgeList.push({from: i, to: j});
+                edges.add(edgeList);
+            } else if (type === 'wheel') {
+                nodes.add({id: 0, label: 'C', color: {background: '#f59e0b', border: '#fbbf24'}});
+                for(let i=1; i<n; i++) nodes.add({id: i, label: String(i)});
+                for(let i=1; i<n; i++) edges.add({from: 0, to: i});
+                for(let i=1; i<n-1; i++) edges.add({from: i, to: i+1});
+                if(n > 1) edges.add({from: n-1, to: 1});
+            } else if (type === 'bipartite') {
+                for(let i=0; i<n; i++) nodes.add({id: i, label: `A${i+1}`, group: 'A'});
+                for(let i=0; i<m; i++) nodes.add({id: n+i, label: `B${i+1}`, group: 'B'});
+                let edgeList = [];
+                for(let i=0; i<n; i++) for(let j=0; j<m; j++) edgeList.push({from: i, to: n+j});
                 edges.add(edgeList);
             }
 
@@ -444,7 +538,7 @@
 
         function updateGraphState() {
             setSizeDisplay.textContent = selection.size;
-            let is2Dominating = true;
+            let isDominating = true;
             const allNodes = nodes.get();
             const updates = [];
 
@@ -456,28 +550,34 @@
                 } else {
                     const neighbors = network.getConnectedNodes(node.id);
                     const neighborsInD = neighbors.filter(n => selection.has(n));
-                    if (neighborsInD.length >= 2) {
+                    if (neighborsInD.length >= k_domination) {
                         updates.push({ id: node.id, color: colorCovered });
                     } else {
                         updates.push({ id: node.id, color: colorUncovered });
-                        is2Dominating = false;
+                        isDominating = false;
                     }
                 }
             });
             nodes.update(updates);
 
-            if (is2Dominating && selection.size > 0) {
-                statusBadge.className = "status-badge px-4 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider flex items-center gap-2 bg-emerald-900/80 border-emerald-700 text-emerald-200";
-                statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Conjunto 2-Dominante';
+            if (isDominating && selection.size > 0) {
+                const isOptimal = selection.size === optimalVal;
+                
+                if (isOptimal) {
+                    statusBadge.className = "status-badge px-4 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider flex items-center gap-2 bg-yellow-900/80 border-yellow-500 text-yellow-200 shadow-yellow-900/40 shadow-lg animate-pulse";
+                    statusBadge.innerHTML = `<span class="w-3 h-3 rounded-full bg-yellow-400"></span> ¡SOLUCIÓN ÓPTIMA!`;
+                } else {
+                    statusBadge.className = "status-badge px-4 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider flex items-center gap-2 bg-emerald-900/80 border-emerald-700 text-emerald-200";
+                    statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Dominante (No Óptimo)`;
+                }
             } else {
                 statusBadge.className = "status-badge px-4 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider flex items-center gap-2 bg-red-900/80 border-red-700 text-red-200";
-                statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span> No es 2-Dominante';
+                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> Incompleto (< k)`;
             }
         }
 
         document.getElementById('generate-btn').addEventListener('click', generateGraph);
-        // Inicializar con Ciclo C8
-        generateGraph();
+        generateGraph(); // Init
     </script>
 </body>
 </html>
