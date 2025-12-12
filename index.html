@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +9,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Estilo principal usando la fuente Inter */
+        /* Estilos Originales */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Gris oscuro */
-            color: #E5E7EB; /* Gris claro */
+            background-color: #111827;
+            color: #E5E7EB;
+            overflow-x: hidden;
         }
-        /* Efecto de gradiente animado para el fondo del encabezado */
+        
+        /* Efecto Hero */
         .hero-bg {
             background: radial-gradient(ellipse at 50% 50%, #1e3a8a 0%, #111827 70%);
         }
-        /* Estilo para las tarjetas con un borde sutil */
+
+        /* Tarjetas */
         .card {
-            background-color: #1F2937; /* Gris un poco más claro */
+            background-color: #1F2937;
             border: 1px solid #374151;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -29,19 +32,10 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
         }
-        /* Estilo para el lienzo de la animación */
-        #rose-canvas {
-            filter: drop-shadow(0 0 5px #60a5fa);
-            width: 100%;
-            height: auto;
-            max-width: 400px;
-            aspect-ratio: 1 / 1;
-            cursor: pointer;
-        }
-        /* Estilos para el slider */
+
+        /* Slider */
         input[type=range] {
             -webkit-appearance: none;
-            appearance: none;
             width: 100%;
             cursor: pointer;
             background: #374151;
@@ -50,27 +44,14 @@
         }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
             height: 20px;
             width: 20px;
             background-color: #60a5fa;
             border-radius: 50%;
             border: 2px solid #1F2937;
         }
-        input[type=range]::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
-            background-color: #60a5fa;
-            border-radius: 50%;
-            border: 2px solid #1F2937;
-        }
-        /* Estilos para la simulación del Juego de la Vida */
-        #game-of-life-canvas {
-            background-color: #111827;
-            border: 1px solid #374151;
-            border-radius: 0.5rem;
-            cursor: pointer;
-        }
+
+        /* Botones */
         .control-button {
             background-color: #374151;
             transition: background-color 0.2s;
@@ -81,575 +62,861 @@
         .control-button.active {
             background-color: #2563eb;
         }
+
+        /* Lógica de Pestañas */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            padding-top: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Navegación Activa */
+        .nav-link.active {
+            color: #60a5fa;
+            border-bottom: 2px solid #60a5fa;
+        }
+        
+        /* Scrollbar personalizada */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body class="antialiased">
+<body class="flex flex-col min-h-screen">
 
-    <!-- Menú de Navegación Desplegable (Slide-out) -->
-    <div id="side-menu" class="fixed top-0 left-0 w-64 h-full bg-gray-900 shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold text-white">Menú</h2>
-                <button id="close-menu-btn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+    <!-- BARRA SUPERIOR (NAVBAR) -->
+    <header class="fixed top-0 left-0 w-full bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 z-50 shadow-lg">
+        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <div class="flex items-center gap-2 cursor-pointer" onclick="showTab('inicio')">
+                <span class="text-3xl font-black text-white tracking-tighter">π</span>
+                <span class="text-xl font-bold text-gray-300 hidden sm:block">lography</span>
             </div>
-            <nav class="space-y-4">
-                <a href="#notas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Notas</a>
-                <a href="#simulaciones" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Simulaciones</a>
-                <a href="#talleres" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Talleres</a>
-                <a href="#congreso" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Congreso</a>
-                <a href="#fotografia" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Fotografía</a>
-                <a href="#lecturas" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Lecturas</a>
-                <a href="#eventos" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Eventos</a>
-                <a href="#interes" class="block text-lg text-gray-300 hover:text-blue-400 transition-colors">Vínculos</a>
-            </nav>
-        </div>
-    </div>
-    
-    <!-- Fondo oscuro para el menú -->
-    <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300"></div>
 
-    <!-- Barra de Navegación Principal -->
-    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-30 border-b border-gray-700">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Botón de Menú (Hamburguesa) -->
-            <button id="open-menu-btn" class="text-white focus:outline-none">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-            <!-- Logo/Título del sitio -->
-            <a href="#inicio" class="text-2xl font-bold text-white">π</a>
+            <!-- Menú de Navegación -->
+            <nav class="flex-1 ml-8 overflow-x-auto hide-scrollbar">
+                <ul class="flex items-center space-x-6 sm:space-x-8 whitespace-nowrap pr-4">
+                    <li><button onclick="showTab('inicio')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors active" data-translate="nav-home">Inicio</button></li>
+                    <li><button onclick="showTab('sobre-mi')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-about">Sobre Mí</button></li>
+                    <li><button onclick="showTab('notas')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-notes">Notas</button></li>
+                    <li><button onclick="showTab('simulaciones')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-sims">Simulaciones</button></li>
+                    <li><button onclick="showTab('talleres')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-workshops">Talleres</button></li>
+                    <li><button onclick="showTab('fotografia')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-photo">Fotografía</button></li>
+                    <li><button onclick="showTab('lecturas')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-reading">Lecturas</button></li>
+                    <li><button onclick="showTab('eventos')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-events">Eventos</button></li>
+                    <li><button onclick="showTab('interes')" class="nav-link py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors" data-translate="nav-links">Vínculos</button></li>
+                </ul>
+            </nav>
+
+            <!-- Redes Sociales y Botón de Idioma -->
+            <div class="hidden md:flex items-center space-x-4 ml-4 border-l border-gray-700 pl-4">
+                 <!-- Botón de Traducción -->
+                 <button id="lang-toggle" class="text-xs font-bold bg-gray-800 hover:bg-gray-700 text-white py-1 px-2 rounded border border-gray-600 transition-colors">
+                    EN
+                 </button>
+
+                 <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                </a>
+            </div>
+
         </div>
     </header>
 
-    <main>
-        <!-- Sección de Inicio (Hero) -->
-        <section id="inicio" class="min-h-screen flex items-center justify-center hero-bg p-6">
-            <div class="container mx-auto px-6 py-12">
-                <div class="flex flex-col lg:flex-row items-center justify-center gap-12 text-center lg:text-left">
-                    
-                    <!-- Columna de Texto -->
-                    <div class="lg:w-1/2 lg:order-1 order-2">
-                        <h1 class="text-5xl md:text-7xl font-black text-white mb-2 tracking-tight">πlography</h1>
-                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Kevin Messina Rodriguez</h2>
-                        <p class="text-lg md:text-xl text-gray-300 italic mb-4">Un espacio donde convergen las matemáticas, la fotografía y la curiosidad.</p>
-                        <p class="text-xl md:text-2xl text-blue-300 mb-8">Apasionado y estudiante de matemáticas.</p>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 mt-20 relative">
+        
+        <!-- SECCIÓN: INICIO (Rosa Polar Restaurada) -->
+        <section id="inicio" class="tab-content active hero-bg">
+            <div class="container mx-auto px-6 py-12 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 min-h-[80vh]">
+                
+                <!-- Animación (Orden 1 en móvil, Orden 2 en escritorio) -->
+                <div class="w-full lg:w-1/2 flex justify-center order-1 lg:order-2 max-w-sm lg:max-w-md">
+                     <div class="w-full flex flex-col items-center">
+                        <!-- Canvas limpio sin bordes -->
+                        <canvas id="rose-canvas" class="w-full aspect-square cursor-crosshair mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.3)]"></canvas>
                         
-                        <div class="flex justify-center lg:justify-start space-x-6">
-                            <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
-                            <a href="https://www.instagram.com/kevin_messinaa/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Instagram"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg></a>
-                            <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="YouTube"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
-                            <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="GitHub"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.663 7.826 6.357 9.363.465.086.635-.202.635-.448 0-.22-.008-.996-.013-1.79-2.585.56-3.13-1.11-3.21-1.33-.132-.33-.67-1.33-1.15-1.59-.4-.22-.97-.75-.01-.76.91-.01 1.55.93 1.76 1.33.99 1.76 2.6 1.25 3.23.95.1-.75.39-1.25.7-1.54-2.47-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2.14-2.98-.12-.28-.54-1.4.12-2.94 0 0 .93-.3 3.05 1.13A10.66 10.66 0 0112 6.8c.96 0 1.93.13 2.82.38 2.12-1.43 3.05-1.13 3.05-1.13.66 1.54.24 2.66.12 2.94.71.78 1.14 1.77 1.14 2.98 0 4.26-2.58 5.2-5.06 5.47.4.34.76.99.76 2 0 1.45-.01 2.62-.01 2.97 0 .25.17.54.64.45A10.01 10.01 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
+                        <!-- Controles minimalistas -->
+                        <div class="space-y-4 w-full max-w-xs">
+                            <div class="flex items-center justify-between text-sm">
+                                <label class="font-bold text-blue-300" data-translate="param-k">Parámetro k</label>
+                                <span id="equation-display" class="font-mono text-gray-400">ρ = R sin(kφ)</span>
+                            </div>
+                            <input type="range" id="k-slider" min="1" max="10" step="0.01" value="1" class="accent-blue-500">
+                            <button id="pause-button" class="w-full py-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600/30 text-gray-300 text-sm font-semibold rounded-full transition-colors backdrop-blur-sm" data-translate="pause-anim">
+                                Pausar Animación
+                            </button>
                         </div>
                     </div>
+                </div>
+
+                <!-- Texto (Orden 2 en móvil, Orden 1 en escritorio) -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left order-2 lg:order-1 animate-[fadeIn_0.5s_ease-out]">
+                    <h1 class="text-5xl md:text-7xl font-black text-white mb-4 tracking-tight">πlography</h1>
+                    <h2 class="text-2xl md:text-4xl font-bold text-gray-200 mb-4">Kevin Messina Rodriguez</h2>
+                    <p class="text-lg text-gray-400 italic mb-6 leading-relaxed" data-translate="hero-desc">Un espacio donde convergen las matemáticas, la programación y el arte visual.</p>
+                    <p class="text-xl text-blue-400 font-semibold mb-8" data-translate="hero-role">Estudiante y apasionado de Matemáticas</p>
                     
-                    <!-- Columna de Animación -->
-                    <div class="lg:w-1/2 lg:order-2 order-1 flex justify-center lg:justify-end">
-                         <div class="w-full max-w-sm mx-auto flex flex-col justify-center items-center">
-                            <canvas id="rose-canvas"></canvas>
-                            <div class="w-full mt-6 space-y-4">
-                                <div class="flex items-center justify-between text-lg">
-                                    <label for="k-slider" class="font-semibold text-blue-300">k</label>
-                                    <p id="equation-display" class="font-mono text-gray-300">ρ = R sin(kφ)</p>
-                                </div>
-                                <input type="range" id="k-slider" min="1" max="10" step="0.01" value="1" class="w-full">
+                    <div class="flex justify-center lg:justify-start gap-4">
+                        <button onclick="showTab('notas')" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold transition-all shadow-lg shadow-blue-900/30" data-translate="explore-btn">
+                            Explorar Notas
+                        </button>
+                        <button onclick="showTab('sobre-mi')" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg font-bold transition-all" data-translate="nav-about">
+                            Sobre Mí
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN: SOBRE MÍ -->
+        <section id="sobre-mi" class="tab-content">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="nav-about">Sobre Mí</h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Columna Izquierda: Perfil -->
+                    <div class="md:col-span-1 space-y-6">
+                        <div class="card p-6 rounded-xl text-center">
+                            <div class="w-32 h-32 mx-auto bg-gray-800 rounded-full mb-4 flex items-center justify-center border-4 border-blue-500/30 overflow-hidden shadow-lg">
+                                <img src="https://i.postimg.cc/h4rsVpRJ/Whats-App-Image-2025-12-12-at-1-16-01-PM.jpg" alt="Foto de Perfil" class="w-full h-full object-cover">
                             </div>
-                            <button id="pause-button" class="mt-6 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-colors">Pausar Animación</button>
+                            <h3 class="text-xl font-bold text-white">Kevin Messina</h3>
+                            <p class="text-blue-400 text-sm font-semibold mb-4" data-translate="role-subtitle">Matemático en formación</p>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6" data-translate="bio-short">
+                                Apasionado por la intersección entre la lógica abstracta y la creatividad visual. Busco explicar el mundo a través de números y código.
+                            </p>
+                            <div class="flex justify-center gap-4">
+                                <a href="https://www.linkedin.com/in/kevin-gerardo-messina-rodriguez-5b756331b" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                                </a>
+                                <a href="https://www.instagram.com/kevin_messinaa/" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.451 2.52c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+                                </a>
+                                <a href="mailto:kevinmessinarodriguez@gmail.com" title="kevinmessinarodriguez@gmail.com" class="text-gray-400 hover:text-white transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Columna Derecha: Info Detallada -->
+                    <div class="md:col-span-2 space-y-6">
+                        <!-- Intereses -->
+                        <div class="card p-6 rounded-xl">
+                            <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2" data-translate="interests-title">
+                                <span class="text-blue-500">⚡</span> Intereses y Enfoque
+                            </h4>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div class="bg-gray-800/50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-gray-200 mb-1" data-translate="int-math">Matemáticas</h5>
+                                    <p class="text-sm text-gray-400" data-translate="int-math-desc">Teoría de Grafos, Geometría Diferencial y Ecuaciones Diferenciales.</p>
+                                </div>
+                                <div class="bg-gray-800/50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-gray-200 mb-1" data-translate="int-dev">Desarrollo</h5>
+                                    <p class="text-sm text-gray-400" data-translate="int-dev-desc">Simulaciones web, Python (Manim), y visualización de datos.</p>
+                                </div>
+                                <div class="bg-gray-800/50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-gray-200 mb-1" data-translate="int-art">Arte Visual</h5>
+                                    <p class="text-sm text-gray-400" data-translate="int-art-desc">Fotografía de paisaje y astrofotografía.</p>
+                                </div>
+                                <div class="bg-gray-800/50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-gray-200 mb-1" data-translate="int-outreach">Divulgación</h5>
+                                    <p class="text-sm text-gray-400" data-translate="int-outreach-desc">Compartir conocimiento complejo de forma accesible.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stack Tecnológico -->
+                        <div class="card p-6 rounded-xl">
+                            <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2" data-translate="tools-title">
+                                <span class="text-blue-500">🛠️</span> Herramientas
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">Python</span>
+                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">LaTeX</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Contenedor para las secciones -->
-        <div class="container mx-auto px-6 py-20 space-y-20">
-
-            <!-- Sección de Notas -->
-            <section id="notas">
-                <h2 class="text-4xl font-bold text-center mb-12">Notas de Divulgación</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="card rounded-lg overflow-hidden p-6">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">Introducción a la Teoría de Grafos</h3>
-                        <p class="text-gray-400 mb-4">Un recorrido visual y conceptual por los fundamentos de los grafos, desde Euler hasta los problemas modernos.</p>
-                        <a href="./GraphTheoryIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+        <!-- SECCIÓN: NOTAS -->
+        <section id="notas" class="tab-content">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="notes-title">Notas de Divulgación</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card rounded-xl p-6 flex flex-col">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3" data-translate="note-graph-title">Teoría de Grafos</h3>
+                        <p class="text-gray-400 text-sm mb-6 flex-1" data-translate="note-graph-desc">Fundamentos visuales desde los puentes de Königsberg hasta algoritmos modernos.</p>
+                        <a href="./GraphTheoryIndex.html" class="inline-block text-white font-semibold hover:text-blue-300 transition-colors mt-auto" data-translate="read-note">Leer nota &rarr;</a>
                     </div>
-                    <div class="card rounded-lg overflow-hidden p-6">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">El teorema de Pitágoras</h3>
-                        <p class="text-gray-400 mb-4">Hablamos de unos de los teoremas más conocidos por la comunidad, incluso la no matemática.</p>
-                        <a href="NotaDTeoremaPitagoras.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    <div class="card rounded-xl p-6 flex flex-col">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3" data-translate="note-pyth-title">Teorema de Pitágoras</h3>
+                        <p class="text-gray-400 text-sm mb-6 flex-1" data-translate="note-pyth-desc">Más allá de a²+b²=c². Exploración geométrica y sus generalizaciones.</p>
+                        <a href="NotaDTeoremaPitagoras.html" class="inline-block text-white font-semibold hover:text-blue-300 transition-colors mt-auto" data-translate="read-note">Leer nota &rarr;</a>
                     </div>
-                    <div class="card rounded-lg overflow-hidden p-6">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">Introducción a la teoría de Grupos</h3>
-                        <p class="text-gray-400 mb-4">Una perspectiva visual sobre cconceptos de la teoría de grupos.</p>
-                        <a href="./GroupTheoryIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    <div class="card rounded-xl p-6 flex flex-col">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3" data-translate="note-group-title">Teoría de Grupos</h3>
+                        <p class="text-gray-400 text-sm mb-6 flex-1" data-translate="note-group-desc">Simetría, permutaciones y la belleza del álgebra abstracta.</p>
+                        <a href="./GroupTheoryIndex.html" class="inline-block text-white font-semibold hover:text-blue-300 transition-colors mt-auto" data-translate="read-note">Leer nota &rarr;</a>
                     </div>
-                    <div class="card rounded-lg overflow-hidden p-6">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">Animaciones Matemáticas </h3>
-                        <p class="text-gray-400 mb-4">Estoy aprendiendo a hacer animaciones y quiero compartirlo con ustedes :D.</p>
-                        <a href="./GaleriaManim.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    <div class="card rounded-xl p-6 flex flex-col">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3" data-translate="note-manim-title">Animaciones Manim</h3>
+                        <p class="text-gray-400 text-sm mb-6 flex-1" data-translate="note-manim-desc">Galería de experimentos visuales con Python (engine de 3Blue1Brown).</p>
+                        <a href="./GaleriaManim.html" class="inline-block text-white font-semibold hover:text-blue-300 transition-colors mt-auto" data-translate="view-gallery">Ver galería &rarr;</a>
                     </div>
-                    <div class="card rounded-lg overflow-hidden p-6">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">Geometría Diferencial</h3>
-                        <p class="text-gray-400 mb-4">Algunas cosas interesantes sobre cuvas y superficies.</p>
-                        <a href="./GeometryDifIndex.html" class="font-semibold text-white hover:text-blue-400">Leer más &rarr;</a>
+                    <div class="card rounded-xl p-6 flex flex-col">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3" data-translate="note-diff-title">Geometría Diferencial</h3>
+                        <p class="text-gray-400 text-sm mb-6 flex-1" data-translate="note-diff-desc">Curvas, superficies, curvatura y geodésicas.</p>
+                        <a href="./GeometryDifIndex.html" class="inline-block text-white font-semibold hover:text-blue-300 transition-colors mt-auto" data-translate="read-note">Leer nota &rarr;</a>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Sección de Simulaciones -->
-            <section id="simulaciones">
-                <h2 class="text-4xl font-bold text-center mb-12">Simulaciones Interactivas</h2>
-                <div class="card rounded-lg overflow-hidden p-6 max-w-4xl mx-auto">
-                    <h3 class="text-2xl font-bold text-blue-300 mb-4">El Juego de la Vida de Conway</h3>
-                    <div class="grid md:grid-cols-3 gap-6 items-start">
-                        <!-- Columna de la simulación -->
-                        <div class="md:col-span-2">
-                            <canvas id="game-of-life-canvas" class="w-full aspect-square rounded-lg"></canvas>
+        <!-- SECCIÓN: SIMULACIONES -->
+        <section id="simulaciones" class="tab-content">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="lab-title">Laboratorio Interactivo</h2>
+                <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700 backdrop-blur-sm">
+                    <div class="flex flex-col lg:flex-row gap-8">
+                        <div class="lg:w-2/3 bg-black rounded-lg overflow-hidden border border-gray-800 shadow-inner">
+                            <canvas id="game-of-life-canvas" class="w-full aspect-square cursor-crosshair"></canvas>
                         </div>
-                        <!-- Columna de controles y explicación -->
-                        <div class="space-y-4">
+                        <div class="lg:w-1/3 space-y-6">
                             <div>
-                                <h4 class="font-semibold text-lg mb-2">Controles</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <button id="gol-start-pause" class="control-button px-4 py-2 rounded-md text-sm font-medium text-white">Iniciar</button>
-                                    <button id="gol-reset" class="control-button px-4 py-2 rounded-md text-sm font-medium text-white">Aleatorio</button>
-                                    <button id="gol-clear" class="control-button px-4 py-2 rounded-md text-sm font-medium text-white">Limpiar</button>
-                                </div>
+                                <h3 class="text-2xl font-bold text-blue-400 mb-2" data-translate="gol-title">Juego de la Vida</h3>
+                                <p class="text-gray-400 text-sm" data-translate="gol-desc">Autómata celular diseñado por John Conway.</p>
                             </div>
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2">Reglas</h4>
-                                <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
-                                    <li>Una célula viva con &lt; 2 vecinos vivos muere.</li>
-                                    <li>Una célula viva con 2 o 3 vecinos vivos sobrevive.</li>
-                                    <li>Una célula viva con &gt; 3 vecinos vivos muere.</li>
-                                    <li>Una célula muerta con = 3 vecinos vivos nace.</li>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button id="gol-start-pause" class="col-span-2 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-colors" data-translate="gol-start">
+                                    Iniciar Simulación
+                                </button>
+                                <button id="gol-reset" class="py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors" data-translate="gol-random">
+                                    Aleatorizar
+                                </button>
+                                <button id="gol-clear" class="py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors" data-translate="gol-clear">
+                                    Limpiar
+                                </button>
+                            </div>
+                            <div class="bg-gray-900/50 p-4 rounded-lg text-sm text-gray-400 border border-gray-700">
+                                <strong class="text-gray-200 block mb-2" data-translate="gol-rules">Reglas:</strong>
+                                <ul class="space-y-1 list-disc list-inside">
+                                    <li data-translate="gol-rule1"><span class="text-red-400">Muerte:</span> < 2 o > 3 vecinos.</li>
+                                    <li data-translate="gol-rule2"><span class="text-green-400">Vida:</span> 2 o 3 vecinos.</li>
+                                    <li data-translate="gol-rule3"><span class="text-blue-400">Nacimiento:</span> Exactamente 3 vecinos.</li>
                                 </ul>
+                                <p class="mt-3 text-xs opacity-70" data-translate="gol-tip">Tip: Haz clic en el cuadro negro para dibujar células.</p>
                             </div>
-                            <p class="text-gray-400 text-sm italic">
-                                Haz clic en el lienzo para crear o destruir células.
-                            </p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Sección de Talleres y Congreso (Unificadas para mejor estructura) -->
-            <section id="talleres">
-                <h2 class="text-4xl font-bold text-center mb-12">Talleres y Congresos</h2>
-                <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                     <div class="card rounded-lg overflow-hidden p-6 text-center">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">58 Congreso Nacional</h3>
-                        <p class="text-gray-400 mb-4">Accede a las notas, presentaciones y fotografías del congreso.</p>
-                        <a href="./Congreso58.html" class="font-semibold text-white hover:text-blue-400">Ver más &rarr;</a>
+        <!-- SECCIÓN: TALLERES -->
+        <section id="talleres" class="tab-content">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="workshops-title">Talleres y Congresos</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card p-8 rounded-xl text-center hover:bg-gray-800 transition-colors group cursor-pointer">
+                        <div class="text-4xl mb-4">🏛️</div>
+                        <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors" data-translate="congress-title">58 Congreso Nacional</h3>
+                        <p class="text-gray-400 mb-6" data-translate="congress-desc">Materiales, presentaciones y galería del evento.</p>
+                        <a href="./Congreso58.html" class="text-blue-400 font-bold hover:underline" data-translate="view-details">Ver detalles &rarr;</a>
                     </div>
-                    <div class="card rounded-lg overflow-hidden p-6 text-center">
-                        <h3 class="text-xl font-bold text-blue-300 mb-2">Próximos Talleres...</h3>
-                        <p class="text-gray-400 mb-4">Nuevos talleres y cursos en preparación.</p>
-                        <span class="font-semibold text-gray-500">... &rarr;</span>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Sección de Fotografía -->
-            <section id="fotografia">
-                <h2 class="text-4xl font-bold text-center mb-12">Fotografía</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
-                        <img src="https://i.postimg.cc/tJbrkb9c/PXL-20250711-171745996-2.jpg" alt="Comedor del CIMAT en Guanajuato" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center p-4">
-                            <p class="text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">Una tarde tranquila en el comedor del CIMAT, Guanajuato.</p>
-                        </div>
-                    </div>
-                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
-                        <img src="https://i.postimg.cc/CLFPfwPB/PXL-20250712-041541875-PORTRAIT.jpg" alt="Fotografía de paisaje" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
-                    </div>
-                     <div class="relative group card rounded-lg overflow-hidden aspect-square">
-                        <img src="https://i.postimg.cc/TYbWJbKp/PXL-20250707-013923759-NIGHT-RAW-01-COVER.jpg" alt="Fotografía nocturna" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
-                    </div>
-                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
-                        <img src="https://i.postimg.cc/hG2Jtb53/Whats-App-Image-2025-07-18-at-2-37-39-PM.jpg" alt="Fotografía de arquitectura" class="w-full h-full object-cover">
-                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
-                    </div>
-                    <div class="relative group card rounded-lg overflow-hidden aspect-square">
-                        <img src="https://i.postimg.cc/xjcxG9Lc/PXL-20250710-041020320-RAW-01-COVER.jpg" alt="Fotografía de naturaleza" class="w-full h-full object-cover">
-                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300"></div>
+                    <div class="card p-8 rounded-xl text-center border-dashed border-2 bg-transparent">
+                        <div class="text-4xl mb-4 opacity-50">🚧</div>
+                        <h3 class="text-2xl font-bold text-gray-500 mb-2" data-translate="soon-title">Próximamente</h3>
+                        <p class="text-gray-600" data-translate="soon-desc">Nuevos cursos en preparación...</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Sección de Lecturas Recomendadas -->
-            <section id="lecturas">
-                <h2 class="text-4xl font-bold text-center mb-12">Lecturas Recomendadas</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                    <div class="flex flex-col items-center text-center">
-                        <img src="https://i.postimg.cc/HkHJQ4V3/s-l1600.webp" alt="Portada del libro 'Hábitos Atómicos'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
-                        <div class="flex flex-col flex-grow justify-start mt-4">
-                            <h4 class="font-bold text-white">Hábitos Atómicos</h4>
-                            <p class="text-sm text-gray-400">James Clear</p>
-                            <p class="text-sm text-gray-400 italic mt-2 px-2">Un libro distinto, habla sobre productividad y hacer un focus en nuestras metas, me lo regaló un amigo y me motivó a hacer este proyecto.</p>
+        <!-- SECCIÓN: FOTOGRAFÍA -->
+        <section id="fotografia" class="tab-content">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="gallery-title">Galería Fotográfica</h2>
+                <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+                    <!-- Masonry Items -->
+                    <div class="break-inside-avoid relative group rounded-xl overflow-hidden card border-0">
+                        <img src="https://i.postimg.cc/tJbrkb9c/PXL-20250711-171745996-2.jpg" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+                            <p class="text-white text-sm font-medium" data-translate="photo-cimat">Comedor CIMAT, Guanajuato</p>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center text-center">
-                        <img src="https://i.postimg.cc/nc3V30th/image.jpg" alt="Portada del libro 'Del cero al infinito'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
-                        <div class="flex flex-col flex-grow justify-start mt-4">
-                            <h4 class="font-bold text-white mt-2">Del cero al infinito.</h4>
-                            <p class="text-sm text-gray-400">Pablo Ámster</p>
-                            <p class="text-sm text-gray-400 italic mt-2 px-2">Mi primer libro de divulgación leído antes de entrar a mi carrera, lo regalé porque creo que era un excelente ejemplar.</p>
+                    <div class="break-inside-avoid relative group rounded-xl overflow-hidden card border-0">
+                        <img src="https://i.postimg.cc/CLFPfwPB/PXL-20250712-041541875-PORTRAIT.jpg" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="break-inside-avoid relative group rounded-xl overflow-hidden card border-0">
+                        <img src="https://i.postimg.cc/TYbWJbKp/PXL-20250707-013923759-NIGHT-RAW-01-COVER.jpg" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+                            <p class="text-white text-sm font-medium" data-translate="photo-night">Nocturna</p>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center text-center">
-                        <img src="https://i.postimg.cc/hGtbS0rf/chel-87-e-cov-1.jpg" alt="Portada del libro 'Geometry and Imagination'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
-                        <div class="flex flex-col flex-grow justify-start mt-4">
-                            <h4 class="font-bold text-white mt-2">Geometry and Imagination</h4>
-                            <p class="text-sm text-gray-400">David Hilbert</p>
-                            <p class="text-sm text-gray-400 italic mt-2 px-2">Maravilloso ejemplar sobre la geometría, es una recomendación de un maestro, y se ha quedado en mis favoritos.</p>
+                     <div class="break-inside-avoid relative group rounded-xl overflow-hidden card border-0">
+                        <img src="https://i.postimg.cc/xjcxG9Lc/PXL-20250710-041020320-RAW-01-COVER.jpg" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105">
+                    </div>
+                     <div class="break-inside-avoid relative group rounded-xl overflow-hidden card border-0">
+                        <img src="https://i.postimg.cc/hG2Jtb53/Whats-App-Image-2025-07-18-at-2-37-39-PM.jpg" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: LECTURAS -->
+        <section id="lecturas" class="tab-content">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="library-title">Biblioteca</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    <!-- Libros -->
+                    <div class="group cursor-pointer">
+                        <div class="aspect-[2/3] rounded-lg overflow-hidden mb-3 relative card border-0">
+                            <img src="https://i.postimg.cc/HkHJQ4V3/s-l1600.webp" class="w-full h-full object-cover group-hover:opacity-75 transition-opacity">
+                        </div>
+                        <h4 class="text-white font-bold text-sm truncate">Hábitos Atómicos</h4>
+                        <p class="text-gray-500 text-xs">James Clear</p>
+                    </div>
+                    <div class="group cursor-pointer">
+                        <div class="aspect-[2/3] rounded-lg overflow-hidden mb-3 relative card border-0">
+                            <img src="https://i.postimg.cc/nc3V30th/image.jpg" class="w-full h-full object-cover group-hover:opacity-75 transition-opacity">
+                        </div>
+                        <h4 class="text-white font-bold text-sm truncate" data-translate="book-zero">Del cero al infinito</h4>
+                        <p class="text-gray-500 text-xs">Pablo Ámster</p>
+                    </div>
+                    <div class="group cursor-pointer">
+                        <div class="aspect-[2/3] rounded-lg overflow-hidden mb-3 relative card border-0">
+                            <img src="https://i.postimg.cc/hGtbS0rf/chel-87-e-cov-1.jpg" class="w-full h-full object-cover group-hover:opacity-75 transition-opacity">
+                        </div>
+                        <h4 class="text-white font-bold text-sm truncate">Geometry & Imagination</h4>
+                        <p class="text-gray-500 text-xs">David Hilbert</p>
+                    </div>
+                    <div class="group cursor-pointer">
+                        <div class="aspect-[2/3] rounded-lg overflow-hidden mb-3 relative card border-0">
+                            <img src="https://i.postimg.cc/JzVfFfPR/12112fb0fb088856cda9c86eed51001c.webp" class="w-full h-full object-cover group-hover:opacity-75 transition-opacity">
+                        </div>
+                        <h4 class="text-white font-bold text-sm truncate">Calculus</h4>
+                        <p class="text-gray-500 text-xs">Michael Spivak</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: EVENTOS -->
+        <section id="eventos" class="tab-content">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="trajectory-title">Trayectoria</h2>
+                <div class="space-y-8">
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                            <div class="w-0.5 h-full bg-gray-800 my-1"></div>
+                        </div>
+                        <div>
+                            <span class="text-blue-400 text-sm font-bold">2025</span>
+                            <h3 class="text-xl text-white font-bold" data-translate="event-cimat">Escuela de Verano CIMAT</h3>
+                            <p class="text-gray-400 text-sm">Guanajuato, México</p>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center text-center">
-                        <img src="https://i.postimg.cc/bYDk1SXM/stml-88-e-cov-1.jpg" alt="Portada del libro 'Hilbert´s Tenth Problem'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
-                        <div class="flex flex-col flex-grow justify-start mt-4">
-                            <h4 class="font-bold text-white mt-2">Hilbert´s Tenth Problem</h4>
-                            <p class="text-sm text-gray-400">Yuri V. Matiyasevich</p>
-                            <p class="text-sm text-gray-400 italic mt-2 px-2">En proceso de lectura.</p>
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 bg-gray-600 rounded-full"></div>
+                            <div class="w-0.5 h-full bg-gray-800 my-1"></div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 text-sm font-bold">2024</span>
+                            <h3 class="text-xl text-white font-bold" data-translate="event-smm">Congreso Nacional SMM</h3>
+                            <p class="text-gray-400 text-sm">Durango, México</p>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center text-center">
-                        <img src="https://i.postimg.cc/JzVfFfPR/12112fb0fb088856cda9c86eed51001c.webp" alt="Portada del libro 'Cálculus'" class="card rounded-lg mb-2 mx-auto w-full aspect-[2/3] object-cover">
-                        <div class="flex flex-col flex-grow justify-start mt-4">
-                            <h4 class="font-bold text-white mt-2">Calculus</h4>
-                            <p class="text-sm text-gray-400">Michael Spivak</p>
-                             <p class="text-sm text-gray-400 italic mt-2 px-2">La biblia del cálculo, el terror y destrozamentes de muchos matemáticos que han leído este libro.</p>
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 bg-gray-600 rounded-full"></div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 text-sm font-bold">2023</span>
+                            <h3 class="text-xl text-white font-bold" data-translate="event-smm">Congreso Nacional SMM</h3>
+                            <p class="text-gray-400 text-sm">San Luis Potosí, México</p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Sección de Eventos -->
-            <section id="eventos">
-                <h2 class="text-4xl font-bold text-center mb-12">Eventos y Viajes</h2>
-                <div class="grid md:grid-cols-2 gap-12">
-                    <div>
-                        <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Lugares Visitados</h3>
-                        <ul class="space-y-3 list-disc list-inside text-gray-300">
-                            <li>Escuela de Verano del CIMAT - Guanajuato, 2025</li>
-                            <li>Congreso Nacional de Matemáticas SMM - Durango, 2024</li>
-                            <li>Congreso Nacional de Matemáticas SMM - San Luis Potosí, 2023</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-blue-300 mb-4 text-center md:text-left">Próximamente</h3>
-                         <ul class="space-y-3 list-disc list-inside text-gray-300">
-                            <li>Si todo sale bien xD, Congreso de la SMM (Octubre 2025)</li>
-                         </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Sección de Vínculos de Interés -->
-            <section id="interes">
-                <h2 class="text-4xl font-bold text-center mb-12">Vínculos de Interés</h2>
-                <div class="max-w-2xl mx-auto space-y-4">
-                    <a href="https://www.3blue1brown.com/" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+        <!-- SECCIÓN: VÍNCULOS -->
+        <section id="interes" class="tab-content">
+            <div class="container mx-auto px-6 max-w-2xl">
+                <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4" data-translate="links-title">Vínculos de Interés</h2>
+                <div class="space-y-4">
+                    <a href="https://www.3blue1brown.com/" target="_blank" class="card block p-4 rounded-lg hover:bg-gray-700 transition-colors">
                         <h4 class="font-bold text-blue-300">3Blue1Brown</h4>
-                        <p class="text-sm text-gray-400">Explicaciones matemáticas animadas de alta calidad.</p>
+                        <p class="text-sm text-gray-400" data-translate="link-3b1b">Explicaciones matemáticas animadas de alta calidad.</p>
                     </a>
-                    <a href="https://mathoverflow.net/" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                    <a href="https://mathoverflow.net/" target="_blank" class="card block p-4 rounded-lg hover:bg-gray-700 transition-colors">
                         <h4 class="font-bold text-blue-300">MathOverflow</h4>
-                        <p class="text-sm text-gray-400">Comunidad de preguntas y respuestas para matemáticos profesionales.</p>
+                        <p class="text-sm text-gray-400" data-translate="link-mo">Comunidad de preguntas y respuestas para matemáticos profesionales.</p>
                     </a>
-                    <a href="https://www.numberphile.com/" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                    <a href="https://www.numberphile.com/" target="_blank" class="card block p-4 rounded-lg hover:bg-gray-700 transition-colors">
                         <h4 class="font-bold text-blue-300">Numberphile</h4>
-                        <p class="text-sm text-gray-400">Videos fascinantes sobre números y el mundo de las matemáticas.</p>
+                        <p class="text-sm text-gray-400" data-translate="link-numberphile">Videos fascinantes sobre números y el mundo de las matemáticas.</p>
                     </a>
-                    <a href="https://www.youtube.com/channel/UCXtxgWwk55kVJo9lCCZRdmg" target="_blank" rel="noopener noreferrer" class="card block p-4 rounded-lg hover:bg-gray-700">
+                    <a href="https://www.youtube.com/channel/UCXtxgWwk55kVJo9lCCZRdmg" target="_blank" class="card block p-4 rounded-lg hover:bg-gray-700 transition-colors">
                         <h4 class="font-bold text-blue-300">Veritasium en español</h4>
-                        <p class="text-sm text-gray-400">Videos increíblemente asombrosos sobre ciencia en general, puedes encontrar matemáticas acá también.</p>
+                        <p class="text-sm text-gray-400" data-translate="link-veritasium">Videos asombrosos sobre ciencia en general y matemáticas.</p>
                     </a>
                 </div>
-            </section>
+            </div>
+        </section>
 
-        </div>
     </main>
 
-    <!-- Recuadro de Mensaje Importante -->
-    <div id="important-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 w-11/12 max-w-4xl bg-yellow-400 text-gray-900 p-4 rounded-lg shadow-lg flex items-center gap-4 z-40">
-        <p><strong class="font-bold">Importante leer:</strong> Esto es una demo, estaré trabajando para que sea lo más funcional posible muy pronto. Observaciones, sugerencias o si notas algo raro en la página agradeceré profundamente tu mensaje en kevinmessinarodriguez@gmail.com</p>
-        <button id="close-banner-btn" class="text-gray-900 font-bold text-2xl leading-none">&times;</button>
-    </div>
-    
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-700">
-        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
-            <p>&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
-            <p class="text-sm mt-2">"Debemos saber, sabremos". - David Hilbert</p>
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-6 mt-12">
+        <div class="container mx-auto text-center text-gray-500 text-sm">
+            <p data-translate="footer-rights">&copy; 2025 Kevin Messina Rodriguez. Todos los derechos reservados.</p>
+            <p class="italic mt-1" data-translate="footer-quote">"Debemos saber, sabremos". - David Hilbert</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- SCRIPT PARA EL MENÚ DESPLEGABLE ---
-            const openMenuBtn = document.getElementById('open-menu-btn');
-            const closeMenuBtn = document.getElementById('close-menu-btn');
-            const sideMenu = document.getElementById('side-menu');
-            const menuBackdrop = document.getElementById('menu-backdrop');
-            const menuLinks = sideMenu.querySelectorAll('a');
+        // === DICCIONARIO DE TRADUCCIÓN ===
+        const translations = {
+            es: {
+                "nav-home": "Inicio",
+                "nav-about": "Sobre Mí",
+                "nav-notes": "Notas",
+                "nav-sims": "Simulaciones",
+                "nav-workshops": "Talleres",
+                "nav-photo": "Fotografía",
+                "nav-reading": "Lecturas",
+                "nav-events": "Eventos",
+                "nav-links": "Vínculos",
+                "param-k": "Parámetro k",
+                "pause-anim": "Pausar Animación",
+                "resume-anim": "Reanudar Animación",
+                "hero-desc": "Un espacio donde convergen las matemáticas, la programación y el arte visual.",
+                "hero-role": "Estudiante y apasionado de Matemáticas",
+                "explore-btn": "Explorar Notas",
+                "role-subtitle": "Matemático en formación",
+                "bio-short": "Apasionado por la intersección entre la lógica abstracta y la creatividad visual. Busco explicar el mundo a través de números y código.",
+                "interests-title": "Intereses y Enfoque",
+                "int-math": "Matemáticas",
+                "int-math-desc": "Teoría de Grafos, Geometría Diferencial y Ecuaciones Diferenciales.",
+                "int-dev": "Desarrollo",
+                "int-dev-desc": "Simulaciones web, Python (Manim), y visualización de datos.",
+                "int-art": "Arte Visual",
+                "int-art-desc": "Fotografía de paisaje y astrofotografía.",
+                "int-outreach": "Divulgación",
+                "int-outreach-desc": "Compartir conocimiento complejo de forma accesible.",
+                "tools-title": "Herramientas",
+                "notes-title": "Notas de Divulgación",
+                "note-graph-title": "Teoría de Grafos",
+                "note-graph-desc": "Fundamentos visuales desde los puentes de Königsberg hasta algoritmos modernos.",
+                "read-note": "Leer nota \u2192",
+                "note-pyth-title": "Teorema de Pitágoras",
+                "note-pyth-desc": "Más allá de a²+b²=c². Exploración geométrica y sus generalizaciones.",
+                "note-group-title": "Teoría de Grupos",
+                "note-group-desc": "Simetría, permutaciones y la belleza del álgebra abstracta.",
+                "note-manim-title": "Animaciones Manim",
+                "note-manim-desc": "Galería de experimentos visuales con Python (engine de 3Blue1Brown).",
+                "view-gallery": "Ver galería \u2192",
+                "note-diff-title": "Geometría Diferencial",
+                "note-diff-desc": "Curvas, superficies, curvatura y geodésicas.",
+                "lab-title": "Laboratorio Interactivo",
+                "gol-title": "Juego de la Vida",
+                "gol-desc": "Autómata celular diseñado por John Conway.",
+                "gol-start": "Iniciar Simulación",
+                "gol-pause": "Pausar Simulación",
+                "gol-random": "Aleatorizar",
+                "gol-clear": "Limpiar",
+                "gol-rules": "Reglas:",
+                "gol-rule1": "Muerte: < 2 o > 3 vecinos.",
+                "gol-rule2": "Vida: 2 o 3 vecinos.",
+                "gol-rule3": "Nacimiento: Exactamente 3 vecinos.",
+                "gol-tip": "Tip: Haz clic en el cuadro negro para dibujar células.",
+                "workshops-title": "Talleres y Congresos",
+                "congress-title": "58 Congreso Nacional",
+                "congress-desc": "Materiales, presentaciones y galería del evento.",
+                "view-details": "Ver detalles \u2192",
+                "soon-title": "Próximamente",
+                "soon-desc": "Nuevos cursos en preparación...",
+                "gallery-title": "Galería Fotográfica",
+                "photo-cimat": "Comedor CIMAT, Guanajuato",
+                "photo-night": "Nocturna",
+                "library-title": "Biblioteca",
+                "book-zero": "Del cero al infinito",
+                "trajectory-title": "Trayectoria",
+                "event-cimat": "Escuela de Verano CIMAT",
+                "event-smm": "Congreso Nacional SMM",
+                "links-title": "Vínculos de Interés",
+                "link-3b1b": "Explicaciones matemáticas animadas de alta calidad.",
+                "link-mo": "Comunidad de preguntas y respuestas para matemáticos profesionales.",
+                "link-numberphile": "Videos fascinantes sobre números y el mundo de las matemáticas.",
+                "link-veritasium": "Videos asombrosos sobre ciencia en general y matemáticas.",
+                "footer-rights": "© 2025 Kevin Messina Rodriguez. Todos los derechos reservados.",
+                "footer-quote": "\"Debemos saber, sabremos\". - David Hilbert"
+            },
+            en: {
+                "nav-home": "Home",
+                "nav-about": "About Me",
+                "nav-notes": "Notes",
+                "nav-sims": "Simulations",
+                "nav-workshops": "Workshops",
+                "nav-photo": "Photography",
+                "nav-reading": "Reading",
+                "nav-events": "Events",
+                "nav-links": "Links",
+                "param-k": "Parameter k",
+                "pause-anim": "Pause Animation",
+                "resume-anim": "Resume Animation",
+                "hero-desc": "A space where mathematics, programming, and visual art converge.",
+                "hero-role": "Student & Mathematics Enthusiast",
+                "explore-btn": "Explore Notes",
+                "role-subtitle": "Mathematician in training",
+                "bio-short": "Passionate about the intersection of abstract logic and visual creativity. I seek to explain the world through numbers and code.",
+                "interests-title": "Interests & Focus",
+                "int-math": "Mathematics",
+                "int-math-desc": "Graph Theory, Differential Geometry, and Differential Equations.",
+                "int-dev": "Development",
+                "int-dev-desc": "Web simulations, Python (Manim), and data visualization.",
+                "int-art": "Visual Art",
+                "int-art-desc": "Landscape photography and astrophotography.",
+                "int-outreach": "Outreach",
+                "int-outreach-desc": "Sharing complex knowledge in an accessible way.",
+                "tools-title": "Tools",
+                "notes-title": "Outreach Notes",
+                "note-graph-title": "Graph Theory",
+                "note-graph-desc": "Visual foundations from the Bridges of Königsberg to modern algorithms.",
+                "read-note": "Read note \u2192",
+                "note-pyth-title": "Pythagorean Theorem",
+                "note-pyth-desc": "Beyond a²+b²=c². Geometric exploration and its generalizations.",
+                "note-group-title": "Group Theory",
+                "note-group-desc": "Symmetry, permutations, and the beauty of abstract algebra.",
+                "note-manim-title": "Manim Animations",
+                "note-manim-desc": "Gallery of visual experiments with Python (3Blue1Brown's engine).",
+                "view-gallery": "View gallery \u2192",
+                "note-diff-title": "Differential Geometry",
+                "note-diff-desc": "Curves, surfaces, curvature, and geodesics.",
+                "lab-title": "Interactive Laboratory",
+                "gol-title": "Game of Life",
+                "gol-desc": "Cellular automaton designed by John Conway.",
+                "gol-start": "Start Simulation",
+                "gol-pause": "Pause Simulation",
+                "gol-random": "Randomize",
+                "gol-clear": "Clear",
+                "gol-rules": "Rules:",
+                "gol-rule1": "Death: < 2 or > 3 neighbors.",
+                "gol-rule2": "Life: 2 or 3 neighbors.",
+                "gol-rule3": "Birth: Exactly 3 neighbors.",
+                "gol-tip": "Tip: Click on the black box to draw cells.",
+                "workshops-title": "Workshops & Congresses",
+                "congress-title": "58th National Congress",
+                "congress-desc": "Materials, presentations, and event gallery.",
+                "view-details": "View details \u2192",
+                "soon-title": "Coming Soon",
+                "soon-desc": "New courses in preparation...",
+                "gallery-title": "Photography Gallery",
+                "photo-cimat": "CIMAT Cafeteria, Guanajuato",
+                "photo-night": "Night Shot",
+                "library-title": "Library",
+                "book-zero": "From Zero to Infinity",
+                "trajectory-title": "Trajectory",
+                "event-cimat": "CIMAT Summer School",
+                "event-smm": "SMM National Congress",
+                "links-title": "Links of Interest",
+                "link-3b1b": "High-quality animated mathematical explanations.",
+                "link-mo": "Q&A community for professional mathematicians.",
+                "link-numberphile": "Fascinating videos about numbers and the world of mathematics.",
+                "link-veritasium": "Amazing videos about general science and mathematics.",
+                "footer-rights": "© 2025 Kevin Messina Rodriguez. All rights reserved.",
+                "footer-quote": "\"We must know, we will know\". - David Hilbert"
+            }
+        };
 
-            const openMenu = () => {
-                sideMenu.classList.remove('-translate-x-full');
-                menuBackdrop.classList.remove('hidden');
-            };
-
-            const closeMenu = () => {
-                sideMenu.classList.add('-translate-x-full');
-                menuBackdrop.classList.add('hidden');
-            };
-
-            openMenuBtn.addEventListener('click', openMenu);
-            closeMenuBtn.addEventListener('click', closeMenu);
-            menuBackdrop.addEventListener('click', closeMenu);
-            menuLinks.forEach(link => {
-                link.addEventListener('click', closeMenu);
-            });
-
-            // --- SCRIPT DE ANIMACIÓN HERO ---
-            const canvas = document.getElementById('rose-canvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const pauseButton = document.getElementById('pause-button');
-                const kSlider = document.getElementById('k-slider');
-                const equationDisplay = document.getElementById('equation-display');
-
-                if (ctx && pauseButton && kSlider && equationDisplay) {
-                    const dpr = window.devicePixelRatio || 1;
-                    const rect = canvas.getBoundingClientRect();
-                    
-                    if (rect.width > 0 && rect.height > 0) {
-                        canvas.width = rect.width * dpr;
-                        canvas.height = rect.height * dpr;
-                        ctx.scale(dpr, dpr);
-
-                        let k = parseFloat(kSlider.value);
-                        let kDirection = 1;
-                        const kSpeed = 0.002;
-                        const R = (Math.min(rect.width, rect.height) / 2) * 0.9;
-                        const centerX = rect.width / 2;
-                        const centerY = rect.height / 2;
-
-                        let isPaused = false;
-                        let animationFrameId;
-
-                        function redrawStatic(newK) {
-                            k = newK;
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            ctx.beginPath();
-                            ctx.strokeStyle = '#60a5fa';
-                            ctx.lineWidth = 1.5;
-                            const maxPhi = Math.PI * 16; 
-                            const step = 0.01;
-                            for (let phi = 0; phi <= maxPhi; phi += step) {
-                                const rho = R * Math.sin(k * phi);
-                                const x = centerX + rho * Math.cos(phi);
-                                const y = centerY + rho * Math.sin(phi);
-                                if (phi === 0) ctx.moveTo(x, y);
-                                else ctx.lineTo(x, y);
-                            }
-                            ctx.stroke();
-                            equationDisplay.textContent = 'ρ = R sin(' + k.toFixed(2) + 'φ)';
-                        }
-
-                        function animate() {
-                            if (!isPaused) {
-                                k += kSpeed * kDirection;
-                                if (k > 10 || k < 1) {
-                                    kDirection *= -1;
-                                    k = Math.max(1, Math.min(10, k));
-                                }
-                                kSlider.value = k;
-                                redrawStatic(k);
-                            }
-                            animationFrameId = requestAnimationFrame(animate);
-                        }
-
-                        pauseButton.addEventListener('click', () => {
-                            isPaused = !isPaused;
-                            pauseButton.textContent = isPaused ? 'Reanudar Animación' : 'Pausar Animación';
-                        });
-
-                        kSlider.addEventListener('input', () => {
-                            if (!isPaused) {
-                                isPaused = true;
-                                pauseButton.textContent = 'Reanudar Animación';
-                            }
-                            const newK = parseFloat(kSlider.value);
-                            redrawStatic(newK);
-                        });
-                        
-                        redrawStatic(k);
-                        animate();
-                    }
+        // Función para cambiar idioma
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
                 }
+            });
+            
+            // Actualizar botón
+            const btn = document.getElementById('lang-toggle');
+            btn.textContent = lang === 'es' ? 'EN' : 'ES'; // Muestra el *otro* idioma disponible
+            
+            // Guardar preferencia
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Event Listeners para Idioma
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('lang-toggle');
+            
+            // Cargar idioma guardado o defecto
+            const savedLang = localStorage.getItem('preferredLanguage') || 'es';
+            setLanguage(savedLang);
+
+            btn.addEventListener('click', () => {
+                const currentLang = localStorage.getItem('preferredLanguage') || 'es';
+                const newLang = currentLang === 'es' ? 'en' : 'es';
+                setLanguage(newLang);
+            });
+        });
+
+        // === LÓGICA DE PESTAÑAS ===
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if(target) target.classList.add('active');
+            
+            const activeBtn = Array.from(document.querySelectorAll('.nav-link')).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if(activeBtn) activeBtn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Hooks de Animación
+            if(tabId === 'inicio') {
+                if(window.animateRose) window.animateRose();
+            } else {
+                if(window.stopRose) window.stopRose();
             }
 
-            // --- SCRIPT PARA EL BANNER ---
-            const banner = document.getElementById('important-banner');
-            const closeBannerBtn = document.getElementById('close-banner-btn');
-            if (banner && closeBannerBtn) {
-                closeBannerBtn.addEventListener('click', () => {
-                    banner.style.display = 'none';
+            if(tabId === 'simulaciones') {
+                if(window.startGolLoop) window.startGolLoop();
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+            } else {
+                if(window.stopGolLoop) window.stopGolLoop();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // === LÓGICA ROSAS POLARES ===
+            const roseCanvas = document.getElementById('rose-canvas');
+            if (roseCanvas) {
+                const ctx = roseCanvas.getContext('2d');
+                const pauseBtn = document.getElementById('pause-button');
+                const kSlider = document.getElementById('k-slider');
+                const eqDisplay = document.getElementById('equation-display');
+                
+                let k = 1;
+                let kDir = 1;
+                let isPaused = false;
+                let roseAnimId;
+
+                function resizeRose() {
+                    const rect = roseCanvas.getBoundingClientRect();
+                    const dpr = window.devicePixelRatio || 1;
+                    if(rect.width === 0) return;
+                    roseCanvas.width = rect.width * dpr;
+                    roseCanvas.height = rect.height * dpr;
+                    ctx.scale(dpr, dpr);
+                }
+
+                function drawRose() {
+                    const w = roseCanvas.width / (window.devicePixelRatio || 1);
+                    const h = roseCanvas.height / (window.devicePixelRatio || 1);
+                    const R = (Math.min(w, h) / 2) * 0.9;
+                    
+                    ctx.clearRect(0, 0, w, h);
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#60a5fa';
+                    ctx.lineWidth = 2;
+
+                    for (let phi = 0; phi <= Math.PI * 12; phi += 0.01) {
+                        const r = R * Math.sin(k * phi);
+                        const x = w/2 + r * Math.cos(phi);
+                        const y = h/2 + r * Math.sin(phi);
+                        if (phi === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+
+                function loopRose() {
+                    if(!isPaused) {
+                        k += 0.003 * kDir;
+                        if(k > 8 || k < 1) kDir *= -1;
+                        kSlider.value = k;
+                        eqDisplay.innerText = `ρ = R sin(${k.toFixed(2)}φ)`;
+                        drawRose();
+                    }
+                    roseAnimId = requestAnimationFrame(loopRose);
+                }
+
+                // Global hooks
+                window.animateRose = () => { if(!roseAnimId) loopRose(); };
+                window.stopRose = () => { cancelAnimationFrame(roseAnimId); roseAnimId = null; };
+
+                // Events
+                kSlider.addEventListener('input', (e) => {
+                    isPaused = true;
+                    // Check current lang to update button text correctly
+                    const currentLang = localStorage.getItem('preferredLanguage') || 'es';
+                    const resumeText = currentLang === 'es' ? 'Reanudar Animación' : 'Resume Animation';
+                    pauseBtn.innerText = resumeText;
+                    
+                    k = parseFloat(e.target.value);
+                    eqDisplay.innerText = `ρ = R sin(${k.toFixed(2)}φ)`;
+                    drawRose();
                 });
+                pauseBtn.addEventListener('click', () => {
+                    isPaused = !isPaused;
+                    const currentLang = localStorage.getItem('preferredLanguage') || 'es';
+                    if (isPaused) {
+                        pauseBtn.innerText = currentLang === 'es' ? 'Reanudar Animación' : 'Resume Animation';
+                    } else {
+                        pauseBtn.innerText = currentLang === 'es' ? 'Pausar Animación' : 'Pause Animation';
+                    }
+                });
+                
+                // Init
+                window.addEventListener('resize', () => { resizeRose(); drawRose(); });
+                resizeRose();
+                loopRose();
             }
 
-            // --- SCRIPT PARA EL JUEGO DE LA VIDA ---
+            // === LÓGICA JUEGO DE LA VIDA ===
             const golCanvas = document.getElementById('game-of-life-canvas');
             if (golCanvas) {
                 const ctx = golCanvas.getContext('2d');
-                const startPauseBtn = document.getElementById('gol-start-pause');
+                const startBtn = document.getElementById('gol-start-pause');
                 const resetBtn = document.getElementById('gol-reset');
                 const clearBtn = document.getElementById('gol-clear');
-
-                const resolution = 20;
-                let cols, rows;
-                let grid;
+                
+                let res = 10;
+                let cols, rows, grid;
                 let isRunning = false;
-                let animationFrameId;
+                let golAnimId;
 
-                function setup() {
-                    const dpr = window.devicePixelRatio || 1;
+                function setupGol() {
                     const rect = golCanvas.getBoundingClientRect();
+                    const dpr = window.devicePixelRatio || 1;
+                    if(rect.width === 0) return;
+                    
                     golCanvas.width = rect.width * dpr;
                     golCanvas.height = rect.height * dpr;
                     ctx.scale(dpr, dpr);
                     
-                    cols = Math.floor(rect.width / resolution);
-                    rows = Math.floor(rect.height / resolution);
-                    grid = buildGrid();
-                    randomizeGrid();
-                    draw();
-                }
-
-                function buildGrid() {
-                    return new Array(cols).fill(null)
-                        .map(() => new Array(rows).fill(0));
-                }
-
-                function randomizeGrid() {
-                    for (let col = 0; col < cols; col++) {
-                        for (let row = 0; row < rows; row++) {
-                            grid[col][row] = Math.random() > 0.7 ? 1 : 0;
-                        }
+                    cols = Math.ceil(rect.width / res);
+                    rows = Math.ceil(rect.height / res);
+                    
+                    if(!grid || grid.length !== cols) {
+                        grid = new Array(cols).fill(null).map(() => new Array(rows).fill(0));
+                        randomizeGol();
                     }
+                    drawGol();
                 }
-                
-                function clearGrid() {
-                    for (let col = 0; col < cols; col++) {
-                        for (let row = 0; row < rows; row++) {
-                            grid[col][row] = 0;
+
+                function randomizeGol() {
+                    for(let i=0; i<cols; i++) {
+                        for(let j=0; j<rows; j++) {
+                            grid[i][j] = Math.random() > 0.8 ? 1 : 0;
                         }
                     }
                 }
 
-                function draw() {
-                    ctx.clearRect(0, 0, golCanvas.width, golCanvas.height);
-                    for (let col = 0; col < cols; col++) {
-                        for (let row = 0; row < rows; row++) {
-                            const cell = grid[col][row];
-                            ctx.beginPath();
-                            ctx.rect(col * resolution, row * resolution, resolution, resolution);
-                            ctx.fillStyle = cell ? '#60a5fa' : '#1F2937';
-                            ctx.fill();
+                function drawGol() {
+                    ctx.fillStyle = '#000'; // Clear
+                    ctx.fillRect(0,0, golCanvas.width, golCanvas.height);
+                    
+                    ctx.fillStyle = '#3b82f6';
+                    for(let i=0; i<cols; i++) {
+                        for(let j=0; j<rows; j++) {
+                            if(grid[i][j]) ctx.fillRect(i*res, j*res, res-1, res-1);
                         }
                     }
                 }
-                
-                function step() {
-                    const nextGen = buildGrid();
-                    for (let col = 0; col < cols; col++) {
-                        for (let row = 0; row < rows; row++) {
-                            const neighbors = countNeighbors(col, row);
-                            const state = grid[col][row];
-                            if (state === 1 && (neighbors < 2 || neighbors > 3)) {
-                                nextGen[col][row] = 0;
-                            } else if (state === 0 && neighbors === 3) {
-                                nextGen[col][row] = 1;
-                            } else {
-                                nextGen[col][row] = state;
+
+                function nextGen() {
+                    const next = new Array(cols).fill(null).map(() => new Array(rows).fill(0));
+                    for(let i=0; i<cols; i++) {
+                        for(let j=0; j<rows; j++) {
+                            let neighbors = 0;
+                            for(let x=-1; x<2; x++) {
+                                for(let y=-1; y<2; y++) {
+                                    if(x===0 && y===0) continue;
+                                    const col = (i + x + cols) % cols;
+                                    const row = (j + y + rows) % rows;
+                                    neighbors += grid[col][row];
+                                }
                             }
+                            const cell = grid[i][j];
+                            if(cell === 0 && neighbors === 3) next[i][j] = 1;
+                            else if(cell === 1 && (neighbors < 2 || neighbors > 3)) next[i][j] = 0;
+                            else next[i][j] = cell;
                         }
                     }
-                    grid = nextGen;
-                    draw();
-                }
-                
-                function countNeighbors(x, y) {
-                    let sum = 0;
-                    for (let i = -1; i < 2; i++) {
-                        for (let j = -1; j < 2; j++) {
-                            if (i === 0 && j === 0) continue;
-                            const col = (x + i + cols) % cols;
-                            const row = (y + j + rows) % rows;
-                            sum += grid[col][row];
-                        }
-                    }
-                    return sum;
-                }
-                
-                function gameLoop() {
-                    if (!isRunning) return;
-                    step();
-                    setTimeout(() => {
-                        animationFrameId = requestAnimationFrame(gameLoop);
-                    }, 100); 
+                    grid = next;
                 }
 
-                startPauseBtn.addEventListener('click', () => {
+                function loopGol() {
+                    if(isRunning) {
+                        nextGen();
+                        drawGol();
+                    }
+                    golAnimId = requestAnimationFrame(loopGol);
+                }
+
+                // Global hooks
+                window.startGolLoop = () => { if(!golAnimId) loopGol(); };
+                window.stopGolLoop = () => { cancelAnimationFrame(golAnimId); golAnimId = null; };
+
+                // Events
+                startBtn.addEventListener('click', () => {
                     isRunning = !isRunning;
-                    startPauseBtn.textContent = isRunning ? 'Pausa' : 'Iniciar';
-                    startPauseBtn.classList.toggle('active', isRunning);
+                    const currentLang = localStorage.getItem('preferredLanguage') || 'es';
+                    
                     if (isRunning) {
-                        gameLoop();
+                        startBtn.innerText = currentLang === 'es' ? 'Pausar Simulación' : 'Pause Simulation';
                     } else {
-                        cancelAnimationFrame(animationFrameId);
+                        startBtn.innerText = currentLang === 'es' ? 'Iniciar Simulación' : 'Start Simulation';
                     }
-                });
-
-                resetBtn.addEventListener('click', () => {
-                    randomizeGrid();
-                    draw();
-                });
-
-                clearBtn.addEventListener('click', () => {
-                    isRunning = false;
-                    startPauseBtn.textContent = 'Iniciar';
-                    startPauseBtn.classList.remove('active');
-                    cancelAnimationFrame(animationFrameId);
-                    clearGrid();
-                    draw();
-                });
-
-                golCanvas.addEventListener('click', (e) => {
-                    const rect = golCanvas.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const col = Math.floor(x / resolution);
-                    const row = Math.floor(y / resolution);
-                    if(col >= 0 && col < cols && row >= 0 && row < rows) {
-                       grid[col][row] = grid[col][row] ? 0 : 1;
-                       draw();
-                    }
+                    
+                    if(isRunning && !golAnimId) loopGol();
                 });
                 
-                setup();
-                window.addEventListener('resize', setup);
+                resetBtn.addEventListener('click', () => { randomizeGol(); drawGol(); });
+                clearBtn.addEventListener('click', () => { 
+                    grid = new Array(cols).fill(null).map(() => new Array(rows).fill(0));
+                    drawGol();
+                    isRunning = false;
+                    const currentLang = localStorage.getItem('preferredLanguage') || 'es';
+                    startBtn.innerText = currentLang === 'es' ? 'Iniciar Simulación' : 'Start Simulation';
+                });
+                golCanvas.addEventListener('mousedown', (e) => {
+                    const rect = golCanvas.getBoundingClientRect();
+                    const x = Math.floor((e.clientX - rect.left) / res);
+                    const y = Math.floor((e.clientY - rect.top) / res);
+                    if(grid[x]) {
+                        grid[x][y] = grid[x][y] ? 0 : 1;
+                        drawGol();
+                    }
+                });
+
+                window.addEventListener('resize', setupGol);
+                setupGol();
             }
         });
     </script>
-
 </body>
 </html>
-
-
-
-
-
-
