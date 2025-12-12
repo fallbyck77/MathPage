@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álgebra Lineal - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración MathJax -->
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        
+        /* Gradiente Álgebra (Magenta/Cian) */
+        .hero-linear {
+            background: radial-gradient(circle at top right, #be185d 0%, #0f172a 70%); 
+            position: relative;
+        }
+
+        .card {
+            background-color: #1e293b; 
+            border: 1px solid #334155;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #22d3ee; /* Cyan 400 */
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.2);
+        }
+        
+        .text-glow-magenta { text-shadow: 0 0 40px rgba(219, 39, 119, 0.5); }
+
+        .canvas-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .card:hover .icon-float {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(34,211,238,0)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(34,211,238,0.5)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(34,211,238,0)); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pink-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="fixed w-full bg-slate-900/80 backdrop-blur-md z-50 border-b border-pink-900/30">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="./index.html" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-500 tracking-tighter hover:opacity-90 transition-opacity">
+                πlography
+            </a>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#temario" class="hover:text-pink-400 transition-colors">Temario</a>
+                <a href="#eigen" class="hover:text-cyan-400 transition-colors">Eigenvalores</a>
+                <a href="./index.html" class="text-slate-500 hover:text-white transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Volver
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION: Deformación Tensorial -->
+    <section class="relative min-h-[85vh] flex items-center py-20 overflow-hidden hero-linear">
+        <div id="linear-canvas" class="canvas-bg"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl">
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-pink-900/60 border border-pink-400/50 text-pink-100 text-sm font-medium mb-8 shadow-lg backdrop-blur-md hover:border-pink-300 transition-colors cursor-default">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                    </span>
+                    <span class="font-serif tracking-wide text-lg">
+                        $A\vec{v} = \lambda\vec{v}$
+                    </span>
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-tight text-glow-magenta">
+                    Álgebra <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400">Lineal</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-slate-200/90 mb-10 max-w-2xl leading-relaxed font-light">
+                    El estudio de los espacios, las transformaciones y la estructura. Visualiza cómo las matrices deforman la realidad y los tensores generalizan el concepto de dirección.
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="#temario" class="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-pink-900/50 flex items-center gap-2 border border-pink-400/20">
+                        Explorar el Espacio
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEMARIO / ÍNDICE -->
+    <section id="temario" class="py-24 bg-slate-950 relative">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Módulos Fundamentales</h2>
+                    <p class="text-pink-400/80">La base de la ingeniería moderna y la IA.</p>
+                </div>
+                <div class="hidden md:block h-px flex-1 bg-slate-800 ml-12 mb-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+                
+                <!-- Tarjeta 1: Matrices y Sistemas -->
+                <div class="group card rounded-2xl p-6 cursor-pointer relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center mb-6 border border-slate-700 group-hover:border-pink-500/50 transition-colors text-pink-500 icon-float">
+                            <!-- Icono: Matriz -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8">
+                                <path d="M4 4h2v16h-2" />
+                                <path d="M20 4h-2v16h2" />
+                                <circle cx="9" cy="9" r="1" fill="currentColor"/>
+                                <circle cx="15" cy="9" r="1" fill="currentColor"/>
+                                <circle cx="9" cy="15" r="1" fill="currentColor"/>
+                                <circle cx="15" cy="15" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Matrices y Sistemas</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Resolución de $Ax=b$. Eliminación Gaussiana, matriz inversa, determinantes y rango.
+                        </p>
+                        <span class="text-xs font-mono text-pink-300 bg-pink-900/20 px-2 py-1 rounded border border-pink-900/50">\det(A) \neq 0</span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Espacios Vectoriales -->
+                <div class="group card rounded-2xl p-6 cursor-pointer relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center mb-6 border border-slate-700 group-hover:border-purple-500/50 transition-colors text-purple-500 icon-float" style="animation-delay: 0.5s;">
+                            <!-- Icono: Vectores Base -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8">
+                                <path d="M3 21h18" />
+                                <path d="M3 21l0 -18" />
+                                <path d="M3 21l9 -9" />
+                                <path d="M12 12l2 2" />
+                                <path d="M3 3l-1 1" />
+                                <path d="M21 21l-1 -1" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Espacios Vectoriales</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Combinación lineal, independencia lineal, bases, dimensión y subespacios. $\mathbb{R}^n$ y más allá.
+                        </p>
+                        <span class="text-xs font-mono text-purple-300 bg-purple-900/20 px-2 py-1 rounded border border-purple-900/50">\text{span}(\vec{v}_1, \dots, \vec{v}_k)</span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Transformaciones Lineales -->
+                <div class="group card rounded-2xl p-6 cursor-pointer relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center mb-6 border border-slate-700 group-hover:border-cyan-500/50 transition-colors text-cyan-500 icon-float" style="animation-delay: 1s;">
+                            <!-- Icono: Función / Mapeo -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8">
+                                <rect x="3" y="5" width="8" height="14" rx="2" />
+                                <rect x="15" y="5" width="6" height="14" rx="2" />
+                                <path d="M7 12h12" />
+                                <path d="M16 9l3 3l-3 3" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Transformaciones</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Núcleo e imagen. Representación matricial. Cambios de base y geometría de las transformaciones.
+                        </p>
+                        <span class="text-xs font-mono text-cyan-300 bg-cyan-900/20 px-2 py-1 rounded border border-cyan-900/50">T(c\vec{u} + \vec{v}) = cT(\vec{u}) + T(\vec{v})</span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 4: Eigenvalores (Eigen) -->
+                <div class="group card rounded-2xl p-6 cursor-pointer relative overflow-hidden" id="eigen">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center mb-6 border border-slate-700 group-hover:border-indigo-500/50 transition-colors text-indigo-400 icon-float" style="animation-delay: 1.5s;">
+                            <!-- Icono: Eigen -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8">
+                                <path d="M4 20l16 -16" />
+                                <path d="M4 20l6 -14" stroke-dasharray="2 2" opacity="0.5"/>
+                                <path d="M20 4l-4 0" />
+                                <path d="M14 4l0 4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">Valores Propios</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Eigenvalores y eigenvectores. Diagonalización. Aplicaciones en PageRank y Componentes Principales.
+                        </p>
+                        <span class="text-xs font-mono text-indigo-200 bg-indigo-900/30 px-2 py-1 rounded border border-indigo-800/50">A\vec{x} = \lambda\vec{x}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-2xl font-bold text-white mb-2">πlography</h3>
+            <p class="text-slate-500 text-sm mb-6">Explorando la belleza matemática.</p>
+            <p class="text-slate-600 text-xs">&copy; 2025 Kevin Messina Rodriguez.</p>
+        </div>
+    </footer>
+
+    <!-- Animación: DEFORMACIÓN TENSORIAL (Malla de Cubos) -->
+    <script>
+        {
+            const container = document.getElementById('linear-canvas');
+            
+            if(container) {
+                const scene = new THREE.Scene();
+                // Niebla oscura para profundidad (Slate 950)
+                scene.fog = new THREE.FogExp2(0x0f172a, 0.035);
+
+                const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(12, 8, 15);
+                camera.lookAt(0, 0, 0);
+
+                const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                container.appendChild(renderer.domElement);
+
+                // --- 1. MALLA DE CUBOS (INSTANCED MESH) ---
+                // Representa el espacio discreto siendo transformado
+                const gridSize = 10; 
+                const count = Math.pow(gridSize, 3);
+                const dummy = new THREE.Object3D();
+                const _color = new THREE.Color();
+
+                const geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3); // Cubos pequeños
+                
+                // Material que reacciona a la luz y tiene brillo
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0xffffff,
+                    roughness: 0.2,
+                    metalness: 0.8
+                });
+
+                const mesh = new THREE.InstancedMesh(geometry, material, count);
+                mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+                scene.add(mesh);
+
+                // Posiciones base para calcular deformaciones
+                const basePositions = [];
+                const offset = (gridSize - 1) * 0.5; 
+                const spacing = 1.0;
+
+                for (let i = 0; i < count; i++) {
+                    const x = (i % gridSize) * spacing - offset * spacing;
+                    const y = (Math.floor(i / gridSize) % gridSize) * spacing - offset * spacing;
+                    const z = (Math.floor(i / (gridSize * gridSize))) * spacing - offset * spacing;
+                    basePositions.push({ x, y, z });
+                }
+
+                // --- 2. EJES FLOTANTES (BASIS VECTORS) ---
+                const axesGroup = new THREE.Group();
+                function createAxis(color, dir) {
+                    const arrowLen = 8;
+                    const g = new THREE.Group();
+                    // Linea
+                    const lineGeo = new THREE.CylinderGeometry(0.04, 0.04, arrowLen);
+                    const mat = new THREE.MeshBasicMaterial({ color: color });
+                    const line = new THREE.Mesh(lineGeo, mat);
+                    line.position.y = arrowLen / 2;
+                    g.add(line);
+                    // Cono
+                    const coneGeo = new THREE.ConeGeometry(0.3, 0.8, 16);
+                    const cone = new THREE.Mesh(coneGeo, mat);
+                    cone.position.y = arrowLen;
+                    g.add(cone);
+                    
+                    g.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+                    return g;
+                }
+                const xAxis = createAxis(0x22d3ee, new THREE.Vector3(1,0,0)); // Cyan
+                const yAxis = createAxis(0xe879f9, new THREE.Vector3(0,1,0)); // Magenta
+                const zAxis = createAxis(0x818cf8, new THREE.Vector3(0,0,1)); // Indigo
+                axesGroup.add(xAxis, yAxis, zAxis);
+                scene.add(axesGroup);
+
+                // --- ILUMINACIÓN ---
+                const ambientLight = new THREE.AmbientLight(0x404040);
+                scene.add(ambientLight);
+                const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+                dirLight.position.set(5, 10, 7);
+                scene.add(dirLight);
+                
+                // Luces de colores para ambiente Neon
+                const light1 = new THREE.PointLight(0x22d3ee, 1, 30);
+                light1.position.set(10, 5, 5);
+                scene.add(light1);
+                const light2 = new THREE.PointLight(0xe879f9, 1, 30);
+                light2.position.set(-10, -5, 5);
+                scene.add(light2);
+
+                // --- ANIMACIÓN ---
+                const clock = new THREE.Clock();
+
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    const time = clock.getElapsedTime();
+
+                    // Deformación del Espacio (Tensor Field Simulation)
+                    // x' = f(x,y,z,t)
+                    const shear = Math.sin(time * 0.4) * 0.5;
+                    const twist = Math.cos(time * 0.3) * 0.2;
+                    const stretch = 1 + Math.sin(time * 0.6) * 0.2;
+
+                    for (let i = 0; i < count; i++) {
+                        const base = basePositions[i];
+                        
+                        // Transformación no lineal suave
+                        let x = base.x + base.y * shear;
+                        let y = base.y * stretch;
+                        let z = base.z;
+                        
+                        // Torsión en Z
+                        const angle = base.y * twist;
+                        const tx = x * Math.cos(angle) - z * Math.sin(angle);
+                        const tz = x * Math.sin(angle) + z * Math.cos(angle);
+                        x = tx; z = tz;
+
+                        dummy.position.set(x, y, z);
+                        
+                        // Rotación individual de cubos para dar "vida"
+                        dummy.rotation.x = time * 0.2 + base.x * 0.1;
+                        dummy.rotation.y = time * 0.3 + base.y * 0.1;
+                        
+                        // Escalar según distancia (más pequeños en el centro para ver ejes)
+                        const dist = Math.sqrt(x*x + y*y + z*z);
+                        const scale = Math.min(Math.max(dist * 0.15, 0.2), 1.0);
+                        dummy.scale.setScalar(scale);
+
+                        dummy.updateMatrix();
+                        mesh.setMatrixAt(i, dummy.matrix);
+
+                        // Color según posición deformada (Map to Cyan/Magenta/Purple)
+                        // Normalizamos coordenadas aprox -10 a 10 a 0-1
+                        const r = (Math.sin(x * 0.2) + 1) * 0.5; // Magenta influence
+                        const g = (Math.cos(y * 0.2) + 1) * 0.1; // Low green
+                        const b = (Math.sin(z * 0.2) + 1) * 0.8; // Blue/Cyan influence
+                        
+                        _color.setRGB(r * 0.8 + 0.2, g, b + 0.2); // Tint to Pink/Cyan
+                        mesh.setColorAt(i, _color);
+                    }
+                    mesh.instanceMatrix.needsUpdate = true;
+                    mesh.instanceColor.needsUpdate = true;
+
+                    // Rotar ejes suavemente
+                    axesGroup.rotation.x = Math.sin(time * 0.15) * 0.3;
+                    axesGroup.rotation.y = Math.cos(time * 0.1) * 0.3;
+
+                    // Cámara (Movimiento automático suave, sin mouse)
+                    camera.position.x += (Math.sin(time * 0.1) * 15 - camera.position.x) * 0.02;
+                    camera.position.z += (Math.cos(time * 0.1) * 15 - camera.position.z) * 0.02;
+                    camera.position.y += (Math.sin(time * 0.05) * 5 + 5 - camera.position.y) * 0.02; // Leve oscilación vertical
+                    camera.lookAt(0, 0, 0);
+
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                window.addEventListener('resize', () => {
+                    if(container){
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
