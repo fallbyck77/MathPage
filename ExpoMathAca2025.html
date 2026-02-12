@@ -28,7 +28,6 @@
       startup: {
         ready: () => {
           MathJax.startup.defaultReady();
-          // Cuando MathJax esté listo, forzamos un renderizado inicial si es necesario
           console.log('MathJax Ready');
         }
       }
@@ -148,6 +147,14 @@
             border-left: 4px solid #38bdf8;
             color: white;
         }
+        
+        /* Estilo para los botones de la nueva sección de geometría */
+        .geo-btn.active {
+            background: #f43f5e;
+            color: white;
+            border-color: #f43f5e;
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
+        }
 
         .formula-box { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
         .formula-box.active { display: block; opacity: 1; }
@@ -159,8 +166,8 @@
         }
 
         #hero-bg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        #main-canvas-container { cursor: grab; touch-action: none; }
-        #main-canvas-container:active { cursor: grabbing; }
+        #main-canvas-container, #geo-canvas-container { cursor: grab; touch-action: none; }
+        #main-canvas-container:active, #geo-canvas-container:active { cursor: grabbing; }
         
         .math-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
         ::-webkit-scrollbar { height: 4px; width: 4px; }
@@ -218,8 +225,8 @@
             
             <!-- Navegación Central -->
             <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-400 absolute left-1/2 -translate-x-1/2">
-                <a href="#visualizador" class="hover:text-sky-400 transition-colors">Visualizador</a>
-                <a href="#teoria" class="hover:text-sky-400 transition-colors">Fundamentos</a>
+                <a href="#geometria-basica" class="hover:text-rose-400 transition-colors">Fundamentos</a>
+                <a href="#visualizador" class="hover:text-sky-400 transition-colors">Galería Completa</a>
                 <a href="#aplicaciones" class="hover:text-sky-400 transition-colors">Aplicaciones</a>
             </nav>
 
@@ -250,75 +257,225 @@
                 Superficies <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400">Minimales</span>
             </h1>
             <p class="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-                "La naturaleza nunca gasta más de lo necesario". Donde la geometría diferencial encuentra la eficiencia perfecta de la naturaleza.
+                "La naturaleza nunca gasta más de lo necesario". Desde los sólidos platónicos hasta las membranas de jabón.
             </p>
-            <a href="#teoria" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-lg font-bold hover:bg-sky-50 transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm md:text-base">
-                Leer la Historia
+            <a href="#visualizador" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-lg font-bold hover:bg-rose-50 transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm md:text-base">
+                Ver Colección
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"></path></svg>
             </a>
         </div>
     </section>
 
-    <!-- CRÓNICA -->
-    <section id="teoria" class="py-16 bg-slate-950 relative border-b border-slate-800">
-        <div class="container mx-auto px-4 max-w-4xl">
-            <div class="mb-16">
-                <span class="text-sky-500 font-mono text-xs mb-3 block tracking-widest">01. EL ORIGEN</span>
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-8">El Engaño de la Piel de Toro</h2>
-                <div class="grid md:grid-cols-2 gap-10 items-center">
-                    <div class="prose prose-invert text-slate-300 leading-relaxed text-sm md:text-base font-serif">
-                        <p class="drop-cap mb-4">
-                            Llegaron a estos lugares... y compraron el suelo, que por esto llamaron Birsa, cuanto pudieron rodear con una piel de toro.
-                        </p>
-                        <p class="mb-4">
-                            Así narra Virgilio en <em>La Eneida</em> el mito fundacional del <strong>Problema Isoperimétrico</strong>. La reina Dido cortó la piel en tiras para encerrar el área máxima posible.
-                        </p>
-                        <p>
-                            En el s. XIX, <strong>Jacob Steiner</strong> probó que el círculo es la solución 2D. En 3D, el problema evoluciona a las <strong>Superficies Minimales</strong>: formas que minimizan área sujetas a un borde, como pompas de jabón.
+    <!-- GEOMETRÍA FUNDAMENTAL (Intro) -->
+    <section id="geometria-basica" class="py-16 bg-slate-900 relative border-b border-slate-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row gap-8 items-start">
+                <div class="w-full md:w-1/3 space-y-6">
+                    <div>
+                        <span class="text-rose-500 font-mono text-xs mb-2 block tracking-widest">00. FUNDAMENTOS</span>
+                        <h2 class="text-3xl font-serif font-bold text-white mb-3">Sólidos & Polígonos</h2>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            Antes de curvar el espacio, comprendamos la estructura. Desde polígonos planos (2D) hasta los sagrados Sólidos Platónicos y Prismas (3D).
                         </p>
                     </div>
-                    <div class="glass-panel p-8 rounded-2xl relative border-t-4 border-sky-500">
-                        <div class="absolute top-4 right-4 text-6xl font-serif text-white opacity-5">H=0</div>
-                        <h3 class="text-xl font-bold text-sky-400 mb-2">Condición de Plateau</h3>
-                        <p class="text-sm text-slate-300 mb-6 font-light">
-                            Para minimizar el área, la curvatura media debe anularse en cada punto.
-                        </p>
-                        <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 text-center">
-                            <div class="math-scroll">
-                                <p class="text-2xl text-white font-serif">$$ H = \frac{k_1 + k_2}{2} = 0 $$</p>
-                            </div>
+                    <!-- Tarjeta estática informativa (Demo) -->
+                    <div class="glass-panel p-5 rounded-xl border-l-4 border-rose-500 mt-6">
+                        <h4 class="text-lg font-bold text-rose-400 mb-1">Tetraedro</h4>
+                        <div class="text-xs text-slate-400 font-mono mb-3">Sólido Platónico</div>
+                        <div class="grid grid-cols-3 gap-2 text-center mb-3">
+                            <div class="bg-slate-950/50 p-2 rounded"><div class="text-[10px] text-slate-500">CARAS</div><div class="text-white font-bold">4</div></div>
+                            <div class="bg-slate-950/50 p-2 rounded"><div class="text-[10px] text-slate-500">VÉRTICES</div><div class="text-white font-bold">4</div></div>
+                            <div class="bg-slate-950/50 p-2 rounded"><div class="text-[10px] text-slate-500">ARISTAS</div><div class="text-white font-bold">6</div></div>
+                        </div>
+                        <div class="text-center bg-slate-800/50 rounded p-2">
+                            <span class="text-[10px] text-slate-500 block mb-1">FÓRMULA DE EULER (V-A+C=2)</span>
+                            <span class="font-mono text-emerald-400 text-sm">4 - 6 + 4 = 2</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="border-t border-slate-800 pt-10">
-                <h3 class="text-xl font-bold text-white mb-6 text-center font-serif italic">Teoremas Fundamentales</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass-panel p-4 rounded-xl border-l-2 border-indigo-500">
-                        <div class="text-indigo-400 text-[10px] font-bold uppercase mb-1">Teorema 4 (Área)</div>
-                        <p class="text-slate-400 text-xs">Área mínima local $\rightarrow$ Superficie Minimal.</p>
-                    </div>
-                    <div class="glass-panel p-4 rounded-xl border-l-2 border-sky-500">
-                        <div class="text-sky-400 text-[10px] font-bold uppercase mb-1">Teorema 5 (Revolución)</div>
-                        <p class="text-slate-400 text-xs">Única de revolución $\rightarrow$ <strong>Catenoide</strong>.</p>
-                    </div>
-                    <div class="glass-panel p-4 rounded-xl border-l-2 border-emerald-500">
-                        <div class="text-emerald-400 text-[10px] font-bold uppercase mb-1">Teorema 6 (Reglada)</div>
-                        <p class="text-slate-400 text-xs">Única reglada $\rightarrow$ <strong>Helicoide</strong>.</p>
+                <div class="w-full md:w-2/3 h-[400px] md:h-[500px] rounded-2xl overflow-hidden glass-panel relative border border-white/10 shadow-2xl">
+                    <div id="geo-canvas-container" class="w-full h-full relative z-10 bg-slate-950"></div>
+                    <div class="absolute bottom-4 right-4 z-20 pointer-events-none">
+                         <span class="text-[10px] text-slate-500 font-mono">MODELO DEMOSTRATIVO</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- VISUALIZADOR 3D -->
+    <!-- FUNDAMENTOS TEÓRICOS EXHAUSTIVOS -->
+    <section id="fundamentos-teoricos" class="py-20 bg-slate-900 relative border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-5xl">
+            
+            <div class="text-center mb-16">
+                <span class="text-rose-500 font-mono text-xs mb-3 block tracking-widest">MARCO TEÓRICO CONCEPTUAL</span>
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-6">La Geometría de la Naturaleza</h2>
+                <p class="text-slate-400 text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+                    Para comprender las superficies minimales, primero debemos entender los bloques de construcción del espacio y cómo el universo decide ordenarlos.
+                </p>
+            </div>
+
+            <div class="space-y-16">
+                
+                <!-- Definiciones Intuitivas -->
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-sky-500">
+                        <h3 class="text-xl font-bold text-sky-400 mb-4 font-serif">1. Polígonos y Poliedros</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Un <strong>polígono</strong> es la forma 2D más simple: una porción de plano delimitada por segmentos de recta rectos (lados). Cuando todos sus lados y ángulos son idénticos, lo llamamos un <strong>polígono regular</strong> (ej. un triángulo equilátero o un cuadrado). Representan la simetría perfecta en el mundo plano.
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Al llevar esta idea a 3D, nacen los <strong>poliedros</strong>: cuerpos geométricos sólidos cuyas caras son polígonos planos. Es decir, un poliedro es una "caja" hecha uniendo figuras planas por sus bordes (aristas), creando esquinas puntiagudas llamadas vértices.
+                        </p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-indigo-500">
+                        <h3 class="text-xl font-bold text-indigo-400 mb-4 font-serif">2. ¿Qué es una Superficie?</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            A diferencia de un poliedro rígido, una <strong>superficie</strong> es una "sábana" bidimensional continua que flota en nuestro espacio tridimensional. Piensa en una hoja de papel doblada, la superficie del mar, o la cáscara de una manzana.
+                        </p>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Las superficies pueden ser planas, pero su verdadera riqueza matemática aparece cuando se <em>curvan</em>. Las matemáticas de las superficies nos permiten estudiar formas orgánicas, suaves y sin esquinas, como las que encontramos de manera natural en nuestro universo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Los 5 Sólidos Platónicos -->
+                <div class="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 opacity-5 pointer-events-none">
+                        <svg width="300" height="300" viewBox="0 0 100 100" fill="white"><polygon points="50,10 90,90 10,90"/></svg>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-6 font-serif">¿Por qué solo existen 5 Sólidos Platónicos?</h3>
+                    <div class="prose prose-invert text-slate-300 text-sm md:text-base leading-relaxed max-w-none">
+                        <p>
+                            Un Sólido Platónico es la máxima expresión de simetría en 3D: todas sus caras son el mismo polígono regular y en cada vértice se junta el mismo número de caras. <strong>¿Por qué el universo solo permite cinco de ellos?</strong> La respuesta es maravillosamente simple y puramente geométrica.
+                        </p>
+                        <p>
+                            Para formar un "pico" (vértice) en 3D, necesitas juntar al menos 3 caras. Además, la suma de los ángulos de las caras que se encuentran en ese vértice <strong>debe ser estrictamente menor a 360°</strong>. Si sumaran 360°, la figura quedaría totalmente plana (como un piso de losetas), y si fuera mayor, no encajarían. Vamos a probar polígonos regulares:
+                        </p>
+                        
+                        <ul class="space-y-4 mt-6">
+                            <li class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <span class="text-rose-400 font-bold block mb-1">Con Triángulos Equiláteros (ángulos de 60°):</span>
+                                Podemos juntar 3 (3x60°=180° $\rightarrow$ <strong>Tetraedro</strong>), 4 (4x60°=240° $\rightarrow$ <strong>Octaedro</strong>) o 5 caras (5x60°=300° $\rightarrow$ <strong>Icosaedro</strong>). Si juntamos 6 (6x60°=360°), se vuelve un plano. ¡Tres sólidos encontrados!
+                            </li>
+                            <li class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <span class="text-sky-400 font-bold block mb-1">Con Cuadrados (ángulos de 90°):</span>
+                                Podemos juntar 3 (3x90°=270° $\rightarrow$ <strong>Cubo</strong>). Si juntamos 4 (4x90°=360°), se vuelve plano (una cuadrícula perfecta). ¡Un sólido más!
+                            </li>
+                            <li class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <span class="text-emerald-400 font-bold block mb-1">Con Pentágonos Regulares (ángulos de 108°):</span>
+                                Podemos juntar 3 (3x108°=324° $\rightarrow$ <strong>Dodecaedro</strong>). Si juntamos 4, pasamos los 360° (432°). ¡El quinto sólido!
+                            </li>
+                            <li class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <span class="text-amber-400 font-bold block mb-1">Con Hexágonos Regulares (ángulos de 120°) o mayores:</span>
+                                Juntar solo 3 hexágonos da exactamente 360° (3x120°=360°). Quedan planos, como un panal de abejas. A partir del heptágono, tres caras siempre sumarán más de 360°.
+                            </li>
+                        </ul>
+                        <p class="mt-6 font-bold text-white text-center text-lg">
+                            ¡La geometría misma nos dice que la búsqueda ha terminado! No hay más combinaciones posibles en nuestro universo tridimensional.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Optimización en la Naturaleza -->
+                <div class="grid md:grid-cols-5 gap-8 items-center bg-gradient-to-r from-emerald-900/20 to-sky-900/20 p-8 rounded-3xl border border-emerald-500/20">
+                    <div class="md:col-span-3 prose prose-invert text-slate-300 text-sm md:text-base leading-relaxed">
+                        <h3 class="text-2xl font-bold text-emerald-400 mb-4 font-serif">La Naturaleza como Optimizadora Perfecta</h3>
+                        <p>
+                            Ya vimos que la geometría dicta leyes estrictas sobre la forma. Sin embargo, la naturaleza aporta su propia ley universal: <strong>el Principio de la Mínima Acción</strong>. La naturaleza es "eficientemente perezosa"; los sistemas físicos siempre evolucionan hacia el estado que consuma o contenga la menor energía posible.
+                        </p>
+                        <p>
+                            Piensa en una pompa de jabón conectada a un aro de alambre. El líquido tiene algo llamado "tensión superficial", una fuerza que atrae a sus moléculas entre sí. Para minimizar esta tensión (y por ende, su energía potencial), la película de jabón busca ser lo más pequeña posible. 
+                        </p>
+                        <p>
+                            Al hacerlo, la pompa de jabón resuelve instantáneamente y sin computadoras un problema matemático colosal: <strong>Encontrar la superficie de menor área que se apoya sobre un límite dado</strong>. Así nacen las <em>Superficies Minimales</em>.
+                        </p>
+                    </div>
+                    <div class="md:col-span-2 flex justify-center">
+                        <div class="w-48 h-48 rounded-full bg-gradient-to-br from-emerald-400/20 to-sky-400/20 border border-emerald-500/30 flex items-center justify-center relative animate-pulse shadow-[0_0_50px_rgba(16,185,129,0.2)]">
+                            <div class="text-center">
+                                <span class="block text-emerald-300 text-xs font-mono mb-2 tracking-widest">MINIMIZACIÓN</span>
+                                <span class="block text-3xl font-serif text-white">Energía $\downarrow$</span>
+                                <span class="block text-xl font-serif text-sky-300 mt-2">Área $\downarrow$</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CRÓNICA (TEORÍA EXPANDIDA Y DETALLADA) -->
+    <section id="teoria" class="py-16 bg-slate-950 relative border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-5xl">
+            
+            <!-- 01. EL ORIGEN GEOMÉTRICO Y EL PROBLEMA ISOPERIMÉTRICO -->
+            <div class="mb-16">
+                <span class="text-sky-500 font-mono text-xs mb-3 block tracking-widest">01. EL ORIGEN GEOMÉTRICO</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-8">El Engaño de la Piel de Toro</h2>
+                <div class="grid md:grid-cols-2 gap-10 items-start">
+                    <div class="prose prose-invert text-slate-300 leading-relaxed text-sm md:text-base font-serif">
+                        <p class="drop-cap mb-4">Llegaron a estos lugares... y compraron el suelo, que por esto llamaron Birsa, cuanto pudieron rodear con una piel de toro.</p>
+                        <p class="mb-4">Así narra el poeta Virgilio en <em>La Eneida</em> el mito fundacional de Cartago. La leyenda cuenta que la reina Dido huía de Tiro y, al llegar a la costa del norte de África, pidió al rey local tanta tierra como pudiera abarcar la piel de un buey. Ante esta petición aparentemente inofensiva, el rey accedió. Dido, haciendo uso de una astucia brillante, cortó la piel en tiras finísimas, las ató formando una cuerda largísima y con ella delimitó un vasto terreno apoyándose en la costa del mar.</p>
+                        <p>Sin saberlo, Dido estaba planteando y resolviendo el primer problema de optimización registrado en la historia: el <strong>Problema Isoperimétrico</strong>. En términos matemáticos, la pregunta es: <em>Dada una longitud fija de perímetro, ¿cuál es la curva plana que encierra la mayor área posible?</em> En el siglo XIX, <strong>Jacob Steiner</strong> demostró formalmente que la respuesta es el círculo. La naturaleza, al igual que la astuta reina, siempre busca hacer más con menos.</p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-2xl relative border-t-4 border-sky-500 sticky top-24">
+                        <div class="absolute top-4 right-4 text-6xl font-serif text-white opacity-5">H=0</div>
+                        <h3 class="text-xl font-bold text-sky-400 mb-2">De 2D a 3D: Condición de Plateau</h3>
+                        <p class="text-sm text-slate-300 mb-6 font-light">
+                            Mientras en 2D maximizamos área con un perímetro fijo, en 3D el problema evoluciona: dado un contorno cerrado en el espacio, buscamos la superficie que se apoye en él teniendo el <strong>menor área posible</strong>. Para lograrlo, la curvatura media debe anularse en cada punto.
+                        </p>
+                        <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 text-center mb-4">
+                            <div class="math-scroll"><p class="text-2xl text-white font-serif">$$ H = \frac{k_1 + k_2}{2} = 0 $$</p></div>
+                        </div>
+                        <p class="text-xs text-slate-400 font-mono text-center">Donde $k_1$ y $k_2$ son las curvaturas principales.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02. SUPERFICIES MINIMALES Y POMPAS DE JABÓN -->
+            <div class="mb-16 border-t border-slate-800/50 pt-16">
+                <span class="text-indigo-400 font-mono text-xs mb-3 block tracking-widest">02. LA EXPRESIÓN DE LA NATURALEZA</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-8">¿Qué son las Superficies Minimales?</h2>
+                <div class="prose prose-invert text-slate-300 leading-relaxed text-sm md:text-base font-serif max-w-none mb-8">
+                    <p class="mb-4">Una <strong>Superficie Minimal</strong> no es simplemente una forma "pequeña". Es una superficie que resuelve de manera perfecta un problema de tensión matemática y física. Imagina que tomas un alambre, lo doblas creando un circuito tridimensional complejo, y lo sumerges en agua jabonosa. Al sacarlo, la película de jabón que se forma no es plana, ni es una burbuja redonda; adopta una forma curvada fascinante.</p>
+                    <p class="mb-4">Esa película de jabón es una superficie minimal. Las moléculas de jabón se atraen entre sí, intentando ocupar el menor espacio posible para mantener la estructura unida. Físicamente, están minimizando su energía potencial. Geométricamente, están encontrando el área exacta más diminuta que puede conectar todos los puntos del alambre.</p>
+                    <p>La característica clave de estas superficies es que se asemejan localmente a una "silla de montar". En cualquier punto que elijas de la superficie de jabón, si notas que se curva hacia arriba en una dirección, se curvará exactamente la misma cantidad hacia abajo en la dirección perpendicular. Esta compensación perfecta significa que su <em>curvatura media</em> es cero en todo su dominio. Las superficies minimales son el equilibrio hecho geometría.</p>
+                </div>
+            </div>
+
+            <!-- 03. EL HELICOIDE -->
+            <div class="mb-16 border-t border-slate-800/50 pt-16">
+                <span class="text-purple-400 font-mono text-xs mb-3 block tracking-widest">03. ANATOMÍA DE UNA FORMA PURA</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-8">La Arquitectura del Helicoide</h2>
+                <div class="grid md:grid-cols-3 gap-10">
+                    <div class="md:col-span-2 prose prose-invert text-slate-300 leading-relaxed text-sm md:text-base font-serif">
+                        <p class="mb-4">Entre la infinita variedad de formas posibles, el <strong>Helicoide</strong> ocupa un lugar privilegiado en la historia de las matemáticas. Descubierto de forma independiente por Euler en 1774 y Jean Baptiste Meusnier en 1776, es una de las figuras más hipnóticas que puedes visualizar.</p>
+                        <p class="mb-4">¿Cómo se construye? Para visualizar un Helicoide, primero imagina el eje de una columna vertical. Luego, imagina una <strong>hélice</strong>: una curva tridimensional que gira alrededor de ese eje elevándose constantemente, exactamente igual que la rosca de un tornillo o la espiral del ADN. Ahora, toma un segmento de línea recta y únelo desde el eje central hasta la hélice, asegurándote de que siempre esté perpendicular al eje.</p>
+                        <p class="mb-4">Si deslizas esta línea recta a lo largo de toda la hélice, barriendo el espacio a su paso, crearás algo parecido a una escalera de caracol continua y fluida, donde los "escalones" no tienen separación. Esa rampa infinita es el Helicoide.</p>
+                        <p>Lo que hace al Helicoide matemáticamente mágico es una paradoja hermosa: está construido <em>íntegramente por líneas rectas</em> (lo que lo define como una "superficie reglada"), pero a pesar de estar hecho de varillas rectas, todo el conjunto se curva formando una superficie minimal perfecta. De hecho, junto al plano euclidiano, el Helicoide es la única superficie en el espacio tradicional que es simultáneamente reglada y minimal.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-center items-center text-center border border-purple-500/30">
+                        <div id="helicoid-demo-container" class="w-full aspect-square bg-slate-950/50 rounded-xl mb-4 relative overflow-hidden cursor-grab active:cursor-grabbing">
+                            <!-- Construcción 3D generada por JS -->
+                        </div>
+                        <h4 class="text-white font-bold mb-2">Superficie Reglada</h4>
+                        <p class="text-xs text-slate-400">Una recta barre el espacio apoyada en el eje central y la hélice, formando el Helicoide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISUALIZADOR PRINCIPAL (EXTENDIDO) -->
     <section id="visualizador" class="py-12 bg-slate-900 relative">
         <div class="container mx-auto px-4 md:px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-6">
                 <div>
-                    <span class="text-sky-500 font-mono text-xs mb-1 block">LABORATORIO INTERACTIVO</span>
-                    <h2 class="text-3xl font-serif font-bold text-white">Soluciones Exactas</h2>
+                    <span class="text-sky-500 font-mono text-xs mb-1 block">GALERÍA COMPLETA</span>
+                    <h2 class="text-3xl font-serif font-bold text-white">Colección de Figuras</h2>
                 </div>
                 <div class="mt-4 md:mt-0 flex gap-4 text-[10px] text-slate-500 font-mono">
                     <span class="hidden md:block">TECLAS: [F] PROYECTAR | [←] [→] MODELO</span>
@@ -330,7 +487,7 @@
             
             <div class="flex flex-col lg:grid lg:grid-cols-12 gap-6 h-auto lg:h-[600px]">
                 
-                <!-- CONTAINER DEL CANVAS -->
+                <!-- CONTAINER DEL CANVAS (IZQUIERDA) -->
                 <div id="canvas-wrapper" class="order-1 lg:order-2 lg:col-span-8 relative group h-[400px] lg:h-full w-full bg-slate-950 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                     <div id="main-canvas-container" class="w-full h-full relative z-10"></div>
                     
@@ -355,34 +512,21 @@
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         </button>
                     </div>
-
-                    <div class="absolute top-4 left-4 z-20 pointer-events-none opacity-60 hide-in-fs">
-                         <div class="text-[10px] text-white font-mono bg-black/40 px-2 py-1 rounded border border-white/10"></div>
-                    </div>
                 </div>
 
-                <!-- Panel Lateral -->
-                <div class="order-2 lg:order-1 lg:col-span-4 flex flex-col gap-3">
-                    <div class="glass-panel p-1 rounded-xl flex-grow flex flex-col gap-1">
-                        <button onclick="changeModel('catenoid')" id="btn-catenoid" class="group w-full text-left p-4 rounded-lg hover:bg-white/5 transition-all border-l-4 border-sky-400 active-surface-btn bg-white/5">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Teorema 5</span>
-                            <span class="font-bold text-sm text-white">El Catenoide</span>
-                        </button>
-                        <button onclick="changeModel('helicoid')" id="btn-helicoid" class="group w-full text-left p-4 rounded-lg hover:bg-white/5 transition-all border-l-2 border-transparent">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Teorema 6</span>
-                            <span class="font-bold text-sm text-slate-300 group-hover:text-white">El Helicoide</span>
-                        </button>
-                        <button onclick="changeModel('scherk')" id="btn-scherk" class="group w-full text-left p-4 rounded-lg hover:bg-white/5 transition-all border-l-2 border-transparent">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Periódica</span>
-                            <span class="font-bold text-sm text-slate-300 group-hover:text-white">Sup. de Scherk</span>
-                        </button>
-                         <button onclick="changeModel('enneper')" id="btn-enneper" class="group w-full text-left p-4 rounded-lg hover:bg-white/5 transition-all border-l-2 border-transparent">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Auto-intersección</span>
-                            <span class="font-bold text-sm text-slate-300 group-hover:text-white">Sup. de Enneper</span>
-                        </button>
+                <!-- Panel Lateral (DERECHA) - Lista con Scroll -->
+                <div class="order-2 lg:order-1 lg:col-span-4 flex flex-col h-full min-h-0">
+                    <div class="glass-panel p-1 rounded-xl flex-grow flex flex-col border border-white/10 overflow-hidden min-h-0">
+                        <div class="p-3 border-b border-white/5 bg-white/5 mb-1 shrink-0">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Selector de Figuras</h4>
+                        </div>
+                        <div id="buttons-list" class="overflow-y-auto p-2 space-y-2 flex-grow custom-scrollbar">
+                            <!-- Los botones se generarán aquí con JS -->
+                        </div>
                     </div>
-                    <div class="glass-panel p-4 rounded-xl min-h-[80px] flex items-center justify-center bg-black/20">
-                        <div id="formulas-container" class="w-full"></div>
+                    <!-- Panel Inferior Fórmulas -->
+                    <div class="glass-panel p-4 rounded-xl min-h-[80px] flex items-center justify-center bg-black/20 mt-3 shrink-0">
+                        <div id="formulas-container" class="w-full text-center"></div>
                     </div>
                 </div>
             </div>
@@ -397,44 +541,75 @@
                 <h2 class="text-3xl md:text-5xl font-serif font-bold text-white">Aplicaciones</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Arquitectura -->
                 <div class="glass-panel rounded-2xl overflow-hidden magnetic-card group cursor-pointer">
-                    <div class="app-card-img" style="background-image: url('https://images.unsplash.com/photo-1510936686708-2321c1729c11?q=80&w=800&auto=format&fit=crop');">
-                        <div class="img-overlay"></div>
-                        <div class="absolute bottom-4 left-5">
-                            <span class="text-[10px] font-bold bg-sky-500/90 px-2 py-0.5 rounded text-white backdrop-blur mb-2 inline-block">ARQUITECTURA</span>
-                            <h3 class="text-xl font-serif font-bold text-white">Estadio de Múnich</h3>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-sm text-slate-300 leading-relaxed"><strong>Frei Otto</strong> usó superficies minimales ($H=0$) para distribuir la tensión uniformemente en cubiertas ligeras.</p>
-                    </div>
+                    <div class="app-card-img" style="background-image: url('https://i.postimg.cc/7YJnTyx4/Olympiastadion-Munchen.jpg');"><div class="img-overlay"></div><div class="absolute bottom-4 left-5"><span class="text-[10px] font-bold bg-sky-500/90 px-2 py-0.5 rounded text-white backdrop-blur mb-2 inline-block">ARQUITECTURA</span><h3 class="text-xl font-serif font-bold text-white">Estadio de Múnich</h3></div></div>
+                    <div class="p-6"><p class="text-sm text-slate-300"><strong>Frei Otto</strong> usó superficies minimales ($H=0$) para distribuir la tensión.</p></div>
                 </div>
-                <!-- Biología -->
                 <div class="glass-panel rounded-2xl overflow-hidden magnetic-card group cursor-pointer">
-                    <div class="app-card-img" style="background-image: url('https://images.unsplash.com/photo-1463123081488-789f998ac9c4?q=80&w=800&auto=format&fit=crop');">
-                        <div class="img-overlay"></div>
-                        <div class="absolute bottom-4 left-5">
-                            <span class="text-[10px] font-bold bg-emerald-500/90 px-2 py-0.5 rounded text-white backdrop-blur mb-2 inline-block">BIOLOGÍA</span>
-                            <h3 class="text-xl font-serif font-bold text-white">Color Estructural</h3>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-sm text-slate-300 leading-relaxed">Las alas de la mariposa <em>Callophrys</em> tienen nano-estructuras de <strong>Giroide</strong> que crean color sin pigmentos.</p>
-                    </div>
+                    <div class="app-card-img" style="background-image: url('https://i.postimg.cc/gcTKJ0Pz/P4120031.jpg');"><div class="img-overlay"></div><div class="absolute bottom-4 left-5"><span class="text-[10px] font-bold bg-emerald-500/90 px-2 py-0.5 rounded text-white backdrop-blur mb-2 inline-block">BIOLOGÍA</span><h3 class="text-xl font-serif font-bold text-white">Color Estructural</h3></div></div>
+                    <div class="p-6"><p class="text-sm text-slate-300">Alas de mariposa con nano-estructuras de <strong>Giroide</strong>.</p></div>
                 </div>
-                <!-- Física -->
                 <div class="glass-panel rounded-2xl overflow-hidden magnetic-card group cursor-pointer">
-                    <div class="app-card-img" style="background-image: url('https://images.unsplash.com/photo-1530213796593-9c882a1f078e?q=80&w=800&auto=format&fit=crop');">
-                        <div class="img-overlay"></div>
-                        <div class="absolute bottom-4 left-5">
-                            <span class="text-[10px] font-bold bg-purple-500/90 px-2 py-0.5 rounded text-white backdrop-blur mb-2 inline-block">FÍSICA</span>
-                            <h3 class="text-xl font-serif font-bold text-white">Jabón y Energía</h3>
-                        </div>
+                    <div class="app-card-img" style="background-image: url('https://i.postimg.cc/Dy4PbK2V/Reflection-in-a-soap-bubble-edit.jpg');"><div class="img-overlay"></div><div class="absolute bottom-4 left-5"><span class="text-[10px] font-bold bg-purple-500/90 px-2 py-0.5 rounded text-white backdrop-blur mb-2 inline-block">FÍSICA</span><h3 class="text-xl font-serif font-bold text-white">Jabón y Energía</h3></div></div>
+                    <div class="p-6"><p class="text-sm text-slate-300">Minimización de energía potencial mediante área mínima.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EQUIPO DEL PROYECTO (CRÉDITOS) -->
+    <section id="equipo" class="py-20 bg-slate-900 border-t border-slate-800 pb-24 relative overflow-hidden">
+        <!-- Efecto de luz de fondo -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-sky-500/10 blur-[100px] pointer-events-none"></div>
+        
+        <div class="container mx-auto px-4 max-w-5xl relative z-10">
+            <div class="text-center mb-12">
+                <span class="text-sky-500 font-mono text-xs mb-2 block tracking-widest">RECONOCIMIENTOS</span>
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-white">Equipo del Proyecto</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Asesor -->
+                <div class="glass-panel p-8 md:p-10 rounded-3xl border-t-4 border-amber-500 flex flex-col items-center text-center justify-center relative overflow-hidden group hover:border-amber-400 transition-colors shadow-lg">
+                    <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-16 h-16 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center mb-6 relative z-10">
+                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
                     </div>
-                    <div class="p-6">
-                        <p class="text-sm text-slate-300 leading-relaxed">Las pompas de jabón resuelven instantáneamente la minimización de energía potencial adoptando el área mínima.</p>
+                    <span class="text-amber-400 font-mono text-xs mb-3 tracking-widest uppercase relative z-10">Asesor del Proyecto</span>
+                    <h3 class="text-2xl md:text-3xl font-serif font-bold text-white mb-2 relative z-10">Dr. Efrén Morales Amaya</h3>
+                    <div class="w-12 h-1 bg-amber-500/50 rounded-full mt-4 relative z-10"></div>
+                </div>
+
+                <!-- Colaboradores -->
+                <div class="glass-panel p-8 md:p-10 rounded-3xl border-t-4 border-sky-500 relative overflow-hidden group hover:border-sky-400 transition-colors shadow-lg">
+                    <div class="absolute inset-0 bg-gradient-to-b from-sky-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center gap-3 mb-8 justify-center relative z-10">
+                        <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span class="text-sky-400 font-mono text-xs tracking-widest uppercase">Colaboradores</span>
                     </div>
+                    
+                    <ul class="space-y-5 relative z-10 px-4 md:px-8">
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]"></div>
+                            <span class="text-slate-200 font-medium text-lg">Ulises García Moreno</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
+                            <span class="text-slate-200 font-medium text-lg">Joel Luna Teofilo</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"></div>
+                            <span class="text-slate-200 font-medium text-lg">Gabriel Vasquez Tapia</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></div>
+                            <span class="text-slate-200 font-medium text-lg">Alexia Sahian Olea Alvarez</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></div>
+                            <span class="text-slate-200 font-medium text-lg">Kevin Gerardo Messina Rodriguez</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -448,200 +623,91 @@
     <!-- SCRIPTS -->
     <script>
         // ==========================================
-        // 0. GENERADOR DE BURBUJAS (CON EXPLOSIÓN)
+        // 0. GENERADOR DE BURBUJAS
         // ==========================================
         function initBubbles() {
             const container = document.getElementById('bubble-container');
             if (!container) return;
-
             const createBubble = () => {
                 const bubble = document.createElement('div');
                 bubble.classList.add('soap-bubble');
-                
-                // Generar tamaños aleatorios (entre 20px y 80px)
                 const size = Math.random() * 60 + 20;
-                
-                // Generar variables CSS aleatorias para la animación
-                const duration = Math.random() * 10 + 5; // 5 a 15 segundos
-                const distance = -(Math.random() * 500 + 800); // Subir mucho
-                const wobble = (Math.random() - 0.5) * 200; // Moverse lateralmente
+                const duration = Math.random() * 10 + 5;
+                const distance = -(Math.random() * 500 + 800);
+                const wobble = (Math.random() - 0.5) * 200;
                 const scale = Math.random() * 0.5 + 0.8;
                 const left = Math.random() * 100;
-                
-                // Aplicar estilos
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                bubble.style.left = `${left}%`;
-                
-                // Pasar variables a CSS
+                bubble.style.width = `${size}px`; bubble.style.height = `${size}px`; bubble.style.left = `${left}%`;
                 bubble.style.setProperty('--duration', `${duration}s`);
                 bubble.style.setProperty('--distance', `${distance}px`);
                 bubble.style.setProperty('--wobble', `${wobble}px`);
                 bubble.style.setProperty('--scale', `${scale}`);
-                
-                // --- LÓGICA DE EXPLOSIÓN AL TOCAR ---
                 const burst = (e) => {
-                    // 1. Obtener la posición exacta actual
                     const rect = bubble.getBoundingClientRect();
-                    
-                    // 2. Detener el movimiento y fijar la burbuja en su sitio
-                    // Esto evita que salte al cambiar la animación
-                    bubble.style.animation = 'none';
-                    bubble.style.transform = 'none';
-                    bubble.style.position = 'fixed';
-                    bubble.style.left = `${rect.left}px`;
-                    bubble.style.top = `${rect.top}px`;
-                    bubble.style.width = `${rect.width}px`;
-                    bubble.style.height = `${rect.height}px`;
-                    
-                    // Forzar reflow para que el navegador procese los cambios de estilo
+                    bubble.style.animation = 'none'; bubble.style.transform = 'none'; bubble.style.position = 'fixed';
+                    bubble.style.left = `${rect.left}px`; bubble.style.top = `${rect.top}px`; bubble.style.width = `${rect.width}px`; bubble.style.height = `${rect.height}px`;
                     void bubble.offsetWidth;
-                    
-                    // 3. Aplicar la clase de explosión
                     bubble.classList.add('burst');
-                    
-                    // 4. Eliminar del DOM después de la animación
-                    setTimeout(() => { 
-                        if(bubble.parentNode) bubble.remove(); 
-                    }, 190);
+                    setTimeout(() => { if(bubble.parentNode) bubble.remove(); }, 190);
                 };
-                
                 bubble.addEventListener('click', burst);
-                bubble.addEventListener('touchstart', (e) => { 
-                    e.preventDefault(); // Evita el click doble/fantasma
-                    burst(e); 
-                }, {passive: false});
-
+                bubble.addEventListener('touchstart', (e) => { e.preventDefault(); burst(e); }, {passive: false});
                 container.appendChild(bubble);
-                
-                // Eliminar burbuja cuando termine la animación de flotar si no se tocó
-                bubble.addEventListener('animationend', (e) => {
-                    if (e.animationName === 'floatUp') bubble.remove();
-                });
+                bubble.addEventListener('animationend', (e) => { if (e.animationName === 'floatUp') bubble.remove(); });
             };
-
-            // Crear un bucle infinito de burbujas
             setInterval(createBubble, 800);
-            
-            // Crear algunas iniciales para que no esté vacío al cargar
-            for(let i=0; i<15; i++) {
-                setTimeout(createBubble, Math.random() * 3000);
-            }
+            for(let i=0; i<15; i++) setTimeout(createBubble, Math.random() * 3000);
         }
-
-        // Iniciar burbujas al cargar
         document.addEventListener('DOMContentLoaded', initBubbles);
 
-        // ==========================================
-        // 1. MAGNETIC EFFECT
-        // ==========================================
         document.querySelectorAll('.magnetic-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                const x = e.clientX - rect.left; const y = e.clientY - rect.top;
                 const rotateX = ((y - rect.height/2) / rect.height/2) * -5;
                 const rotateY = ((x - rect.width/2) / rect.width/2) * 5;
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
             });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-            });
+            card.addEventListener('mouseleave', () => { card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)'; });
         });
 
-        // ==========================================
-        // 2. HERO BACKGROUND
-        // ==========================================
         // ==========================================
         // 1. HERO BACKGROUND (Doble Enneper)
         // ==========================================
         (function initHero() {
             const canvas = document.getElementById('hero-bg-canvas');
-            
-            // Si por alguna razón no encuentra el canvas (por tus cambios de HTML), salimos para no dar error
             if (!canvas) return;
-
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 22; // Distancia ajustada para ver la figura completa
-            
+            camera.position.z = 22;
             const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
-            const pixelRatio = Math.min(window.devicePixelRatio, 2);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(pixelRatio);
-
-            // --- GEOMETRÍA: Superficie de Enneper de Orden Superior (k=2) ---
-            // Matemáticas derivadas de la parametrización de Weierstrass
-            const segments = 90; // Resolución
-            const limit = 1.45;  // Límite radial del dominio
-            
+            const segments = 90; const limit = 1.45;
             const geometry = new THREE.ParametricGeometry((u, v, target) => {
-                // Mapear u,v (0 a 1) al dominio polar
-                const r = u * limit; 
-                const theta = v * Math.PI * 2;
-                
-                // Términos de potencia para Enneper k=2
-                const r5 = Math.pow(r, 5) / 5;
-                const r3 = 2 * Math.pow(r, 3) / 3;
-                
-                // Escala visual (x3) para que llene la pantalla
-                const scale = 3;
-
-                // Ecuaciones paramétricas
+                const r = u * limit; const theta = v * Math.PI * 2;
+                const r5 = Math.pow(r, 5) / 5; const r3 = 2 * Math.pow(r, 3) / 3; const scale = 3;
                 const x = scale * (r * Math.cos(theta) - r5 * Math.cos(5 * theta));
                 const y = scale * (-r * Math.sin(theta) - r5 * Math.sin(5 * theta));
                 const z = scale * (r3 * Math.cos(3 * theta));
-                
                 target.set(x, y, z);
             }, segments, segments);
-
-            // Material estilo "Blueprint" / Tecnológico
-            const material = new THREE.LineBasicMaterial({ 
-                color: 0x38bdf8, // Azul Sky
-                transparent: true, 
-                opacity: 0.15 
-            });
-            
+            const material = new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.15 });
             const mesh = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), material);
-            // Inclinación inicial para que se vea más interesante
-            mesh.rotation.x = -Math.PI / 4; 
-            scene.add(mesh);
-
-            // --- PARTÍCULAS FLOTANTES (Ambiente) ---
+            mesh.rotation.x = -Math.PI / 4; scene.add(mesh);
             const pGeo = new THREE.BufferGeometry();
-            // Ajustar cantidad según dispositivo (Móvil vs PC)
-            const count = window.innerWidth < 768 ? 150 : 300;
-            const pos = new Float32Array(count * 3);
-            
-            for(let i=0; i<count*3; i++) {
-                pos[i] = (Math.random() - 0.5) * 70; // Esparcidas en un área grande
-            }
-            
+            const count = window.innerWidth < 768 ? 150 : 300; const pos = new Float32Array(count * 3);
+            for(let i=0; i<count*3; i++) pos[i] = (Math.random() - 0.5) * 70;
             pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ 
-                size: 0.1, 
-                color: 0x818cf8 // Indigo suave
-            }));
+            const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.1, color: 0x818cf8 }));
             scene.add(particles);
-
-            // --- LOOP DE ANIMACIÓN ---
             function animate() {
                 requestAnimationFrame(animate);
-                
-                // Rotación suave compleja
-                mesh.rotation.z += 0.002; 
-                mesh.rotation.y += 0.001;
-                
-                // Las partículas suben lentamente
-                particles.rotation.y -= 0.0005;
-                
+                mesh.rotation.z += 0.002; mesh.rotation.y += 0.001; particles.rotation.y -= 0.0005;
                 renderer.render(scene, camera);
             }
             animate();
-
-            // --- RESIZE HANDLER ---
             window.addEventListener('resize', () => {
-                // Solo redimensionar si el hero es visible (optimización)
                 if(window.scrollY < window.innerHeight) {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
@@ -651,10 +717,54 @@
         })();
 
         // ==========================================
-        // 3. MAIN 3D VISUALIZER
+        // 2. GEOMETRÍA FUNDAMENTAL (Intro - Tetraedro)
+        // ==========================================
+        (function initBasicGeometry() {
+            const container = document.getElementById('geo-canvas-container');
+            if(!container) return;
+            const scene = new THREE.Scene(); scene.background = new THREE.Color('#0f172a');
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.set(0, 0, 8);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+            const light = new THREE.PointLight(0xf43f5e, 1.5); light.position.set(5, 5, 5); scene.add(light);
+            const geom = new THREE.TetrahedronGeometry(2);
+            const mat = new THREE.MeshPhysicalMaterial({ color: 0xf43f5e, metalness: 0.2, roughness: 0.1, transparent: true, opacity: 0.8, transmission: 0.2, side: THREE.DoubleSide });
+            const mesh = new THREE.Mesh(geom, mat);
+            const wf = new THREE.LineSegments(new THREE.WireframeGeometry(geom), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 }));
+            scene.add(mesh); scene.add(wf);
+            let isDragging = false, pm = { x: 0, y: 0 };
+            const toRad = (deg) => deg * (Math.PI / 180);
+            container.addEventListener('mousedown', (e) => { isDragging = true; });
+            container.addEventListener('mousemove', (e) => {
+                if(isDragging) {
+                    const delta = { x: e.offsetX - pm.x, y: e.offsetY - pm.y };
+                    const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(toRad(delta.y), toRad(delta.x), 0, 'XYZ'));
+                    mesh.quaternion.multiplyQuaternions(q, mesh.quaternion); wf.quaternion.multiplyQuaternions(q, wf.quaternion);
+                }
+                pm = { x: e.offsetX, y: e.offsetY };
+            });
+            document.addEventListener('mouseup', () => isDragging = false);
+            function animate() {
+                requestAnimationFrame(animate);
+                if(!isDragging) { mesh.rotation.y += 0.005; mesh.rotation.z += 0.002; wf.rotation.copy(mesh.rotation); }
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        })();
+
+        // ==========================================
+        // 3. VISUALIZADOR PRINCIPAL (EXTENDIDO)
         // ==========================================
         const container = document.getElementById('main-canvas-container');
         const wrapper = document.getElementById('canvas-wrapper');
+        const listContainer = document.getElementById('buttons-list');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color('#020617');
         scene.fog = new THREE.FogExp2(0x020617, 0.025);
@@ -671,49 +781,38 @@
         container.appendChild(renderer.domElement);
 
         scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-        const spot1 = new THREE.SpotLight(0x38bdf8, 1.5);
-        spot1.position.set(10, -10, 20);
-        scene.add(spot1);
-        const spot2 = new THREE.PointLight(0xf43f5e, 0.8);
-        spot2.position.set(-10, 5, 5);
-        scene.add(spot2);
+        const spot1 = new THREE.SpotLight(0x38bdf8, 1.5); spot1.position.set(10, -10, 20); scene.add(spot1);
+        const spot2 = new THREE.PointLight(0xf43f5e, 0.8); spot2.position.set(-10, 5, 5); scene.add(spot2);
 
         const group = new THREE.Group();
         scene.add(group);
 
-        const data = {
-            catenoid: { title: "Catenoide", desc: "Teorema 5: Revolución Minimal", tex: "$$\\vec{x} = (c \\cosh \\frac{v}{c} \\cos u, c \\cosh \\frac{v}{c} \\sin u, v)$$" },
-            helicoid: { title: "Helicoide", desc: "Teorema 6: Reglada Minimal", tex: "$$\\vec{x} = (v \\cos u, v \\sin u, cu)$$" },
-            scherk: { title: "Sup. de Scherk", desc: "Doble Periodicidad", tex: "$$z = \\ln(\\cos y) - \\ln(\\cos x)$$" },
-            enneper: { title: "Sup. de Enneper", desc: "Auto-Intersección", tex: "$$x = u - \\frac{u^3}{3} + uv^2, \\quad y = v - \\frac{v^3}{3} + vu^2$$" }
-        };
-
-        function buildMesh(type) {
-            while(group.children.length) {
-                const o = group.children[0];
-                if(o.geometry) o.geometry.dispose();
-                group.remove(o);
-            }
+        // Helper para superficies paramétricas
+        const createParametric = (type) => {
+            const segs = isMobile ? 60 : 90;
             let geo;
-            const segs = isMobile ? 60 : 100;
-            if (type === 'catenoid') {
-                const c = 1.2;
+            if(type === 'catenoid') {
                 geo = new THREE.ParametricGeometry((u, v, t) => {
-                    u *= Math.PI * 2; v = (v - 0.5) * 4;
+                    u *= Math.PI * 2; v = (v - 0.5) * 4; const c = 1.2;
                     t.set(c*Math.cosh(v/c)*Math.cos(u), c*Math.cosh(v/c)*Math.sin(u), v);
                 }, segs, segs);
-            } else if (type === 'helicoid') {
+            } else if(type === 'helicoid') {
                 geo = new THREE.ParametricGeometry((u, v, t) => {
                     u = (u - 0.5) * 5; v = (v - 0.5) * Math.PI * 3;
                     t.set(u*Math.cos(v), u*Math.sin(v), v);
                 }, segs, segs);
-            } else if (type === 'scherk') {
+            } else if(type === 'enneper') {
+                geo = new THREE.ParametricGeometry((u, v, t) => {
+                    u = (u - 0.5) * 3.5; v = (v - 0.5) * 3.5;
+                    t.set(u - u*u*u/3 + u*v*v, v - v*v*v/3 + v*u*u, u*u - v*v);
+                }, segs, segs);
+            } else if(type === 'scherk') {
                 const vts = [], idx = [], lim = 1.5, scale = 2.0;
                 for(let i=0; i<=segs; i++) {
                     const y = -lim + (i/segs)*2*lim;
                     for(let j=0; j<=segs; j++) {
                         const x = -lim + (j/segs)*2*lim;
-                        let z = 0; try { const cx = Math.cos(x), cy = Math.cos(y); if(cx > 0.05 && cy > 0.05) z = Math.log(cy) - Math.log(cx); else z = NaN; } catch(e) { z = NaN; }
+                        let z = 0; try { const cx = Math.cos(x), cy = Math.cos(y); z = (cx > 0.05 && cy > 0.05) ? Math.log(cy) - Math.log(cx) : NaN; } catch(e){ z=NaN; }
                         if(!isNaN(z)) z = Math.max(-4, Math.min(4, z));
                         vts.push(x*scale, y*scale, z);
                     }
@@ -728,52 +827,121 @@
                     }
                 }
                 geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(vts, 3)); geo.setIndex(idx); geo.computeVertexNormals();
-            } else if (type === 'enneper') {
-                 geo = new THREE.ParametricGeometry((u, v, t) => { u = (u - 0.5) * 3.5; v = (v - 0.5) * 3.5; t.set(u - u*u*u/3 + u*v*v, v - v*v*v/3 + v*u*u, u*u - v*v); }, segs, segs);
             }
             geo.center();
-            const mat = new THREE.MeshPhongMaterial({ color: type === 'catenoid' ? 0x38bdf8 : type === 'helicoid' ? 0xa855f7 : type === 'scherk' ? 0x10b981 : 0xf43f5e, side: THREE.DoubleSide, transparent: true, opacity: 0.9, shininess: 100 });
-            group.add(new THREE.Mesh(geo, mat));
-            const wf = new THREE.WireframeGeometry(geo);
-            const wfMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08 });
-            group.add(new THREE.LineSegments(wf, wfMat));
+            return geo;
+        };
+
+        // DATOS COMPLETOS
+        const allFigures = [
+            // Polígonos
+            { id: 'tri', title: "Triángulo", cat: "Polígono 2D", type: 'poly', gen: () => new THREE.CircleGeometry(2, 3), desc: "3 Lados, 3 Vértices" },
+            { id: 'squ', title: "Cuadrado", cat: "Polígono 2D", type: 'poly', gen: () => new THREE.CircleGeometry(2, 4), desc: "4 Lados, 4 Vértices" },
+            { id: 'pen', title: "Pentágono", cat: "Polígono 2D", type: 'poly', gen: () => new THREE.CircleGeometry(2, 5), desc: "5 Lados, 5 Vértices" },
+            { id: 'hex', title: "Hexágono", cat: "Polígono 2D", type: 'poly', gen: () => new THREE.CircleGeometry(2, 6), desc: "6 Lados, 6 Vértices" },
+            // Sólidos
+            { id: 'tetra', title: "Tetraedro", cat: "Sólido Platónico", type: 'solid', gen: () => new THREE.TetrahedronGeometry(2), desc: "4 Caras, 4 Vértices" },
+            { id: 'cube', title: "Cubo", cat: "Sólido Platónico", type: 'solid', gen: () => new THREE.BoxGeometry(2.5, 2.5, 2.5), desc: "6 Caras, 8 Vértices" },
+            { id: 'octa', title: "Octaedro", cat: "Sólido Platónico", type: 'solid', gen: () => new THREE.OctahedronGeometry(2), desc: "8 Caras, 6 Vértices" },
+            { id: 'dodeca', title: "Dodecaedro", cat: "Sólido Platónico", type: 'solid', gen: () => new THREE.DodecahedronGeometry(2), desc: "12 Caras, 20 Vértices" },
+            { id: 'ico', title: "Icosaedro", cat: "Sólido Platónico", type: 'solid', gen: () => new THREE.IcosahedronGeometry(2), desc: "20 Caras, 12 Vértices" },
+            // Prismas
+            { id: 'pris_tri', title: "Prisma Triangular", cat: "Prisma", type: 'solid', gen: () => new THREE.CylinderGeometry(1.5, 1.5, 3, 3), desc: "Base Triangular" },
+            { id: 'pris_hex', title: "Prisma Hexagonal", cat: "Prisma", type: 'solid', gen: () => new THREE.CylinderGeometry(1.5, 1.5, 3, 6), desc: "Base Hexagonal" },
+            { id: 'cyl', title: "Cilindro", cat: "Sólido de Rev.", type: 'solid', gen: () => new THREE.CylinderGeometry(1.5, 1.5, 3, 32), desc: "Prisma de lados infinitos" },
+            // Minimales
+            { id: 'catenoid', title: "Catenoide", cat: "Sup. Minimal", type: 'surf', gen: () => createParametric('catenoid'), desc: "", color: 0x38bdf8 },
+            { id: 'helicoid', title: "Helicoide", cat: "Sup. Minimal", type: 'surf', gen: () => createParametric('helicoid'), desc: "", color: 0xa855f7 },
+            { id: 'scherk', title: "Sup. de Scherk", cat: "Sup. Minimal", type: 'surf', gen: () => createParametric('scherk'), desc: "Doble Periodicidad", color: 0x10b981 },
+            { id: 'enneper', title: "Sup. de Enneper", cat: "Sup. Minimal", type: 'surf', gen: () => createParametric('enneper'), desc: "Auto-Intersección", color: 0xf43f5e }
+        ];
+
+        // Materiales
+        const matSolid = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, metalness: 0.5, roughness: 0.1, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+        const matSurfaceBase = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, transparent: true, opacity: 0.9, shininess: 100 });
+        const matLine = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1 });
+
+        // Generar Botones
+        function generateButtons() {
+            listContainer.innerHTML = '';
+            let currentCat = '';
+            allFigures.forEach((item, index) => {
+                // Separador de categorías
+                if(item.cat !== currentCat) {
+                    const sep = document.createElement('div');
+                    sep.className = 'text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-4 mb-2 pl-2';
+                    sep.textContent = item.cat;
+                    listContainer.appendChild(sep);
+                    currentCat = item.cat;
+                }
+                const btn = document.createElement('button');
+                btn.id = `btn-${index}`;
+                btn.className = `group w-full text-left p-3 rounded-lg hover:bg-white/5 transition-all border-l-2 border-transparent text-sm text-slate-300 font-medium`;
+                btn.innerHTML = `<span class="block text-white font-bold">${item.title}</span><span class="text-[10px] text-slate-500">${item.desc}</span>`;
+                btn.onclick = () => { stopAuto(); loadFigure(index); };
+                listContainer.appendChild(btn);
+            });
         }
 
-        let autoPlay = true, idx = 0, timer;
-        const keys = Object.keys(data);
-        const titleEl = document.getElementById('surface-title');
-        const descEl = document.getElementById('surface-desc');
-        const formulaEl = document.getElementById('formulas-container');
+        function loadFigure(idx, isAuto = false) {
+            // Limpiar
+            while(group.children.length) {
+                const o = group.children[0];
+                if(o.geometry) o.geometry.dispose();
+                group.remove(o);
+            }
+
+            const item = allFigures[idx];
+            const geo = item.gen();
+            
+            // Elegir material
+            let mat;
+            if(item.type === 'surf') {
+                mat = matSurfaceBase.clone();
+                mat.color.setHex(item.color);
+            } else {
+                mat = matSolid;
+            }
+
+            const mesh = new THREE.Mesh(geo, mat);
+            const wf = new THREE.LineSegments(new THREE.WireframeGeometry(geo), matLine);
+            
+            if(item.type === 'poly') mesh.rotation.x = -0.2; // Mejor ángulo para 2D
+
+            group.add(mesh);
+            group.add(wf);
+
+            // Actualizar UI Texto
+            document.getElementById('surface-title').textContent = item.title;
+            document.getElementById('surface-desc').textContent = item.cat + ": " + item.desc;
+
+            // Actualizar botones activos
+            document.querySelectorAll('#buttons-list button').forEach(b => {
+                b.classList.remove('active-surface-btn', 'bg-white/5');
+                b.classList.add('border-transparent');
+            });
+            const activeBtn = document.getElementById(`btn-${idx}`);
+            if(activeBtn) {
+                activeBtn.classList.add('active-surface-btn', 'bg-white/5');
+                activeBtn.classList.remove('border-transparent');
+                
+                // FIX: Solo hacer scroll si NO es automático
+                if(!isAuto) {
+                    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }
+
+        // Lógica Global
+        let autoPlay = true, currentIndex = 0, timer;
         const statusEl = document.getElementById('status-indicator');
         const restartBtn = document.getElementById('restart-btn');
 
-        function updateUI(k) {
-            titleEl.textContent = data[k].title;
-            descEl.textContent = data[k].desc;
-            formulaEl.innerHTML = `<div class="math-scroll text-sm text-sky-200 font-mono">${data[k].tex}</div>`;
-            // SAFE CHECK: Ensure MathJax is fully loaded before calling typeset
-            if(window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
-                MathJax.typesetPromise([formulaEl]).catch(err => console.log('MathJax processing...', err));
-            }
-            
-            document.querySelectorAll('.active-surface-btn').forEach(b => {
-                b.classList.remove('active-surface-btn', 'border-l-4', 'border-sky-400', 'bg-white/5');
-                b.classList.add('border-l-2', 'border-transparent');
-            });
-            const btn = document.getElementById(`btn-${k}`);
-            if(btn) {
-                btn.classList.add('active-surface-btn', 'border-l-4', 'border-sky-400', 'bg-white/5');
-                btn.classList.remove('border-l-2', 'border-transparent');
-            }
-        }
-
-        window.changeModel = (k) => {
-            buildMesh(k); updateUI(k); idx = keys.indexOf(k); if(autoPlay) resetTimer();
-        };
-
         window.toggleAutoPlay = () => {
-            autoPlay = true; statusEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span> AUTO';
-            restartBtn.classList.add('hidden'); resetTimer();
+            autoPlay = true; 
+            statusEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span> AUTO';
+            restartBtn.classList.add('hidden'); 
+            resetTimer();
         }
 
         function stopAuto() {
@@ -784,47 +952,49 @@
 
         function resetTimer() {
             clearInterval(timer);
-            timer = setInterval(() => { if(autoPlay) { idx = (idx + 1) % keys.length; changeModel(keys[idx]); } }, 5000);
+            timer = setInterval(() => { 
+                if(autoPlay) { 
+                    currentIndex = (currentIndex + 1) % allFigures.length; 
+                    loadFigure(currentIndex, true); // true = es automático
+                } 
+            }, 4000);
         }
 
-        // FULLSCREEN LOGIC FIX
         window.toggleFullscreen = () => {
             wrapper.classList.toggle('fullscreen-mode');
-            const isFS = wrapper.classList.contains('fullscreen-mode');
-            
-            // Forzar resize con un pequeño delay para que el DOM se asiente
-            onResize();
-            setTimeout(onResize, 100); 
+            setTimeout(onResize, 100);
         };
 
+        // Eventos
         document.addEventListener('keydown', (e) => {
-            if(e.key === 'ArrowRight') { stopAuto(); idx = (idx + 1) % keys.length; changeModel(keys[idx]); }
-            if(e.key === 'ArrowLeft') { stopAuto(); idx = (idx - 1 + keys.length) % keys.length; changeModel(keys[idx]); }
+            if(e.key === 'ArrowRight') { stopAuto(); currentIndex = (currentIndex + 1) % allFigures.length; loadFigure(currentIndex); }
+            if(e.key === 'ArrowLeft') { stopAuto(); currentIndex = (currentIndex - 1 + allFigures.length) % allFigures.length; loadFigure(currentIndex); }
             if(e.key === 'f' || e.key === 'F') toggleFullscreen();
         });
 
         let dragging = false, lx=0, ly=0;
-        const handleStart = (x, y) => { dragging = true; lx=x; ly=y; if(autoPlay) stopAuto(); container.style.cursor = 'grabbing'; };
-        const handleMove = (x, y) => { 
-            if(!dragging) return;
-            group.rotation.z += (x - lx) * 0.005;
-            group.rotation.x += (y - ly) * 0.005;
-            lx=x; ly=y;
-        };
-
-        container.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
+        container.addEventListener('mousedown', e => { dragging = true; lx=e.clientX; ly=e.clientY; stopAuto(); container.style.cursor = 'grabbing'; });
         window.addEventListener('mouseup', () => { dragging = false; container.style.cursor = 'grab'; });
-        window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
-        container.addEventListener('touchstart', e => handleStart(e.touches[0].clientX, e.touches[0].clientY), {passive:false});
-        container.addEventListener('touchmove', e => { if(dragging) { e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:false});
+        window.addEventListener('mousemove', e => { 
+            if(!dragging) return;
+            group.rotation.z += (e.clientX - lx) * 0.005;
+            group.rotation.x += (e.clientY - ly) * 0.005;
+            lx=e.clientX; ly=e.clientY;
+        });
+        container.addEventListener('touchstart', e => { dragging = true; lx=e.touches[0].clientX; ly=e.touches[0].clientY; stopAuto(); }, {passive:false});
+        container.addEventListener('touchmove', e => { 
+            if(dragging) { 
+                e.preventDefault(); 
+                group.rotation.z += (e.touches[0].clientX - lx) * 0.005;
+                group.rotation.x += (e.touches[0].clientY - ly) * 0.005;
+                lx=e.touches[0].clientX; ly=e.touches[0].clientY; 
+            } 
+        }, {passive:false});
         window.addEventListener('touchend', () => dragging = false);
 
         function onResize() {
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
+            const w = container.clientWidth; const h = container.clientHeight;
+            renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
         }
         window.addEventListener('resize', onResize);
 
@@ -834,9 +1004,140 @@
             renderer.render(scene, camera);
         }
 
-        changeModel('catenoid');
+        // ==========================================
+        // 4. DEMOSTRACIÓN DE CONSTRUCCIÓN DEL HELICOIDE
+        // ==========================================
+        (function initHelicoidDemo() {
+            const container = document.getElementById('helicoid-demo-container');
+            if(!container) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.set(0, 8, 12);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Luces
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const light = new THREE.PointLight(0xa855f7, 2);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            // 1. Eje Central (Línea)
+            const axisGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, -5, 0),
+                new THREE.Vector3(0, 5, 0)
+            ]);
+            const axisMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2 });
+            group.add(new THREE.Line(axisGeo, axisMat));
+
+            // 2. Hélice (Curva exterior)
+            const radius = 3;
+            const heightSegments = 200;
+            const helixPoints = [];
+            for (let i = 0; i <= heightSegments; i++) {
+                const t = (i / heightSegments) * Math.PI * 6 - Math.PI * 3; // 3 vueltas
+                helixPoints.push(new THREE.Vector3(radius * Math.cos(t), t, radius * Math.sin(t)));
+            }
+            const helixGeo = new THREE.BufferGeometry().setFromPoints(helixPoints);
+            const helixMat = new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.8 });
+            group.add(new THREE.Line(helixGeo, helixMat));
+
+            // 3. Superficie Fantasma (El Helicoide completo de fondo para guiar la vista)
+            const surfGeo = new THREE.ParametricGeometry((u, v, target) => {
+                const r = u * radius;
+                const t = v * Math.PI * 6 - Math.PI * 3;
+                target.set(r * Math.cos(t), t, r * Math.sin(t));
+            }, 20, 60);
+            const surfMat = new THREE.MeshBasicMaterial({ color: 0xa855f7, side: THREE.DoubleSide, transparent: true, opacity: 0.1, wireframe: true });
+            group.add(new THREE.Mesh(surfGeo, surfMat));
+
+            // 4. Generatriz (La línea recta que barre la superficie)
+            const genGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(radius, 0, 0)
+            ]);
+            const genMat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 3 });
+            const generatrix = new THREE.Line(genGeo, genMat);
+            group.add(generatrix);
+
+            // Controles de mouse para rotar el demo interactivamente
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            
+            container.addEventListener('mousedown', (e) => { 
+                isDragging = true; 
+                previousMousePosition = { x: e.offsetX, y: e.offsetY }; 
+            });
+            window.addEventListener('mouseup', () => { isDragging = false; });
+            container.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const deltaMove = { x: e.offsetX - previousMousePosition.x, y: e.offsetY - previousMousePosition.y };
+                    group.rotation.y += deltaMove.x * 0.01;
+                    group.rotation.x += deltaMove.y * 0.01;
+                    previousMousePosition = { x: e.offsetX, y: e.offsetY };
+                }
+            });
+
+            // Soporte Touch para móviles
+            container.addEventListener('touchstart', (e) => { 
+                isDragging = true; 
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY }; 
+            }, {passive: false});
+            container.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    const deltaMove = { x: e.touches[0].clientX - previousMousePosition.x, y: e.touches[0].clientY - previousMousePosition.y };
+                    group.rotation.y += deltaMove.x * 0.01;
+                    group.rotation.x += deltaMove.y * 0.01;
+                    previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            }, {passive: false});
+            window.addEventListener('touchend', () => { isDragging = false; });
+
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Animar la generatriz subiendo y bajando por el eje
+                time += 0.025;
+                const t = Math.sin(time) * Math.PI * 2.5; // Oscila arriba y abajo en el eje
+                
+                const p1 = new THREE.Vector3(0, t, 0); // Punto anclado en el eje central
+                const p2 = new THREE.Vector3(radius * Math.cos(t), t, radius * Math.sin(t)); // Punto anclado en la hélice exterior
+                generatrix.geometry.setFromPoints([p1, p2]);
+
+                if (!isDragging) {
+                    group.rotation.y += 0.005; // Rotación automática suave
+                }
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize Observer
+            const ro = new ResizeObserver(() => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+            ro.observe(container);
+        })();
+
+        // Init
+        generateButtons();
+        loadFigure(0, true); // Iniciar como auto para no scrollear al principio
+        resetTimer();
         loop();
 
     </script>
 </body>
 </html>
+
