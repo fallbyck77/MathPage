@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esferas de Dandelin - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración MathJax para las ecuaciones -->
+    <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Three.js y OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* Fondo Slate muy oscuro */
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
+        .tech-font { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Gradientes Llamativos */
+        .hero-vibrant {
+            background: radial-gradient(circle at top right, #4c0519 0%, #020617 60%),
+                        radial-gradient(circle at bottom left, #0f766e 0%, transparent 50%);
+            position: relative;
+        }
+
+        .text-gradient-vibrant {
+            background: linear-gradient(to right, #fbbf24, #f43f5e, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .canvas-container {
+            width: 100%; height: 600px;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            border: 1px solid rgba(244, 63, 94, 0.3); /* Borde rosa tenue */
+            box-shadow: 0 0 50px rgba(244, 63, 94, 0.15), inset 0 0 30px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .info-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+        }
+        .info-card:hover {
+            border-color: rgba(251, 191, 36, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.1);
+        }
+
+        /* Botones de control del visualizador */
+        .ui-btn {
+            background: rgba(2, 6, 23, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s;
+        }
+        .ui-btn:hover, .ui-btn.active {
+            border-color: #f43f5e;
+            color: #fff;
+            background: rgba(244, 63, 94, 0.2);
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
+        }
+
+        .glow-text-rose { text-shadow: 0 0 20px rgba(244, 63, 94, 0.6); }
+
+        /* Custom Slider */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #fbbf24;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-rose-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="fixed w-full bg-slate-950/80 backdrop-blur-md z-50 border-b border-rose-900/30">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="./index.html" class="text-2xl font-bold serif-font tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-rose-500 hover:opacity-90 transition-opacity">
+                πlography
+            </a>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-400 font-sans">
+                <a href="#visualizador" class="hover:text-rose-400 transition-colors">Visualizador 3D</a>
+                <a href="#explicacion" class="hover:text-amber-400 transition-colors">La Magia Geométrica</a>
+                <a href="./index.html" class="text-slate-500 hover:text-white transition-colors flex items-center gap-1">
+                    ← Volver al Índice
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO & VISUALIZADOR 3D -->
+    <section id="visualizador" class="relative pt-32 pb-12 hero-vibrant">
+        <div class="container mx-auto px-6">
+            
+            <div class="text-center max-w-4xl mx-auto mb-12">
+                <div class="inline-block mb-4">
+                    <span class="py-1 px-4 border border-amber-500/30 rounded-full text-xs font-mono text-amber-300 bg-amber-950/30 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+                        GEOMETRÍA DE LAS CÓNICAS
+                    </span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 serif-font leading-tight">
+                    Las Esferas de <br>
+                    <span class="text-gradient-vibrant glow-text-rose">Dandelin</span>
+                </h1>
+                <p class="text-lg text-slate-400 font-light leading-relaxed">
+                    El hermoso puente entre el álgebra 3D y la geometría plana. Usa el control para inclinar el plano y observa cómo las esferas se adaptan dinámicamente para revelar los focos.
+                </p>
+            </div>
+
+            <!-- Contenedor del Canvas 3D -->
+            <div class="relative max-w-6xl mx-auto">
+                
+                <!-- Botones Superpuestos (Izquierda) -->
+                <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
+                    <button onclick="toggleElement('cone')" id="btn-cone" class="ui-btn active px-4 py-2 rounded text-xs font-bold uppercase tracking-wide text-left">Mostrar Cono</button>
+                    <button onclick="toggleElement('plane')" id="btn-plane" class="ui-btn active px-4 py-2 rounded text-xs font-bold uppercase tracking-wide text-left">Mostrar Plano</button>
+                    <button onclick="toggleElement('spheres')" id="btn-spheres" class="ui-btn active px-4 py-2 rounded text-xs font-bold uppercase tracking-wide text-left">Mostrar Esferas</button>
+                    <button onclick="toggleElement('tangents')" id="btn-tangents" class="ui-btn active px-4 py-2 rounded text-xs font-bold uppercase tracking-wide text-left border-amber-500 text-amber-400">Mostrar Focos</button>
+                    <button onclick="toggleElement('axes')" id="btn-axes" class="ui-btn active px-4 py-2 rounded text-xs font-bold uppercase tracking-wide text-left border-slate-500 text-slate-300">Mostrar Ejes</button>
+                    <button onclick="toggleRotation()" id="btn-rotation" class="ui-btn active px-4 py-2 rounded text-xs font-bold uppercase tracking-wide text-left border-indigo-500 text-indigo-300 mt-2">Pausar Rotación</button>
+                </div>
+
+                <!-- Control Deslizante (Slider Abajo Izquierda) -->
+                <div class="absolute bottom-4 left-4 z-10 w-48 p-4 rounded-xl bg-slate-950/80 backdrop-blur-md border border-amber-500/40 shadow-[0_0_20px_rgba(251,191,36,0.15)]">
+                    <label class="block text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-1">Inclinación</label>
+                    <div class="text-xl font-black text-white mb-3 serif-font" id="angle-display">34.0°</div>
+                    <input type="range" id="angle-slider" min="0" max="34.5" step="0.1" value="34" class="w-full h-1 bg-slate-700 rounded-lg appearance-none">
+                    <div class="flex justify-between text-[9px] text-slate-400 mt-2 font-mono">
+                        <span>0°</span>
+                        <span>Máxima</span>
+                    </div>
+                </div>
+
+                <div id="dandelin-canvas" class="canvas-container w-full"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE EXPLICACIÓN PASO A PASO -->
+    <section id="explicacion" class="py-24 bg-slate-950 relative border-t border-slate-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold text-white serif-font mb-4">Anatomía de la Demostración</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    ¿Por qué es importante esta construcción de 1822 creada por Germinal Pierre Dandelin? Porque demuestra visualmente una verdad matemática profunda.
+                </p>
+            </div>
+            <!-- ... Las 4 tarjetas de explicación se mantienen igual ... -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Paso 1 -->
+                <div class="info-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-full bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-bold text-xl mb-4">1</div>
+                    <h3 class="text-xl font-bold text-white mb-3">El Cono y el Corte</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Atravesamos un cono recto con un plano. Si el plano es horizontal, obtenemos una circunferencia. Al inclinarlo, se estira formando una Elipse.
+                    </p>
+                </div>
+                <!-- Paso 2 -->
+                <div class="info-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-full bg-rose-950 border border-rose-500/50 flex items-center justify-center text-rose-400 font-bold text-xl mb-4">2</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Las Esferas Atrapadas</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Insertamos dos esferas (color rubí). Una por encima del corte y otra por debajo. Las inflamos hasta que toquen las paredes del cono y el plano inclinado simultáneamente.
+                    </p>
+                </div>
+                <!-- Paso 3 -->
+                <div class="info-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-full bg-amber-950 border border-amber-500/50 flex items-center justify-center text-amber-400 font-bold text-xl mb-4">3</div>
+                    <h3 class="text-xl font-bold text-white mb-3">El Nacimiento de los Focos</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Cada esfera toca al plano en exactamente un punto. La magia demuestra que esos dos puntos de tangencia (los dorados) son los <strong>focos exactos</strong> de nuestra curva.
+                    </p>
+                </div>
+                <!-- Paso 4 -->
+                <div class="info-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-full bg-purple-950 border border-purple-500/50 flex items-center justify-center text-purple-400 font-bold text-xl mb-4">4</div>
+                    <h3 class="text-xl font-bold text-white mb-3">La Constante Mágica</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Si tomas el punto cian que recorre la elipse, la suma de las dos líneas rectas hacia los focos es siempre constante.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRIPT DEL VISUALIZADOR 3D -->
+    <script>
+        let coneMesh, planeGroup, spheresGroup, tangentsGroup, axesGroup;
+        const elementsState = { cone: true, plane: true, spheres: true, tangents: true, axes: true };
+        let isRotating = true; 
+
+        // Variables dinámicas para el loop de animación
+        let currentEllipseCurve = null;
+        let currentF1 = new THREE.Vector3();
+        let currentF2 = new THREE.Vector3();
+
+        function initDandelin() {
+            const container = document.getElementById('dandelin-canvas');
+            if(!container) return;
+
+            const scene = new THREE.Scene();
+            const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambient);
+            
+            const light1 = new THREE.PointLight(0xf43f5e, 1.5, 100); light1.position.set(10, 10, 30); scene.add(light1);
+            const light2 = new THREE.PointLight(0x38bdf8, 1.2, 100); light2.position.set(-20, -20, 10); scene.add(light2);
+            const light3 = new THREE.PointLight(0xfbbf24, 1.0, 100); light3.position.set(0, 15, -10); scene.add(light3);
+
+            const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 200);
+            camera.up.set(0, 0, 1); 
+            camera.position.set(38, 38, 18); 
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.physicallyCorrectLights = true;
+            container.appendChild(renderer.domElement);
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.target.set(0, 0, 10);
+
+            // ==========================================
+            // ZOOM INTELIGENTE HACIA EL CURSOR
+            // ==========================================
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+
+            renderer.domElement.addEventListener('wheel', (event) => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                raycaster.setFromCamera(mouse, camera);
+                const zoomIntensity = 0.002;
+                const delta = -event.deltaY * zoomIntensity;
+                const distance = camera.position.distanceTo(controls.target);
+                const moveAmount = Math.max(Math.min(delta * distance, distance * 0.5), -distance * 0.5);
+                const step = raycaster.ray.direction.clone().multiplyScalar(moveAmount);
+                camera.position.add(step);
+                controls.target.add(step);
+            }, { passive: false, capture: true });
+
+            // ==========================================
+            // CONSTANTES GEOMÉTRICAS BASE
+            // ==========================================
+            const h0 = 5; // Altura de cruce del plano con el eje Z
+            const tanTheta = 0.7; // Define la apertura del cono
+            const theta = Math.atan(tanTheta);
+            const sinTheta = Math.sin(theta);
+            const cosTheta = Math.cos(theta);
+
+            // 1. CONSTRUIR CONO (Estático)
+            const coneHeight = 35;
+            const coneRadius = coneHeight * tanTheta;
+            const coneGeo = new THREE.CylinderGeometry(coneRadius, 0, coneHeight, 64, 1, true);
+            const coneMat = new THREE.MeshPhysicalMaterial({
+                color: 0x0ea5e9, metalness: 0.1, roughness: 0.1, transmission: 0.8,
+                transparent: true, opacity: 0.3, side: THREE.DoubleSide, depthWrite: false
+            });
+            coneMesh = new THREE.Mesh(coneGeo, coneMat);
+            coneMesh.rotation.x = Math.PI / 2;
+            coneMesh.position.z = coneHeight / 2;
+            const edgesGeo = new THREE.EdgesGeometry(coneGeo);
+            coneMesh.add(new THREE.LineSegments(edgesGeo, new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.3 })));
+            scene.add(coneMesh);
+
+            // 2. INICIALIZAR GRUPOS Y OBJETOS DINÁMICOS CON GEOMETRÍAS DUMMY
+            spheresGroup = new THREE.Group();
+            const sphereMat = new THREE.MeshPhysicalMaterial({
+                color: 0xf43f5e, metalness: 0.3, roughness: 0.2, transmission: 0.5,
+                clearcoat: 1.0, transparent: true, opacity: 0.85, emissive: 0x881337, emissiveIntensity: 0.4
+            });
+            const s1 = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), sphereMat);
+            const s2 = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), sphereMat);
+            spheresGroup.add(s1, s2);
+            scene.add(spheresGroup);
+
+            planeGroup = new THREE.Group();
+            const planeGeo = new THREE.PlaneGeometry(55, 55); 
+            const planeMesh = new THREE.Mesh(planeGeo, new THREE.MeshPhysicalMaterial({
+                color: 0xfbbf24, transparent: true, opacity: 0.35, side: THREE.DoubleSide, metalness: 0.5, roughness: 0.1, clearcoat: 1.0
+            }));
+            const gridH = new THREE.GridHelper(55, 30, 0xfbbf24, 0xfbbf24);
+            gridH.material.opacity = 0.15; gridH.material.transparent = true; gridH.rotation.x = Math.PI/2;
+            planeMesh.add(gridH);
+            const pGroupOffset = new THREE.Group();
+            pGroupOffset.add(planeMesh);
+            pGroupOffset.position.z = h0;
+            planeGroup.add(pGroupOffset);
+            
+            // Tubo de la elipse
+            const ellipseMesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+            planeGroup.add(ellipseMesh);
+            scene.add(planeGroup);
+
+            tangentsGroup = new THREE.Group();
+            const focusMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
+            const focus1 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), focusMat);
+            const focus2 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), focusMat);
+            tangentsGroup.add(focus1, focus2);
+
+            // Anillos
+            const ring1 = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xf43f5e, linewidth: 2 }));
+            const ring2 = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xf43f5e, linewidth: 2 }));
+            tangentsGroup.add(ring1, ring2);
+
+            // Punto dinámico y líneas
+            const pointP = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), new THREE.MeshBasicMaterial({ color: 0x22d3ee }));
+            tangentsGroup.add(pointP);
+            const dynLineMat = new THREE.LineBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.9 });
+            const linePF1 = new THREE.Line(new THREE.BufferGeometry(), dynLineMat);
+            const linePF2 = new THREE.Line(new THREE.BufferGeometry(), dynLineMat);
+            tangentsGroup.add(linePF1, linePF2);
+            scene.add(tangentsGroup);
+
+            // EJES
+            axesGroup = new THREE.Group();
+            const origin = new THREE.Vector3(0, 0, 0);
+            axesGroup.add(
+                new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 25, 0xf43f5e, 1.5, 0.8),
+                new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), origin, 25, 0x10b981, 1.5, 0.8),
+                new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), origin, 40, 0x3b82f6, 1.5, 0.8)
+            );
+            scene.add(axesGroup);
+
+            // ==========================================
+            // FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN MATEMÁTICA
+            // ==========================================
+            window.updateMath = function(angleDeg) {
+                // Actualizar UI
+                document.getElementById('angle-display').innerText = parseFloat(angleDeg).toFixed(1) + '°';
+                
+                const phi = angleDeg * (Math.PI / 180);
+                const sinPhi = Math.sin(phi);
+                const cosPhi = Math.cos(phi);
+                const tanPhi = Math.tan(phi);
+
+                // Calcular Esferas
+                const z1 = (h0 * cosPhi) / (cosPhi - sinTheta); 
+                const R1 = z1 * sinTheta; 
+                const z2 = (h0 * cosPhi) / (cosPhi + sinTheta);
+                const R2 = z2 * sinTheta; 
+
+                // Calcular Focos
+                currentF1.set( R1 * sinPhi, 0, z1 - R1 * cosPhi );
+                currentF2.set( -R2 * sinPhi, 0, z2 + R2 * cosPhi );
+
+                // Aplicar a los objetos
+                s1.scale.set(R1, R1, R1); s1.position.z = z1;
+                s2.scale.set(R2, R2, R2); s2.position.z = z2;
+                
+                planeMesh.rotation.y = -phi; 
+                focus1.position.copy(currentF1);
+                focus2.position.copy(currentF2);
+
+                // Calcular Elipse (o Circunferencia)
+                const K = tanTheta;
+                const m = tanPhi;
+                const A = 1 - (K*K * m*m);
+                const xc = (K*K * m * h0) / A;
+                const a = (K * h0) / A;              
+                const b = (K * h0) / Math.sqrt(A);   
+
+                const ellipsePoints = [];
+                for (let i = 0; i <= 100; i++) {
+                    const t = (i / 100) * Math.PI * 2;
+                    const ex = xc + a * Math.cos(t);
+                    const ey = b * Math.sin(t);          
+                    const ez = m * ex + h0;              
+                    ellipsePoints.push(new THREE.Vector3(ex, ey, ez));
+                }
+                currentEllipseCurve = new THREE.CatmullRomCurve3(ellipsePoints, true);
+                
+                if(ellipseMesh.geometry) ellipseMesh.geometry.dispose();
+                ellipseMesh.geometry = new THREE.TubeGeometry(currentEllipseCurve, 100, 0.15, 8, true);
+
+                // Actualizar Anillos de Tangencia
+                const buildRingPts = (zCenter) => {
+                    const ringZ = zCenter * cosTheta * cosTheta;
+                    const ringRad = zCenter * cosTheta * sinTheta;
+                    const pts = [];
+                    for(let i=0; i<=64; i++) {
+                        const t = (i/64)*Math.PI*2;
+                        pts.push(new THREE.Vector3(ringRad * Math.cos(t), ringRad * Math.sin(t), ringZ));
+                    }
+                    return pts;
+                };
+
+                if(ring1.geometry) ring1.geometry.dispose();
+                ring1.geometry = new THREE.BufferGeometry().setFromPoints(buildRingPts(z1));
+                
+                if(ring2.geometry) ring2.geometry.dispose();
+                ring2.geometry = new THREE.BufferGeometry().setFromPoints(buildRingPts(z2));
+            };
+
+            // Evento del Slider
+            document.getElementById('angle-slider').addEventListener('input', (e) => {
+                updateMath(e.target.value);
+            });
+
+            // Llamada Inicial (Arrancamos en 34 grados)
+            updateMath(34);
+
+            // ==========================================
+            // RENDER LOOP
+            // ==========================================
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                controls.update();
+                
+                if (isRotating) {
+                    scene.rotation.z += 0.002; 
+                }
+                
+                if(currentEllipseCurve) {
+                    const t = (clock.getElapsedTime() * 0.1) % 1; 
+                    const posP = currentEllipseCurve.getPoint(t);
+                    pointP.position.copy(posP);
+
+                    linePF1.geometry.setFromPoints([posP, currentF1]);
+                    linePF2.geometry.setFromPoints([posP, currentF2]);
+                }
+
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            window.addEventListener('resize', () => {
+                if(container){
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+        }
+
+        window.toggleElement = (id) => {
+            const btn = document.getElementById('btn-' + id);
+            elementsState[id] = !elementsState[id];
+            if(elementsState[id]) btn.classList.add('active');
+            else btn.classList.remove('active');
+
+            if(id === 'cone') coneMesh.visible = elementsState[id];
+            if(id === 'plane') planeGroup.visible = elementsState[id];
+            if(id === 'spheres') spheresGroup.visible = elementsState[id];
+            if(id === 'tangents') tangentsGroup.visible = elementsState[id];
+            if(id === 'axes') axesGroup.visible = elementsState[id];
+        };
+
+        window.toggleRotation = () => {
+            isRotating = !isRotating;
+            const btn = document.getElementById('btn-rotation');
+            if(isRotating) {
+                btn.classList.add('active');
+                btn.innerText = 'Pausar Rotación';
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = 'Reanudar Rotación';
+            }
+        };
+
+        initDandelin();
+    </script>
+</body>
+</html>

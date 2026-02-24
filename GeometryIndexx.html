@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría - πlography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js para el Dodecaedro -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* Slate 950 */
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
+        .tech-font { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Gradientes para Geometría */
+        .hero-geo {
+            background: radial-gradient(circle at center, rgba(239, 68, 68, 0.08) 0%, #020617 80%);
+            position: relative;
+        }
+
+        .text-gradient-geo {
+            background: linear-gradient(to right, #f87171, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Canvas de fondo para el teselado hexagonal */
+        #hex-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            opacity: 0.35;
+            pointer-events: none; /* Dejar pasar clicks */
+        }
+
+        /* Canvas para el Sólido Platónico */
+        #solid-canvas {
+            position: absolute;
+            top: 0; right: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Tarjetas de Módulos */
+        .geo-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .geo-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .geo-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.15);
+        }
+
+        .geo-card:hover::before { opacity: 1; }
+
+        .btn-glow {
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-red-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="fixed w-full bg-slate-950/80 backdrop-blur-md z-50 border-b border-red-900/20">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-bold serif-font tracking-wide text-white hover:text-red-400 transition-colors">
+                πlography
+            </a>
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-400">
+                <a href="#catalogo" class="hover:text-amber-400 transition-colors">Catálogo Espacial</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[85vh] flex items-center pt-20 overflow-hidden hero-geo">
+        <!-- Fondo Hexagonal Animado (Canvas 2D) -->
+        <canvas id="hex-canvas"></canvas>
+        <!-- Sólido Platónico (Three.js) -->
+        <div id="solid-canvas"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-3xl">
+                <div class="inline-block mb-6">
+                    <span class="py-1 px-4 border border-red-500/30 rounded-full text-xs font-mono text-red-300 bg-red-950/30 backdrop-blur-md uppercase tracking-widest">
+                        El Estudio de la Forma y el Espacio
+                    </span>
+                </div>
+
+                <h1 class="text-6xl md:text-8xl font-black text-white mb-6 serif-font leading-tight">
+                    Geometría <br>
+                    <span class="text-gradient-geo">Universal</span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-slate-400 mb-10 font-light leading-relaxed max-w-2xl">
+                    Desde las proporciones perfectas de los sólidos platónicos hasta la elegante belleza de las cónicas en el espacio tridimensional.
+                </p>
+
+                <div class="flex gap-4">
+                    <a href="#catalogo" class="btn-glow bg-red-600 hover:bg-red-500 text-white px-8 py-3 rounded-full font-medium transition-colors">
+                        Explorar Formas
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Indicador de Scroll -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-red-500/50 z-20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: CATÁLOGO DE MÓDULOS -->
+    <section id="catalogo" class="py-24 bg-slate-950 relative z-20 border-t border-red-900/30 backdrop-blur-sm">
+        <div class="container mx-auto px-6">
+            
+            <div class="flex items-end justify-between mb-16">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white serif-font mb-4">Repositorio Geométrico</h2>
+                    <p class="text-slate-500 font-mono text-sm uppercase tracking-widest">Selecciona un modelo interactivo</p>
+                </div>
+                <div class="hidden md:block h-px flex-1 bg-slate-800 ml-12 mb-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- CARD 1: ESFERAS DE DANDELIN -->
+                <a href="./DandelinSphere.html" class="geo-card rounded-2xl p-6 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-rose-500 group-hover:border-rose-500/50 group-hover:scale-110 transition-all shadow-lg">
+                            <!-- Icono de cónica/elipse -->
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"></path></svg>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="font-mono text-xs px-2 py-1 border border-amber-900 text-amber-400 bg-amber-950/30 rounded">Cónicas</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-amber-400 transition-colors serif-font">Esferas de Dandelin</h3>
+                    <p class="text-slate-400 text-sm mb-6 leading-relaxed flex-grow">
+                        El hermoso puente entre el álgebra 3D y la geometría plana. Visualiza cómo dos esferas atrapadas en un cono revelan los focos exactos de una elipse.
+                    </p>
+                    <div class="flex items-center text-amber-400 text-sm font-bold mt-auto group-hover:translate-x-2 transition-transform">
+                        Iniciar Simulador →
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 border-t border-slate-900 py-12 relative z-20">
+        <div class="container mx-auto px-6 text-center">
+            <div class="text-2xl font-bold serif-font text-slate-700 mb-2">π</div>
+            <p class="text-slate-600 text-xs font-mono">&copy; 2026 πlography. Repositorio de Geometría.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT 1: FONDO DE TESELADO HEXAGONAL (Canvas 2D) -->
+    <script>
+        const canvas = document.getElementById('hex-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let hexRadius = 40; 
+        let time = 0;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawHexagon(x, y, r, opacity) {
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                // Rotar para que queden planos arriba y abajo
+                const angle = (Math.PI / 3) * i + (Math.PI / 6); 
+                const px = x + r * Math.cos(angle);
+                const py = y + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            
+            ctx.lineWidth = 1;
+            // Color rojo muy sutil que pulsa con el tiempo y la posición
+            ctx.strokeStyle = `rgba(239, 68, 68, ${opacity})`; 
+            ctx.stroke();
+        }
+
+        function animateHexagons() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Distancias entre centros para un panal de abejas perfecto
+            const hexWidth = Math.sqrt(3) * hexRadius;
+            const hexHeight = 2 * hexRadius;
+            const xOffset = hexWidth;
+            const yOffset = hexHeight * 0.75;
+
+            // Dibujar la cuadrícula
+            for (let row = -1; row < height / yOffset + 2; row++) {
+                for (let col = -1; col < width / xOffset + 2; col++) {
+                    
+                    let x = col * xOffset;
+                    let y = row * yOffset;
+                    
+                    // Desplazar filas impares para crear el encaje de panal
+                    if (row % 2 !== 0) {
+                        x += xOffset / 2;
+                    }
+
+                    // Calcular un efecto de "ola" u opacidad basada en el tiempo y la posición
+                    const distFromCenter = Math.sqrt(Math.pow(x - width/2, 2) + Math.pow(y - height/2, 2));
+                    const wave = Math.sin((distFromCenter * 0.005) - time) * 0.5 + 0.5;
+                    
+                    // Opacidad base muy baja, sube con la ola
+                    const opacity = 0.02 + (wave * 0.15);
+
+                    drawHexagon(x, y, hexRadius - 2, opacity); // hexRadius-2 da un pequeño espacio entre ellos
+                }
+            }
+
+            time += 0.015; // Velocidad de la ola
+            requestAnimationFrame(animateHexagons);
+        }
+
+        animateHexagons();
+    </script>
+
+    <!-- SCRIPT 2: DODECAEDRO FLOTANTE (Three.js) -->
+    <script>
+        {
+            const container = document.getElementById('solid-canvas');
+            const scene = new THREE.Scene();
+            
+            // Iluminación
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+            
+            const light1 = new THREE.PointLight(0xef4444, 2, 100); // Luz Roja Intensa
+            light1.position.set(10, 10, 10);
+            scene.add(light1);
+            
+            const light2 = new THREE.PointLight(0xf87171, 1.5, 100); // Luz Roja/Rosada suave
+            light2.position.set(-10, -10, 10);
+            scene.add(light2);
+
+            // Cámara
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            // Posicionar la cámara más lejos para asegurar que el modelo se vea completo
+            camera.position.z = 32;
+            camera.position.x = 0; // Cámara centrada
+
+            // Renderer transparente
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // --- El Dodecaedro Platónico ---
+            const geometry = new THREE.DodecahedronGeometry(4.5, 0); 
+            
+            // Material interno cristalino oscuro con tintes rojizos
+            const materialSolid = new THREE.MeshPhysicalMaterial({
+                color: 0x450a0a, // Rojo oscuro profundo
+                metalness: 0.8,
+                roughness: 0.2,
+                clearcoat: 1.0,
+                transmission: 0.5,
+                transparent: true,
+                opacity: 0.9,
+                side: THREE.DoubleSide
+            });
+            
+            // Material para las aristas
+            const edges = new THREE.EdgesGeometry(geometry);
+            const materialWire = new THREE.LineBasicMaterial({ 
+                color: 0xfca5a5, // Rojo claro / salmón
+                linewidth: 2,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const mesh = new THREE.Mesh(geometry, materialSolid);
+            const wire = new THREE.LineSegments(edges, materialWire);
+            
+            const group = new THREE.Group();
+            group.add(mesh);
+            group.add(wire);
+            
+            // Desplazar el grupo a la derecha, pero lo suficiente para que no se corte
+            group.position.x = 8;
+            scene.add(group);
+
+            // Animación suave de rotación y flotación
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                const t = clock.getElapsedTime();
+                
+                // Rotación compleja
+                group.rotation.x = t * 0.2;
+                group.rotation.y = t * 0.3;
+                
+                // Efecto de flotación en el eje Y
+                group.position.y = Math.sin(t * 1.5) * 0.5;
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Responsive
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            // Para dispositivos móviles, centramos el objeto y lo subimos sin que se corte
+            if(window.innerWidth < 768) {
+                camera.position.x = 0;
+                group.position.x = 0;
+                group.position.y = 9; // Mover arriba del texto
+                group.scale.set(0.85, 0.85, 0.85); // Reducirlo sutilmente
+            }
+        }
+    </script>
+</body>
+</html>
